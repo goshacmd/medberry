@@ -5,7 +5,20 @@
     <%= simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f| %>
       <%= f.error_notification %>
 
-      <%= f.input :email, label: 'Email address', placeholder: 'john.doe@gmail.com', autofocus: true %>
+      <h3>Personal information</h3>
+
+      <%= f.input :bsn, label: 'BSN', placeholder: '123456789', autofocus: true %>
+      <%= f.input :dob, label: 'Date of birth', order: [:day, :month, :year], start_year: 1900, end_year: Time.now.year, as: :date %>
+      <%= f.input :gender, collection: [['Male', 'male'], ['Female', 'female']], default: 'male' %>
+      <%= f.input :first_name, placeholder: 'John' %>
+      <%= f.input :last_name, placeholder: 'Doe' %>
+      <%= f.input :zip, label: 'Postal code', placeholder: '1111 AB' %>
+      <%= f.input :address, placeholder: 'Somestraat 42' %>
+      <%= f.input :city, placeholder: 'Amsterdam' %>
+
+      <h3>Account information</h3>
+
+      <%= f.input :email, label: 'Email address', placeholder: 'john.doe@gmail.com' %>
       <%= f.input :password, placeholder: 'Desired password' %>
       <%= f.input :password_confirmation, placeholder: 'Confirm' %>
 
