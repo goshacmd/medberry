@@ -30,7 +30,13 @@ module Medlive
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
       g.view_specs false
       g.helper_specs false
+      g.controller_specs false
       g.helper = false
+    end
+
+    console do
+      require 'pry'
+      config.console = Pry
     end
   end
 end
