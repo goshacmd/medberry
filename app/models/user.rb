@@ -4,6 +4,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  belongs_to :identity, polymorphic: true, autosave: true, validate: true
+  accepts_nested_attributes_for :identity
 end

@@ -11,12 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140219165417) do
+ActiveRecord::Schema.define(version: 20140222143757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
-  create_table "users", force: true do |t|
+  create_table "doctors", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string "first_name"
+    t.string "last_name"
+  end
+
+  create_table "patients", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string "bsn"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "gender"
+    t.date   "dob"
+    t.string "zip"
+    t.string "address"
+    t.string "city"
+  end
+
+  create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -29,15 +46,8 @@ ActiveRecord::Schema.define(version: 20140219165417) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "bsn"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "gender"
-    t.date     "dob"
-    t.string   "zip"
-    t.string   "address"
-    t.string   "city"
-    t.string   "type"
+    t.uuid     "identity_id"
+    t.string   "identity_type"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

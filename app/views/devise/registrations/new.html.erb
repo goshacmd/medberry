@@ -7,14 +7,16 @@
 
       <h3>Personal information</h3>
 
-      <%= f.input :bsn, label: 'BSN', placeholder: '123456789', autofocus: true %>
-      <%= f.input :dob, label: 'Date of birth', order: [:day, :month, :year], start_year: 1900, end_year: Time.now.year, as: :date %>
-      <%= f.input :gender, collection: [['Male', 'male'], ['Female', 'female']], default: 'male' %>
-      <%= f.input :first_name, placeholder: 'John' %>
-      <%= f.input :last_name, placeholder: 'Doe' %>
-      <%= f.input :zip, label: 'Postal code', placeholder: '1111 AB' %>
-      <%= f.input :address, placeholder: 'Somestraat 42' %>
-      <%= f.input :city, placeholder: 'Amsterdam' %>
+      <%= f.simple_fields_for :identity do |ff| %>
+        <%= ff.input :bsn, label: 'BSN', placeholder: '123456789', autofocus: true %>
+        <%= ff.input :dob, label: 'Date of birth', order: [:day, :month, :year], start_year: 1900, end_year: Time.now.year, as: :date %>
+        <%= ff.input :gender, collection: [['Male', 'male'], ['Female', 'female']], default: 'male' %>
+        <%= ff.input :first_name, placeholder: 'John' %>
+        <%= ff.input :last_name, placeholder: 'Doe' %>
+        <%= ff.input :zip, label: 'Postal code', placeholder: '1111 AB' %>
+        <%= ff.input :address, placeholder: 'Somestraat 42' %>
+        <%= ff.input :city, placeholder: 'Amsterdam' %>
+      <% end %>
 
       <h3>Account information</h3>
 

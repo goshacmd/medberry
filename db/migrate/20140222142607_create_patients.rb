@@ -1,6 +1,6 @@
-class AddPersonalInfoToUser < ActiveRecord::Migration
+class CreatePatients < ActiveRecord::Migration
   def change
-    change_table :users do |t|
+    create_table :patients, id: :uuid do |t|
       t.string :bsn
       t.string :first_name
       t.string :last_name
