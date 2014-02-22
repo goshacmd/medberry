@@ -1,7 +1,14 @@
 <h2>Doctors</h2>
 
-<ul>
+<div class="row">
   {{#each}}
-    <li>{{full_name}}</li>
+    <div class="col-lg-3 text-center">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3>{{full_name}}</h3>
+          <h6>Family doctor</h6>
+        </div>
+      </div>
+    </div>
   {{/each}}
-</ul>
+</div>
