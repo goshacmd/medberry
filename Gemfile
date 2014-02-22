@@ -14,8 +14,8 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
-gem 'ember-rails'
-gem 'ember-source', '1.3.0'
+gem 'ember-rails', '~> 0.14.1'
+gem 'ember-source', '1.4.0'
 
 group :test do
   gem 'database_cleaner'

@@ -1,4 +1,6 @@
 Medlive::Application.routes.draw do
+  resources :doctors
+
   devise_for :users, controllers: {
     registrations: 'registrations'
   }
