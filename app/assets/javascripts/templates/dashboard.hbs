@@ -2,4 +2,6 @@
   <h3>Welcome, Dr. {{currentUser.fullName}}</h3>
 {{else}}
   <h3>Welcome, {{currentUser.fullName}}</h3>
+
+  {{#link-to 'doctors' class="btn btn-primary"}}Talk to a doctor{{/link-to}}
 {{/if}}
