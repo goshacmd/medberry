@@ -1,5 +1,5 @@
-class DoctorsController < ApplicationController
-  before_filter :authenticate_user!
+class DoctorsController < ApiController
+  before_action :ensure_patient
 
   def index
     @doctors = Doctor.all
