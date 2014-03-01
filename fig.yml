@@ -1,5 +1,7 @@
 db:
   image: orchardup/postgresql
+  volumes:
+    - tmp/db:/var/lib/postgresql
   ports:
     - 5432
 

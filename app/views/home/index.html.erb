@@ -1,3 +1,7 @@
-<% unless user_signed_in? %>
+<% if user_signed_in? %>
+  <script type="text/javascript">
+    window.currentUser = JSON.parse('<%= UserSerializer.new(current_user, root: nil).to_json.html_safe %>');
+  </script>
+<% else %>
   <h1>We connect doctors and patients via live video chat</h1>
 <% end %>
