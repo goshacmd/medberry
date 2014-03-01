@@ -1,8 +1,8 @@
 Medlive.Doctor = DS.Model.extend({
-  first_name: DS.attr('string'),
-  last_name: DS.attr('string'),
+  firstName: DS.attr('string'),
+  lastName: DS.attr('string'),
 
-  full_name: function() {
-    return [this.get('first_name'), this.get('last_name')].join(' ')
-  }.property('first_name', 'last_name')
+  fullName: function() {
+    return [this.get('firstName'), this.get('lastName')].join(' ')
+  }.property('firstName', 'lastName')
 });

@@ -18,6 +18,6 @@ Ember.Application.initializer({
     container.register('user:current', Medlive.User.find(obj.id), { instantiate: false });
 
     container.injection('route', 'currentUser', 'user:current');
-    container.injection('controller:application', 'currentUser', 'user:current');
+    container.injection('controller', 'currentUser', 'user:current');
   }
 });

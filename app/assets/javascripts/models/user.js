@@ -1,4 +1,7 @@
 Medlive.User = DS.Model.extend({
-  name: DS.attr('string'),
-  role: DS.attr('string')
+  fullName: DS.attr('string'),
+  role: DS.attr('string'),
+
+  isDoctor: Ember.computed.equal('role', 'doctor'),
+  isPatient: Ember.computed.equal('role', 'patient')
 });

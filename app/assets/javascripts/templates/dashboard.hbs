@@ -1,0 +1,5 @@
+{{#if currentUser.isDoctor}}
+  <h3>Welcome, Dr. {{currentUser.fullName}}</h3>
+{{else}}
+  <h3>Welcome, {{currentUser.fullName}}</h3>
+{{/if}}
