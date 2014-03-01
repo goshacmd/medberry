@@ -5,6 +5,7 @@ class CreateConsultationRequests < ActiveRecord::Migration
       t.index :patient_id
       t.string :doctor_id
       t.index :doctor_id
+
       t.string :cause
 
       t.timestamps

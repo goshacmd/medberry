@@ -55,6 +55,9 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    dotenv (0.10.0)
+    dotenv-rails (0.10.0)
+      dotenv (= 0.10.0)
     ember-data-source (0.14)
       ember-source
     ember-rails (0.14.1)
@@ -181,6 +184,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.1.0)
   database_cleaner
   devise (~> 3.2.0)
+  dotenv-rails
   ember-rails (~> 0.14.1)
   ember-source (= 1.4.0)
   factory_girl_rails

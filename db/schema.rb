@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140301111636) do
+ActiveRecord::Schema.define(version: 20140301125811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,23 @@ ActiveRecord::Schema.define(version: 20140301111636) do
 
   add_index "consultation_requests", ["doctor_id"], name: "index_consultation_requests_on_doctor_id", using: :btree
   add_index "consultation_requests", ["patient_id"], name: "index_consultation_requests_on_patient_id", using: :btree
+
+  create_table "consultations", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string   "patient_id"
+    t.string   "doctor_id"
+    t.string   "request_id"
+    t.string   "cause"
+    t.string   "tokbox_session"
+    t.text     "tokbox_token_patient"
+    t.text     "tokbox_token_doctor"
+    t.datetime "expiry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "consultations", ["doctor_id"], name: "index_consultations_on_doctor_id", using: :btree
+  add_index "consultations", ["patient_id"], name: "index_consultations_on_patient_id", using: :btree
+  add_index "consultations", ["request_id"], name: "index_consultations_on_request_id", using: :btree
 
   create_table "doctors", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "first_name"
