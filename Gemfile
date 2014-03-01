@@ -7,11 +7,11 @@ gem 'pg'
 gem 'devise', '~> 3.2.0'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'simple_form', '~> 3.0.0'
+gem 'opentok'
 
 gem 'sass-rails', '~> 4.0.0'
 gem 'bootstrap-sass', '~> 3.1.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'ember-rails', '~> 0.14.1'
@@ -33,6 +33,7 @@ group :development do
 end
 
 gem 'pry'
+gem 'dotenv-rails', groups: [:development, :test]
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
