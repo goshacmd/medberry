@@ -11,8 +11,12 @@ class ConsultationDispatcher
 
   def perform
     consultation = Consultation.create_from_request(request)
-    channels = [consultation.patient, consultation.doctor].map { |i| i.user.try(:pusher_channel_name) }
 
+    return unless consultation.valid?
+
+    request.update(status: :accepted)
+
+    channels = [consultation.patient, consultation.doctor].map { |i| i.user.try(:pusher_channel_name) }
     push channels, request: request.id, consultation: consultation.id
   end
 end
