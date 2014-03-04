@@ -1,5 +1,5 @@
 class ConsultationRequestsController < ApiController
-  before_action :ensure_patient, only: [:create]
+  before_action :ensure_patient
 
   def create
     @request = ConsultationRequestCreator.new(cr_params, current_user).perform

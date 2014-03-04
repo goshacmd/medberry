@@ -11,11 +11,19 @@ class User < ActiveRecord::Base
     identity.class.name.downcase
   end
 
+  def doctor?
+    role == 'doctor'
+  end
+
+  def patient?
+    role == 'patient'
+  end
+
   def full_name
     [identity.first_name, identity.last_name].join(' ')
   end
 
   def pusher_channel_name
-    "private-#{identity.class.name.downcase}-#{identity.id}"
+    "private-#{role}-#{identity.id}"
   end
 end

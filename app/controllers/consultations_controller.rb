@@ -4,10 +4,8 @@ class ConsultationsController < ApiController
   def show
     @consultation = Consultation.find(params[:id])
 
-    if [@consultation.doctor, @consultation.patient].map(&:user).include? current_user
-      render json: @consultation
-    else
-      not_authorized
-    end
+    authorize! :read, @consultation
+
+    render json: @consultation
   end
 end

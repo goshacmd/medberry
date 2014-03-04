@@ -7,6 +7,7 @@ gem 'pg'
 gem 'devise', '~> 3.2.0'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'simple_form', '~> 3.0.0'
+gem 'cancan'
 gem 'opentok'
 gem 'pusher'
 

@@ -1,4 +1,10 @@
 class ApiController < ApplicationController
+  before_action :check_sign_in
+
+  rescue_from CanCan::AccessDenied do |exception|
+    not_authorized
+  end
+
   private
 
   def not_authorized
