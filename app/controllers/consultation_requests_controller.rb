@@ -2,14 +2,11 @@ class ConsultationRequestsController < ApiController
   before_action :ensure_patient, only: [:create]
 
   def create
-    @request = ConsultationRequest.new(cr_params)
-    @request.patient = current_user.identity
+    @request = ConsultationRequestCreator.new(cr_params, current_user).perform
 
-    if @request.save
-      render json: @request
-    else
-      render json: { errors: @request.full_error_messages }, status: :unprocessable_entity
-    end
+    render json: @request
+  rescue ConsultationRequestCreator::ValidationError => e
+    render json: { errors: e.data.full_error_messages }, status: :unprocessable_entity
   end
 
   private
