@@ -1,6 +1,9 @@
 <% if user_signed_in? %>
+  <script src="https://swww.tokbox.com/webrtc/v2.0/js/TB.min.js"></script>
+
   <script type="text/javascript">
     window.currentUser = JSON.parse('<%= UserSerializer.new(current_user, root: nil).to_json.html_safe %>');
+    window.tokboxApiKey = "<%= ENV['OPEN_TOK_KEY'] %>";
   </script>
 <% else %>
   <h1>We connect doctors and patients via live video chat</h1>
