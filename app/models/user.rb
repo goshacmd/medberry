@@ -14,4 +14,8 @@ class User < ActiveRecord::Base
   def full_name
     [identity.first_name, identity.last_name].join(' ')
   end
+
+  def pusher_channel_name
+    "private-#{identity.class.name.downcase}-#{identity.id}"
+  end
 end

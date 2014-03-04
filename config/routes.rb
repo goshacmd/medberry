@@ -6,6 +6,8 @@ Medlive::Application.routes.draw do
     registrations: 'registrations'
   }
 
+  post 'pusher/auth'
+
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
