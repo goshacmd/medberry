@@ -9,6 +9,14 @@ class ConsultationRequestsController < ApiController
     render json: { errors: e.data.full_error_messages }, status: :unprocessable_entity
   end
 
+  def show
+    @request = ConsultationRequest.find(params[:id])
+
+    authorize! :read, @request
+
+    render json: @request
+  end
+
   private
 
   def cr_params
