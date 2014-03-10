@@ -1,0 +1,25 @@
+<h3>Welcome, Dr. {{currentUser.fullName}}</h3>
+
+<h4>Consultation requests</h4>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Cause</th>
+      <th>Placed at</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {{#each controller}}
+      <tr>
+        <td>{{patient.fullName}}</td>
+        <td>{{cause}}</td>
+        <td>{{createdAt}}</td>
+        <td>{{status}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

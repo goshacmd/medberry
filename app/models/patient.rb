@@ -1,5 +1,6 @@
 class Patient < ActiveRecord::Base
   has_one :user, as: :identity
+  has_many :consultation_requests
 
   validates :bsn, presence: true, length: { is: 9 }, format: { with: /\A[0-9]+\z/ }
   validates :first_name, presence: true

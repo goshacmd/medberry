@@ -1,5 +1,11 @@
 class ConsultationRequestsController < ApiController
-  before_action :ensure_patient
+  before_action :ensure_patient, only: [:create]
+
+  def index
+    @requests = current_user.identity.consultation_requests
+
+    render json: @requests
+  end
 
   def create
     @request = ConsultationRequestCreator.new(cr_params, current_user).perform
