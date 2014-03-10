@@ -12,7 +12,6 @@ class ConsultationDispatcher
 
     request.update(status: :accepted)
 
-    channels = [consultation.patient, consultation.doctor].map { |i| i.user.try(:pusher_channel_name) }
-    Pusher.trigger(channels, "requests:#{request.id}", consultation: consultation.id)
+    Pusher.trigger(consultation.channels, "requests:#{request.id}", consultation: consultation.id)
   end
 end

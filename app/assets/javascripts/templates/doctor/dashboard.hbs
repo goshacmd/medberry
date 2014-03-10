@@ -1,24 +1,29 @@
-<h3>Welcome, Dr. {{currentUser.fullName}}</h3>
-
 <h4>Consultation requests</h4>
 
-<table class="table">
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Patient</th>
       <th>Cause</th>
       <th>Placed at</th>
       <th>Status</th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     {{#each controller}}
-      <tr>
+      <tr {{bind-attr class="isNew:warning"}}>
         <td>{{patient.fullName}}</td>
         <td>{{cause}}</td>
         <td>{{createdAt}}</td>
         <td>{{status}}</td>
+        <td>
+          {{#if isNew}}
+            <a href="#" class="btn btn-sm btn-success disabled">Accept</a>
+            <a href="#" class="btn btn-sm btn-danger disabled">Decline</a>
+          {{/if}}
+        </td>
       </tr>
     {{/each}}
   </tbody>

@@ -1,4 +1,6 @@
 class ConsultationRequest < ActiveRecord::Base
+  include PusherChannels
+
   STATUSES = { new: 0, accepted: 1, canceled: 2 }
 
   belongs_to :patient

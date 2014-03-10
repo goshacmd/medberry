@@ -1,4 +1,6 @@
 class Consultation < ActiveRecord::Base
+  include PusherChannels
+
   belongs_to :patient
   belongs_to :doctor
   belongs_to :request, class_name: 'ConsultationRequest'

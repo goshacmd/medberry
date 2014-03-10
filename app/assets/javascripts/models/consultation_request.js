@@ -3,5 +3,7 @@ Medlive.ConsultationRequest = DS.Model.extend({
   doctor: DS.belongsTo('Medlive.Doctor'),
   cause: DS.attr('string'),
   status: DS.attr('string'),
-  createdAt: DS.attr('date')
+  createdAt: DS.attr('date'),
+
+  isNew: Ember.computed.equal('status', 'new')
 });
