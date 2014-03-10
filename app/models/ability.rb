@@ -6,7 +6,7 @@ class Ability
       consultation.doctor.user == user || consultation.patient.user == user
     end
 
-    can :read, ConsultationRequest do |request|
+    can [:read, :update], ConsultationRequest do |request|
       request.doctor.user == user || request.patient.user == user
     end
   end

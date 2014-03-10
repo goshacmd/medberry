@@ -23,6 +23,16 @@ class ConsultationRequestsController < ApiController
     render json: @request
   end
 
+  def update
+    @request = ConsultationRequest.find(params[:id])
+
+    authorize! :update, @request
+
+    ConsultationRequestUpdater.new(@request, params[:consultation_request][:status], current_user).perform
+
+    render json: @request
+  end
+
   private
 
   def cr_params

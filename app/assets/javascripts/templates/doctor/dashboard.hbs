@@ -20,8 +20,8 @@
         <td>{{status}}</td>
         <td>
           {{#if isNew}}
-            <a href="#" class="btn btn-sm btn-success disabled">Accept</a>
-            <a href="#" class="btn btn-sm btn-danger disabled">Decline</a>
+            <a href="#" {{action 'acceptRequest' this}} class="btn btn-sm btn-success">Accept</a>
+            <a href="#" {{action 'declineRequest' this}} class="btn btn-sm btn-danger">Decline</a>
           {{/if}}
         </td>
       </tr>

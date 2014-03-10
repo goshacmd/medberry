@@ -10,8 +10,6 @@ class ConsultationDispatcher
 
     return unless consultation.valid?
 
-    request.update(status: :accepted)
-
     Pusher.trigger(consultation.channels, "requests:#{request.id}", consultation: consultation.id)
   end
 end
