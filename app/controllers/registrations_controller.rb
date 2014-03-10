@@ -9,7 +9,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def build_resource(hash = nil)
-    self.resource = User.new.tap do |u|
+    self.resource = User.new do |u|
       u.identity = Patient.new
       u.assign_attributes(hash)
     end
