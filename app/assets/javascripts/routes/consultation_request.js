@@ -1,7 +1,11 @@
 Medlive.ConsultationRequestRoute = Ember.Route.extend({
   enter: function() {
-    var eventName = 'requests:' + this.currentModel.get('id');
-    channel.bind(eventName, this.showConsultation.bind(this));
+    var self = this;
+
+    var model = this.modelFor('consultation_request').then(function(request) {
+      var eventName = 'requests:' + request.get('id');
+      channel.bind(eventName, self.showConsultation.bind(self));
+    });
   },
 
   showConsultation: function(data) {
