@@ -6,9 +6,11 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <h3>Dr. {{fullName}}</h3>
-          <h6>Family doctor</h6>
+          <h6>
+            Family doctor &mdash; {{status}}
+          </h6>
 
-          <a href="#" class="btn btn-success" {{action 'createRequest' this}}>Call now</a>
+          <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'createRequest' this}}>Call now</a>
         </div>
       </div>
     </div>
