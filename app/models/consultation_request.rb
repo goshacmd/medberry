@@ -1,5 +1,6 @@
 class ConsultationRequest < ActiveRecord::Base
   include PusherChannels
+  include Enum
 
   STATUSES = HashWithIndifferentAccess.new new: 0, accepted: 1, declined: 2
 
@@ -10,13 +11,7 @@ class ConsultationRequest < ActiveRecord::Base
   validates :patient, presence: true
   validates :doctor, presence: true
 
-  def status
-    STATUSES.invert[read_attribute(:status)].try(:to_sym)
-  end
-
-  def status=(value)
-    write_attribute(:status, STATUSES[value])
-  end
+  enum :status, STATUSES
 
   def new_request?
     status == :new
