@@ -3,7 +3,7 @@
   <script src="http://js.pusher.com/2.1/pusher.min.js"></script>
 
   <script type="text/javascript">
-    var currentUser = JSON.parse('<%= UserSerializer.new(current_user, root: nil).to_json.html_safe %>');
+    var currentUser = JSON.parse('<%= UserSerializer.new(current_user).to_json.html_safe %>');
     var tokboxApiKey = "<%= ENV['OPEN_TOK_KEY'] %>";
     var pusher = new Pusher("<%= Pusher.key %>");
     var channel = pusher.subscribe("<%= current_user.pusher_channel_name %>");

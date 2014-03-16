@@ -1,4 +1,4 @@
-class DoctorsController < ApiController
+class Api::DoctorsController < ApiController
   before_action :ensure_patient
 
   def index

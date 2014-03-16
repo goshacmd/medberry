@@ -1,4 +1,4 @@
-class ConsultationRequestsController < ApiController
+class Api::ConsultationRequestsController < ApiController
   before_action :ensure_patient, only: [:create]
 
   def index

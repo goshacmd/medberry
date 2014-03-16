@@ -14,9 +14,9 @@ Ember.Application.initializer({
 
   initialize: function(container, application) {
     var store = container.lookup('store:main');
-    var user = store.push('user', currentUser);
+    store.pushPayload('user', currentUser);
 
-    container.register('user:current', user, { instantiate: false });
+    container.register('user:current', store.find('user', currentUser.user.id), { instantiate: false });
 
     container.injection('route', 'currentUser', 'user:current');
     container.injection('controller', 'currentUser', 'user:current');

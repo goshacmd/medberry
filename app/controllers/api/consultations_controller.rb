@@ -1,4 +1,4 @@
-class ConsultationsController < ApiController
+class Api::ConsultationsController < ApiController
   def show
     @consultation = Consultation.find(params[:id])
 

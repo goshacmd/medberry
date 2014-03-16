@@ -9,8 +9,10 @@ Medlive.ConsultationRequestRoute = Ember.Route.extend({
   },
 
   showConsultation: function(data) {
+    var self = this;
+
     this.store.find('consultation', data.consultation).then(function(consultation) {
-      this.transitionTo('consultation', consultation);
-    }.bind(this));
+      self.transitionTo('consultation', consultation);
+    });
   }
 });
