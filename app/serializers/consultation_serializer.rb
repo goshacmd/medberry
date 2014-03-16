@@ -1,7 +1,7 @@
 class ConsultationSerializer < ActiveModel::Serializer
   embed :ids, include: true
 
-  attributes :id, :cause, :tokbox_session, :tokbox_token, :created_at, :expiry
+  attributes :id, :cause, :tokbox_session, :tokbox_token, :created_at, :expiry, :status
   has_one :doctor
   has_one :patient
 

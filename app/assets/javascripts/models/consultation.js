@@ -5,5 +5,6 @@ Medlive.Consultation = DS.Model.extend({
   tokboxSession: DS.attr('string'),
   tokboxToken: DS.attr('string'),
   createdAt: DS.attr('date'),
-  expiry: DS.attr('date')
+  expiry: DS.attr('date'),
+  status: DS.attr('string')
 });

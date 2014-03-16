@@ -1,9 +1,14 @@
 class Consultation < ActiveRecord::Base
   include PusherChannels
+  include Enum
+
+  STATUSES = HashWithIndifferentAccess.new new: 0, finished: 1
 
   belongs_to :patient
   belongs_to :doctor
   belongs_to :request, class_name: 'ConsultationRequest'
+
+  enum :status, STATUSES
 
   class << self
     def create_from_request(request)
