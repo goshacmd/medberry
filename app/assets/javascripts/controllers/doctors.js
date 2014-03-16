@@ -3,7 +3,7 @@ Medlive.DoctorsController = Ember.ArrayController.extend({
     createRequest: function(doctor) {
       var self = this;
 
-      Medlive.ConsultationRequest.createRecord({
+      this.store.createRecord('consultation_request', {
         doctor: doctor
       }).save().then(function(request) {
         self.transitionToRoute('consultation_request', request);

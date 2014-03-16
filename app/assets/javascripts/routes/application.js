@@ -2,12 +2,9 @@ Medlive.ApplicationRoute = Ember.Route.extend({
   activate: function() {
     var store = this.store;
 
-    channel.bind('requests', function(data) {
-      store.pushPayload('consultation_request', data);
-    });
+    var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-    channel.bind('consultations', function(data) {
-      store.pushPayload('consultation', data);
-    });
+    channel.bind('requests', load('consultation_request'));
+    channel.bind('consultations', load('consultation'));
   }
 });
