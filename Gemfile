@@ -19,6 +19,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'ember-rails', '~> 0.14.1'
 gem 'ember-source', '1.4.0'
+gem 'ember-data-source', '1.0.0.beta.7'
 
 group :test do
   gem 'database_cleaner'

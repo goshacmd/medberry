@@ -14,9 +14,9 @@ Ember.Application.initializer({
 
   initialize: function(container, application) {
     var store = container.lookup('store:main');
-    var obj = store.load(Medlive.User, currentUser);
+    var user = store.push('user', currentUser);
 
-    container.register('user:current', Medlive.User.find(obj.id), { instantiate: false });
+    container.register('user:current', user, { instantiate: false });
 
     container.injection('route', 'currentUser', 'user:current');
     container.injection('controller', 'currentUser', 'user:current');

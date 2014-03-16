@@ -1,5 +1,3 @@
-Medlive.Store = DS.Store.extend({
-  adapter: 'Medlive.ApplicationAdapter'
-});
+Medlive.Store = DS.Store.extend();
 
-Medlive.ApplicationAdapter = DS.RESTAdapter.extend();
+Medlive.ApplicationAdapter = DS.ActiveModelAdapter;

@@ -1,6 +1,6 @@
 Medlive.Consultation = DS.Model.extend({
-  patient: DS.belongsTo('Medlive.Patient'),
-  doctor: DS.belongsTo('Medlive.Doctor'),
+  patient: DS.belongsTo('patient'),
+  doctor: DS.belongsTo('doctor'),
   cause: DS.attr('string'),
   tokboxSession: DS.attr('string'),
   tokboxToken: DS.attr('string'),
