@@ -34,4 +34,23 @@ class Consultation < ActiveRecord::Base
   def tokbox_token_for_role(role)
     role == 'doctor' ? tokbox_token_doctor : tokbox_token_patient
   end
+
+  def new_consultation?
+    status == :new
+  end
+
+  def finished?
+    status == :finished
+  end
+
+  # Get the role of a user in the consultation.
+  #
+  # @param user_or_identity [User, Patient, Doctor]
+  #
+  # @return [:patient, :doctor]
+  def role_of(user_or_identity)
+    identity = User === user_or_identity ? user_or_identity.identity : user_or_identity
+
+    patient == identity ? :patient : doctor == identity ? :doctor : nil
+  end
 end

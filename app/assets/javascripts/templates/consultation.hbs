@@ -1,22 +1,26 @@
-<div class="alert alert-info">
-  <div class="row">
-    <div class="col-lg-3">
-      {{time runTime}}
-    </div>
+{{#if isNew}}
+  <div class="alert alert-info">
+    <div class="row">
+      <div class="col-lg-3">
+        {{time runTime}}
+      </div>
 
-    <div class="col-lg-6 text-center">
-      Live consultation with
-      {{#if currentUser.isPatient}}
-        <b>Dr. {{doctor.fullName}}</b>
-      {{else}}
-        <b>{{patient.fullName}}</b>
-      {{/if}}
-    </div>
+      <div class="col-lg-6 text-center">
+        Live consultation with
+        {{#if currentUser.isPatient}}
+          <b>Dr. {{doctor.fullName}}</b>
+        {{else}}
+          <b>{{patient.fullName}}</b>
+        {{/if}}
+      </div>
 
-    <div class="col-lg-3 text-right">
-      <a href="#" class="btn btn-default btn-xs disabled">End</a>
+      <div class="col-lg-3 text-right">
+        <a href="#" class="btn btn-default btn-xs" {{action 'finish'}}>End</a>
+      </div>
     </div>
   </div>
-</div>
 
-{{tokbox-video sessionId=tokboxSession token=tokboxToken}}
+  {{tokbox-video sessionId=tokboxSession token=tokboxToken}}
+{{else}}
+  The consultation has been ended.
+{{/if}}

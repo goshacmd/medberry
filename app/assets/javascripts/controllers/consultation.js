@@ -14,5 +14,11 @@ Medlive.ConsultationController = Ember.ObjectController.extend({
 
   runTime: function() {
     return (new Date) - this.get('createdAt');
-  }.property('createdAt', 'pulse')
+  }.property('createdAt', 'pulse'),
+
+  actions: {
+    finish: function() {
+      this.get('model').finish();
+    }
+  }
 });

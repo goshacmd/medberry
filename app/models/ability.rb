@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    can :read, Consultation do |consultation|
+    can [:read, :update], Consultation do |consultation|
       consultation.doctor.user == user || consultation.patient.user == user
     end
 

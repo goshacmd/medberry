@@ -10,7 +10,7 @@ class ConsultationRequestUpdater
     @current_user = current_user
   end
 
-  # Change the status ofma request.
+  # Change the status of a request.
   def perform
     if request.new_request? && ConsultationRequest::STATUSES[status]
       request.update(status: status)
