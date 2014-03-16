@@ -7,6 +7,9 @@ class ConsultationRequest < ActiveRecord::Base
   belongs_to :doctor
   has_one :consultation, inverse_of: :request, foreign_key: :request_id
 
+  validates :patient, presence: true
+  validates :doctor, presence: true
+
   def status
     STATUSES.invert[read_attribute(:status)].try(:to_sym)
   end
