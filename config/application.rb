@@ -27,6 +27,8 @@ module Medlive
 
     config.autoload_paths += %W(#{config.root}/lib #{config.root}/app/services)
 
+    config.active_record.observers = [:consultation_request_observer, :consultation_observer]
+
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, dir: 'spec/factories'

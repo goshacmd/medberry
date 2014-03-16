@@ -17,7 +17,6 @@ class ConsultationRequestCreator
     status = DoctorStatusChecker.new(consultation_request.doctor).check
 
     if status == :online && consultation_request.save
-      Pusher.trigger consultation_request.doctor_channel, "requests", ConsultationRequestSerializer.new(consultation_request).as_json
       consultation_request
     else
       raise ValidationError.new(nil, consultation_request)

@@ -1,7 +1,13 @@
 Medlive.ApplicationRoute = Ember.Route.extend({
-  enter: function() {
+  activate: function() {
+    var store = this.store;
+
     channel.bind('requests', function(data) {
-      Medlive.ConsultationRequest.find();
+      store.push('consultation_request', data);
+    });
+
+    channel.bind('consultations', function(data) {
+      store.push('consultation', data);
     });
   }
 });

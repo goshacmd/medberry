@@ -5,6 +5,8 @@ class ConsultationSerializer < ActiveModel::Serializer
   has_one :doctor
   has_one :patient
 
+  alias_method :current_user, :scope
+
   def tokbox_token
     object.tokbox_token_for_role(current_user.role)
   end

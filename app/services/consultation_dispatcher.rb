@@ -8,10 +8,6 @@ class ConsultationDispatcher
 
   # Create a consultation from a consultation request.
   def perform
-    consultation = Consultation.create_from_request(request)
-
-    return unless consultation.valid?
-
-    Pusher.trigger(consultation.channels, "requests:#{request.id}", consultation: consultation.id)
+    Consultation.create_from_request(request)
   end
 end
