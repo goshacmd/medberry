@@ -1,3 +1,22 @@
-Now chatting: {{patient.fullName}} with Dr. {{doctor.fullName}}. <br>
+<div class="alert alert-info">
+  <div class="row">
+    <div class="col-lg-3">
+      {{time runTime}}
+    </div>
+
+    <div class="col-lg-6 text-center">
+      Live consultation with
+      {{#if currentUser.isPatient}}
+        <b>Dr. {{doctor.fullName}}</b>
+      {{else}}
+        <b>{{patient.fullName}}</b>
+      {{/if}}
+    </div>
+
+    <div class="col-lg-3 text-right">
+      <a href="#" class="btn btn-default btn-xs disabled">End</a>
+    </div>
+  </div>
+</div>
 
 {{tokbox-video sessionId=tokboxSession token=tokboxToken}}

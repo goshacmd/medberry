@@ -1,9 +1,7 @@
 class ApiController < ApplicationController
   before_action :check_sign_in
 
-  rescue_from CanCan::AccessDenied do |exception|
-    not_authorized
-  end
+  rescue_from CanCan::AccessDenied, with: :not_authorized
 
   private
 
