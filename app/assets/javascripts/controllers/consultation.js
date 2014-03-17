@@ -3,11 +3,5 @@ App.ConsultationController = Ember.ObjectController.extend({
 
   runTime: function() {
     return (new Date) - this.get('createdAt');
-  }.property('createdAt', 'controllers.clockService.pulse'),
-
-  actions: {
-    finish: function() {
-      this.get('model').finish();
-    }
-  }
+  }.property('createdAt', 'controllers.clockService.pulse')
 });
