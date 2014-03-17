@@ -1,4 +1,4 @@
-Medlive.TokboxVideoComponent = Ember.Component.extend({
+App.TokboxVideoComponent = Ember.Component.extend({
   sessionId: null,
   token: null,
 

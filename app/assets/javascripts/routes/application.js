@@ -1,4 +1,4 @@
-Medlive.ApplicationRoute = Ember.Route.extend({
+App.ApplicationRoute = Ember.Route.extend({
   activate: function() {
     var store = this.store;
 

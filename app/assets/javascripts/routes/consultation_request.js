@@ -1,4 +1,4 @@
-Medlive.ConsultationRequestRoute = Ember.Route.extend({
+App.ConsultationRequestRoute = Ember.Route.extend({
   enter: function() {
     var self = this;
 

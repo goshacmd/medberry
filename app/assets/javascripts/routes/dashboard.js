@@ -1,4 +1,4 @@
-Medlive.DashboardRoute = Ember.Route.extend({
+App.DashboardRoute = Ember.Route.extend({
   redirect: function() {
     if (this.currentUser.get('isDoctor')) {
       this.transitionTo('doctor.dashboard')

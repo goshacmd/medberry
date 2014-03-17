@@ -1,4 +1,4 @@
-Medlive.User = DS.Model.extend({
+App.User = DS.Model.extend({
   fullName: DS.attr('string'),
   role: DS.attr('string'),
 

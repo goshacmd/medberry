@@ -1,4 +1,4 @@
-Medlive.ConsultationController = Ember.ObjectController.extend({
+App.ConsultationController = Ember.ObjectController.extend({
   init: function() {
     this.tick();
     this._super();

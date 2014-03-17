@@ -7,7 +7,7 @@
 //= require_self
 //= require medlive
 
-window.Medlive = Ember.Application.create();
+window.App = Ember.Application.create();
 
 Ember.Application.initializer({
   name: 'currentUser',

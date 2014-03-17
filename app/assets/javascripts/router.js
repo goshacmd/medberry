@@ -1,4 +1,4 @@
-Medlive.Router.map(function() {
+App.Router.map(function() {
   this.route('dashboard', { path: '/' });
 
   this.resource('doctor', function() {

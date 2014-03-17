@@ -1,5 +1,5 @@
-Medlive.ApplicationAdapter = DS.ActiveModelAdapter.extend({
+App.ApplicationAdapter = DS.ActiveModelAdapter.extend({
   namespace: 'api'
 });
 
-Medlive.Store = DS.Store.extend();
+App.Store = DS.Store.extend();

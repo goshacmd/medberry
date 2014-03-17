@@ -1,4 +1,4 @@
-Medlive.DoctorsController = Ember.ArrayController.extend({
+App.DoctorsController = Ember.ArrayController.extend({
   actions: {
     createRequest: function(doctor) {
       var self = this;

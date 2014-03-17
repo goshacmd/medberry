@@ -1,4 +1,4 @@
-Medlive.Doctor = DS.Model.extend({
+App.Doctor = DS.Model.extend({
   firstName: DS.attr('string'),
   lastName: DS.attr('string'),
   status: DS.attr('string'),

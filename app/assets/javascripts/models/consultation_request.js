@@ -1,4 +1,4 @@
-Medlive.ConsultationRequest = DS.Model.extend({
+App.ConsultationRequest = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
   consultation: DS.belongsTo('consultation'),
