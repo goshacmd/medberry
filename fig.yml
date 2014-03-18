@@ -5,7 +5,7 @@ db:
 
 web:
   build: .
-  command: bundle exec rackup -p 3000
+  command: foreman start
   volumes:
     - .:/home/app
   ports:

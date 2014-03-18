@@ -2,10 +2,10 @@ class PusherController < ApplicationController
   protect_from_forgery except: :auth
 
   def auth
-    channel = params[:channel_name]
+    authenticator = ChannelAuthenticator.new params[:channel_name], params[:socket_id], current_user
 
-    if current_user && current_user.pusher_channel_name == channel
-      render json: Pusher[channel].authenticate(params[:socket_id])
+    if authenticator.can_authenticate?
+      render json: authenticator.authenticate
     else
       head :forbidden
     end
