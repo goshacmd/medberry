@@ -9,5 +9,6 @@ class ConsultationDispatcher
   # Create a consultation from a consultation request.
   def perform
     Consultation.create_from_request(request)
+    request.update(status: :accepted)
   end
 end

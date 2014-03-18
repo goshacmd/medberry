@@ -12,10 +12,8 @@ class ConsultationRequestUpdater
 
   # Change the status of a request.
   def perform
-    if request.new_request? && ConsultationRequest::STATUSES[status]
-      request.update(status: status)
-
-      ConsultationDispatcher.new(request).perform if request.accepted?
+    if request.new_request? && status == 'accepted'
+      ConsultationDispatcher.new(request).perform
     end
   end
 end
