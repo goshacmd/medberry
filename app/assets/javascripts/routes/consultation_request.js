@@ -1,18 +1,20 @@
 App.ConsultationRequestRoute = Ember.Route.extend({
-  enter: function() {
+  afterModel: function(request) {
     var self = this;
 
-    var model = this.modelFor('consultation_request').then(function(request) {
-      var eventName = 'requests:' + request.get('id');
-      userChannel.bind(eventName, self.showConsultation.bind(self));
-    });
+    var id = request.get('id');
+    var eventName = 'requests:' + id;
+
+    userChannel.bind(eventName, function(d) { self.send('showConsultation', d); });
   },
 
-  showConsultation: function(data) {
-    var self = this;
+  actions: {
+    showConsultation: function(data) {
+      var self = this;
 
-    this.store.find('consultation', data.consultation).then(function(consultation) {
-      self.transitionTo('consultation', consultation);
-    });
+      this.store.find('consultation', data.consultation).then(function(consultation) {
+        self.transitionTo('consultation', consultation);
+      });
+    }
   }
 });

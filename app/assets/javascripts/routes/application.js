@@ -7,12 +7,11 @@ App.ApplicationRoute = Ember.Route.extend({
     userChannel.bind('requests', load('consultation_request'));
     userChannel.bind('consultations', load('consultation'));
 
+    var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
+    var updateDoctor = function(item) { store.update('doctor', item); };
+
     pulserChannel.bind('pulse', function(data) {
-      data.filter(function(item) {
-        return store.hasRecordForId('doctor', item.id);
-      }).forEach(function(item) {
-        store.update('doctor', item)
-      });
+      data.filter(hasDoctor).forEach(updateDoctor);
     });
   }
 });
