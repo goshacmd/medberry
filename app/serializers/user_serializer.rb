@@ -1,3 +1,3 @@
-class UserSerializer < ActiveModel::Serializer
+class UserSerializer < ApplicationSerializer
   attributes :id, :full_name, :role
 end

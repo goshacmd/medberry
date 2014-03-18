@@ -1,4 +1,4 @@
-class DoctorSerializer < ActiveModel::Serializer
+class DoctorSerializer < ApplicationSerializer
   attributes :id, :first_name, :last_name, :status
 
   def status
