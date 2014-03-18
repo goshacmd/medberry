@@ -1,4 +1,9 @@
 App.DoctorDashboardController = Ember.ArrayController.extend({
   sortProperties: ['createdAt'],
-  sortAscending: false,
+
+  filteredContent: function() {
+    return this.filterBy('status', 'new');
+  }.property('arrangedContent'),
+
+  nextRequest: Ember.computed.alias('filteredContent.firstObject')
 });

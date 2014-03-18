@@ -4,16 +4,14 @@ App.DoctorDashboardRoute = Ember.Route.extend({
   },
 
   actions: {
-    acceptRequest: function(request) {
+    acceptNext: function() {
       var self = this;
 
-      request.accept().then(function() {
+      var goToConsultation = function(request) {
         self.transitionTo('consultation', request.get('consultation'));
-      });
-    },
+      };
 
-    declineRequest: function(request) {
-      request.decline();
+      this.controller.get('nextRequest').accept().then(goToConsultation);
     }
   }
 });

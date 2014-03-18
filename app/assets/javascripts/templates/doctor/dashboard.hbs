@@ -1,30 +1,29 @@
-<h4>Consultation requests</h4>
+<h4>Queue</h4>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Patient</th>
-      <th>Cause</th>
-      <th>Placed at</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-  </thead>
+{{#if filteredContent}}
+  <a href="#" class="btn btn-success" {{action 'acceptNext'}}>
+    Talk to next patient ({{nextRequest.patient.fullName}})
+  </a>
 
-  <tbody>
-    {{#each controller}}
-      <tr {{bind-attr class="isNewRequest:warning"}}>
-        <td>{{patient.fullName}}</td>
-        <td>{{cause}}</td>
-        <td>{{createdAt}}</td>
-        <td>{{status}}</td>
-        <td>
-          {{#if isNewRequest}}
-            <a href="#" {{action 'acceptRequest' this}} class="btn btn-sm btn-success">Accept</a>
-            <a href="#" {{action 'declineRequest' this}} class="btn btn-sm btn-danger">Decline</a>
-          {{/if}}
-        </td>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Cause</th>
+        <th>Placed at</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      {{#each filteredContent}}
+        <tr>
+          <td>{{patient.fullName}}</td>
+          <td>{{cause}}</td>
+          <td>{{createdAt}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>The queue is empty.</p>
+{{/if}}
