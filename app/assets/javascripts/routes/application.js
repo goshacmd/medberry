@@ -13,5 +13,20 @@ App.ApplicationRoute = Ember.Route.extend({
     this.pusher.bindPulser('pulse', function(data) {
       data.filter(hasDoctor).forEach(updateDoctor);
     });
+  },
+
+  actions: {
+    openModal: function(modalName, model) {
+      this.controllerFor(modalName).set('model', model);
+      this.render(modalName, { into: 'application', outlet: 'modal' });
+    },
+
+    closeModal: function() {
+      this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
+    },
+
+    willTransition: function() {
+      this.send('closeModal');
+    }
   }
 });
