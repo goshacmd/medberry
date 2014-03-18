@@ -10,7 +10,7 @@ App.DoctorsRoute = Ember.Route.extend({
       this.store.createRecord('consultation_request', {
         doctor: doctor
       }).save().then(function(request) {
-        self.transitionToRoute('consultation_request', request);
+        self.transitionTo('consultation_request', request);
       });
     }
   }

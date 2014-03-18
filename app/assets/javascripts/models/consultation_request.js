@@ -6,7 +6,7 @@ App.ConsultationRequest = DS.Model.extend({
   status: DS.attr('string'),
   createdAt: DS.attr('date'),
 
-  isNew: Ember.computed.equal('status', 'new'),
+  isNewRequest: Ember.computed.equal('status', 'new'),
 
   accept: function() {
     this.set('status', 'accepted');

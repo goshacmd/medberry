@@ -13,13 +13,13 @@
 
   <tbody>
     {{#each controller}}
-      <tr {{bind-attr class="isNew:warning"}}>
+      <tr {{bind-attr class="isNewRequest:warning"}}>
         <td>{{patient.fullName}}</td>
         <td>{{cause}}</td>
         <td>{{createdAt}}</td>
         <td>{{status}}</td>
         <td>
-          {{#if isNew}}
+          {{#if isNewRequest}}
             <a href="#" {{action 'acceptRequest' this}} class="btn btn-sm btn-success">Accept</a>
             <a href="#" {{action 'declineRequest' this}} class="btn btn-sm btn-danger">Decline</a>
           {{/if}}
