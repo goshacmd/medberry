@@ -4,7 +4,7 @@ App.ConsultationRequestRoute = Ember.Route.extend({
 
     var model = this.modelFor('consultation_request').then(function(request) {
       var eventName = 'requests:' + request.get('id');
-      channel.bind(eventName, self.showConsultation.bind(self));
+      userChannel.bind(eventName, self.showConsultation.bind(self));
     });
   },
 

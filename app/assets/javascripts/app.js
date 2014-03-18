@@ -7,6 +7,9 @@
 //= require_self
 //= require medlive
 
+var userChannel = pusher.subscribe(userChannelName);
+var pulserChannel = pusher.subscribe('online_pulser');
+
 window.App = Ember.Application.create();
 
 Ember.Application.initializer({

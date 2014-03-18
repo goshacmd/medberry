@@ -4,7 +4,15 @@ App.ApplicationRoute = Ember.Route.extend({
 
     var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-    channel.bind('requests', load('consultation_request'));
-    channel.bind('consultations', load('consultation'));
+    userChannel.bind('requests', load('consultation_request'));
+    userChannel.bind('consultations', load('consultation'));
+
+    pulserChannel.bind('pulse', function(data) {
+      data.filter(function(item) {
+        return store.hasRecordForId('doctor', item.id);
+      }).forEach(function(item) {
+        store.update('doctor', item)
+      });
+    });
   }
 });
