@@ -5,7 +5,7 @@
   <script type="text/javascript">
     var currentUser = JSON.parse('<%= UserSerializer.new(current_user).to_json.html_safe %>');
     var tokboxApiKey = "<%= ENV['OPEN_TOK_KEY'] %>";
-    var pusher = new Pusher("<%= Pusher.key %>");
+    var pusherKey = "<%= Pusher.key %>";
     var userChannelName = "<%= current_user.pusher_channel_name %>";
   </script>
 <% else %>

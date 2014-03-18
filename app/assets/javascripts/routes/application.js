@@ -4,13 +4,13 @@ App.ApplicationRoute = Ember.Route.extend({
 
     var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-    userChannel.bind('requests', load('consultation_request'));
-    userChannel.bind('consultations', load('consultation'));
+    this.pusher.bindUser('requests', load('consultation_request'));
+    this.pusher.bindUser('consultations', load('consultation'));
 
     var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
     var updateDoctor = function(item) { store.update('doctor', item); };
 
-    pulserChannel.bind('pulse', function(data) {
+    this.pusher.bindPulser('pulse', function(data) {
       data.filter(hasDoctor).forEach(updateDoctor);
     });
   }

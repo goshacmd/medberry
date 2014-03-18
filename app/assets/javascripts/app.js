@@ -7,9 +7,6 @@
 //= require_self
 //= require medlive
 
-var userChannel = pusher.subscribe(userChannelName);
-var pulserChannel = pusher.subscribe('online_pulser');
-
 window.App = Ember.Application.create();
 
 Ember.Application.initializer({
@@ -23,5 +20,15 @@ Ember.Application.initializer({
 
     container.injection('route', 'currentUser', 'user:current');
     container.injection('controller', 'currentUser', 'user:current');
+  }
+});
+
+Ember.Application.initializer({
+  name: 'pusher',
+
+  initialize: function(container, application) {
+    var pusher = App.Pusher.create({ key: pusherKey, userChannelName: userChannelName });
+    container.register('pusher:main', pusher, { instantiate: false });
+    container.injection('route', 'pusher', 'pusher:main');
   }
 });
