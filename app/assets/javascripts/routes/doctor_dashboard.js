@@ -8,7 +8,7 @@ App.DoctorDashboardRoute = Ember.Route.extend({
       var self = this;
 
       request.accept().then(function() {
-        self.transitionToRoute('consultation', request.get('consultation'));
+        self.transitionTo('consultation', request.get('consultation'));
       });
     },
 
