@@ -3,6 +3,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
   token: null,
   publisher: null,
   session: null,
+  cameraAccessError: null,
 
   mateStreamId: null,
 
@@ -83,7 +84,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
   actions: {
     accessDenied: function() {
-      alert('access to camera was denied, cannot proceed...');
+      this.set('cameraAccessError', true);
     },
 
     sessionConnected: function(event) {

@@ -1,2 +1,11 @@
-<div id="video-mate"></div>
-<div id="video-self"></div>
+{{#unless cameraAccessError}}
+  <div id="video-self"></div>
+  <div id="video-mate"></div>
+{{else}}
+  <h3>Access to camera denied</h3>
+
+  <p>
+    It looks like you have denied medberry access to your camera.
+    If you denied access to camera accidentaly, try reloading the page.
+  </p>
+{{/unless}}
