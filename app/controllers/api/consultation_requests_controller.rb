@@ -4,6 +4,8 @@ class Api::ConsultationRequestsController < ApiController
   def index
     @requests = current_user.identity.consultation_requests
 
+    @requests = @requests.where(status: params[:status]) if params[:status]
+
     render json: @requests
   end
 
