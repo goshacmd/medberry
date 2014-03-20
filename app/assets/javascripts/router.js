@@ -1,9 +1,7 @@
 App.Router.map(function() {
   this.route('dashboard', { path: '/' });
 
-  this.resource('doctor', function() {
-    this.route('dashboard');
-  });
+  this.resource('queue');
 
   this.resource('patient', function() {
     this.route('dashboard');
