@@ -1,16 +1,18 @@
 App.TokboxVideoComponent = Ember.Component.extend({
   sessionId: null,
   token: null,
-  streamCounter: 0,
   publisher: null,
   session: null,
 
+  mateStreamId: null,
+
   setupEventListeners: function(publisher, session) {
     var self = this;
-
     var send = function(eventName) {
-      var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
-      return function() { self.send.apply(self, newArguments) };
+      return function() {
+        var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
+        self.send.apply(self, newArguments)
+      };
     };
 
     var listenFor = function(object, eventName) { object.addEventListener(eventName, send(eventName)) };
@@ -30,11 +32,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
         sessionId = this.get('sessionId'),
         token = this.get('token');
 
-    var publisherId = this.elementId + '-publisher';
-
-    this.$().append('<div id="' + publisherId + '"></div>');
-
-    var publisher = this.publisher = TB.initPublisher(apiKey, publisherId);
+    var publisher = this.publisher = TB.initPublisher(apiKey, 'video-self');
     var session = this.session = TB.initSession(sessionId);
 
     this.setupEventListeners(publisher, session);
@@ -47,19 +45,15 @@ App.TokboxVideoComponent = Ember.Component.extend({
   }.on('willDestroyElement'),
 
   subscribeToStreams: function(streams) {
-    for (var i = 0; i < streams.length; i++) {
-      var stream = streams[i];
-      if (stream.connection.connectionId != this.session.connection.connectionId) {
-        var id = this.nextStreamElementId();
+    var self = this;
 
-        this.$().append('<div id="' + id + '"></div>');
-        this.session.subscribe(stream, id);
-      }
+    var mateStream = this.session.streams.find(function(stream) {
+      return (stream.connection.connectionId != self.session.connection.connectionId);
+    });
+
+    if (mateStream && this.mateStreamId != mateStream.streamId) {
+      this.session.subscribe(mateStream, 'video-mate');
     }
-  },
-
-  nextStreamElementId: function() {
-    return this.elementId + '-stream-' + ++this.streamCounter;
   },
 
   publish: function() {
