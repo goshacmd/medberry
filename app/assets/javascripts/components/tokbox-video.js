@@ -8,6 +8,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
   setupEventListeners: function(publisher, session) {
     var self = this;
+
     var send = function(eventName) {
       return function() {
         var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
@@ -32,6 +33,24 @@ App.TokboxVideoComponent = Ember.Component.extend({
         sessionId = this.get('sessionId'),
         token = this.get('token');
 
+    var mate$ = this.$('#video-mate');
+    var mateWidth = this.mateWidth = mate$.width();
+    var mateHeight = this.mateHeight = mateWidth * 3 / 4;
+
+    mate$.height(mateHeight);
+
+    var self$ = this.$('#video-self');
+    var selfWidth = this.selfWidth = 264;
+    var selfHeight = this.selfHeight = 198;
+
+    self$.width(selfWidth);
+    self$.height(selfHeight);
+
+    var selfTop = mate$.offset().top;
+    var selfLeft = mate$.offset().left;
+
+    self$.offset({ left: selfLeft + mateWidth - selfWidth - 20, top: selfTop + mateHeight - selfHeight - 20 });
+
     var publisher = this.publisher = TB.initPublisher(apiKey, 'video-self');
     var session = this.session = TB.initSession(sessionId);
 
@@ -52,7 +71,9 @@ App.TokboxVideoComponent = Ember.Component.extend({
     });
 
     if (mateStream && this.mateStreamId != mateStream.streamId) {
-      this.session.subscribe(mateStream, 'video-mate');
+      this.session.subscribe(mateStream, 'video-mate', {
+        width: this.mateWidth, height: this.mateHeight
+      });
     }
   },
 

@@ -17,3 +17,17 @@
 .modal {
   display: block;
 }
+
+#video-mate {
+  background-color: #999;
+  border-radius: 10px;
+}
+
+#video-self {
+  background-color: #666;
+  border-radius: 10px;
+}
+
+#video-mate video, #video-self video {
+  border-radius: 10px;
+}
