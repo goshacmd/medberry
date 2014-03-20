@@ -1,6 +1,7 @@
 App.DoctorDashboardRoute = Ember.Route.extend({
   model: function() {
-    return this.store.find('consultation_request');
+    var isNew = function(request) { return request.get('isNewRequest') };
+    return this.store.filter('consultation_request', isNew);
   },
 
   actions: {

@@ -1,6 +1,6 @@
 <h4>Queue</h4>
 
-{{#if filteredContent}}
+{{#if controller}}
   <a href="#" class="btn btn-success" {{action 'acceptNext'}}>
     Talk to next patient ({{nextRequest.patient.fullName}})
   </a>
@@ -15,7 +15,7 @@
     </thead>
 
     <tbody>
-      {{#each filteredContent}}
+      {{#each controller}}
         <tr>
           <td>{{patient.fullName}}</td>
           <td>{{cause}}</td>
