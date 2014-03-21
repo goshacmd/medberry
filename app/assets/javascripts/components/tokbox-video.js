@@ -88,6 +88,14 @@ App.TokboxVideoComponent = Ember.Component.extend({
     return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
   },
 
+  computeOptimalSelfVideoSize: function() {
+    var mateSize = this.computeOptimalMateVideoSize();
+    var mWidth = mateSize.width,
+        mHeight = mateSize.height;
+
+    return { width: mWidth / 3, height: mHeight / 3 };
+  },
+
   setMateSize: function(size) {
     this.mate$().css(size);
   },
@@ -106,7 +114,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
     var mateSize = this.computeOptimalMateVideoSize();
     this.setMateSize(mateSize);
 
-    var selfSize = { width: 264, height: 198 };
+    var selfSize = this.computeOptimalSelfVideoSize();
     this.setSelfSize(selfSize);
   },
 
