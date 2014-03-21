@@ -47,20 +47,42 @@ App.TokboxVideoComponent = Ember.Component.extend({
     session.connect(apiKey, token);
   }.on('didInsertElement'),
 
-  setVideoSizes: function() {
-    var mate$ = this.$('#video-mate');
-    var mateWidth = this.mateWidth = mate$.width();
-    var mateHeight = this.mateHeight = mateWidth * 3 / 4;
+  computeOptimalMateVideoSize: function() {
+    var vpWidth = this.$().width();
+    var vpHeight = $(window).height() - this.$().offset().top - 100;
 
-    mate$.width(mateWidth);
-    mate$.height(mateHeight);
+    var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
+    var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
+
+    return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
+  },
+
+  setMateSize: function(size) {
+    var mate$ = this.$('#video-mate');
+
+    this.mateWidth = size.width;
+    this.mateHeight = size.height;
+
+    mate$.css(size);
+  },
+
+  setSelfSize: function(size) {
+    var self$ = this.$('#video-self');
+
+    this.selfWidth = size.width;
+    this.selfHeight = size.height;
+
+    self$.css(size);
+  },
+
+  setVideoSizes: function() {
+    var mateSize = this.computeOptimalMateVideoSize();
+    this.setMateSize(mateSize);
 
     var self$ = this.$('#video-self');
-    var selfWidth = this.selfWidth = 264;
-    var selfHeight = this.selfHeight = 198;
 
-    self$.width(selfWidth);
-    self$.height(selfHeight);
+    var selfSize = { width: 264, height: 198 };
+    this.setSelfSize(selfSize);
   },
 
   positionVideoElements: function() {
