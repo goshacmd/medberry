@@ -17,6 +17,10 @@ var listenTo = function(object, self, events) {
   });
 };
 
+var getSize = function(el$) {
+  return { width: el$.width(), height: el$.heigh() };
+}
+
 var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
 var sessionEvents = ['connectionCreated', 'connectionDestroyed', 'sessionConnected', 'sessionDisconnected', 'signal', 'streamCreated', 'streamDestroyed', 'streamPropertyChanged'];
 
@@ -41,6 +45,10 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
   self$: function() {
     return this.$(selfSel);
+  },
+
+  v$: function() {
+    return this.$('.videos');
   },
 
   setupEventListeners: function() {
@@ -105,9 +113,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
   },
 
   getMateSize: function() {
-    var mate$ = this.mate$();
-
-    return { width: mate$.width(), height: mate$.height() };
+    return getSize(this.mate$());
   },
 
   setVideoSizes: function() {
@@ -116,6 +122,8 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
     var selfSize = this.computeOptimalSelfVideoSize();
     this.setSelfSize(selfSize);
+
+    this.v$().css(mateSize);
   },
 
   computeSelfVideoPosition: function() {
@@ -135,6 +143,15 @@ App.TokboxVideoComponent = Ember.Component.extend({
     return { top: -this.self$().height() };
   },
 
+  positionVideoContainer: function() {
+    var v$ = this.v$();
+
+    v$.css({ position: 'relative' });
+
+    var vPosition = { left: (this.$().width() - v$.width()) / 2 };
+    v$.css(vPosition);
+  },
+
   positionVideoElements: function() {
     var mate$ = this.mate$();
     var self$ = this.self$();
@@ -151,6 +168,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
   setAndPositionVideos: function() {
     this.setVideoSizes();
+    this.positionVideoContainer();
     this.positionVideoElements();
   },
 
