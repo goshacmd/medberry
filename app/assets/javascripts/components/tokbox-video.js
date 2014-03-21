@@ -48,13 +48,27 @@ App.TokboxVideoComponent = Ember.Component.extend({
     listenTo(this.session, this, sessionEvents);
   },
 
+  bindResize: function() {
+    var self = this;
+
+    this.resizeHandler = function() {
+      Ember.run(function() { self.setAndPositionVideos(); });
+    };
+
+    $(window).bind('resize', this.resizeHandler);
+  },
+
+  unbindResize: function() {
+    $(window).unbind('resize', this.resizeHandler);
+  },
+
   setupTokbox: function() {
     var apiKey = tokboxApiKey,
         sessionId = this.get('sessionId'),
         token = this.get('token');
 
-    this.setVideoSizes();
-    this.positionVideoElements();
+    this.bindResize();
+    this.setAndPositionVideos();
 
     this.publisher = TB.initPublisher(apiKey, selfId);
     this.session = TB.initSession(sessionId);
@@ -75,21 +89,11 @@ App.TokboxVideoComponent = Ember.Component.extend({
   },
 
   setMateSize: function(size) {
-    var mate$ = this.mate$();
-
-    this.mateWidth = size.width;
-    this.mateHeight = size.height;
-
-    mate$.css(size);
+    this.mate$().css(size);
   },
 
   setSelfSize: function(size) {
-    var self$ = this.self$();
-
-    this.selfWidth = size.width;
-    this.selfHeight = size.height;
-
-    self$.css(size);
+    this.self$().css(size);
   },
 
   getMateSize: function() {
@@ -137,7 +141,13 @@ App.TokboxVideoComponent = Ember.Component.extend({
     self$.css(selfPosition);
   },
 
+  setAndPositionVideos: function() {
+    this.setVideoSizes();
+    this.positionVideoElements();
+  },
+
   unsubscribeTokbox: function() {
+    this.unbindResize();
     this.session.disconnect();
   }.on('willDestroyElement'),
 
