@@ -13,7 +13,9 @@ App.TokboxVideoComponent = Ember.Component.extend({
     var send = function(eventName) {
       return function() {
         var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
-        self.send.apply(self, newArguments)
+        Ember.run(function() {
+          self.send.apply(self, newArguments)
+        });
       };
     };
 
