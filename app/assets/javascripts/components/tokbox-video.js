@@ -26,14 +26,14 @@ var mateId = 'video-mate';
 var mateSel = '#video-mate';
 
 App.TokboxVideoComponent = Ember.Component.extend({
-  sessionId: null,
-  token: null,
-  publisher: null,
-  session: null,
-  cameraAccessError: null,
+  sessionId: null, // tokbox session id
+  token: null, // tokbox token
+  publisher: null, // TB.Publisher
+  session: null, // TB.Session
+  cameraAccessError: null, // was there an error?
   selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
 
-  mateStreamId: null,
+  mateStreamId: null, // id of mate stream
 
   mate$: function() {
     return this.$(mateSel);
@@ -43,9 +43,9 @@ App.TokboxVideoComponent = Ember.Component.extend({
     return this.$(selfSel);
   },
 
-  setupEventListeners: function(publisher, session) {
-    listenTo(publisher, this, publisherEvents);
-    listenTo(session, this, sessionEvents);
+  setupEventListeners: function() {
+    listenTo(this.publisher, this, publisherEvents);
+    listenTo(this.session, this, sessionEvents);
   },
 
   setupTokbox: function() {
@@ -56,12 +56,12 @@ App.TokboxVideoComponent = Ember.Component.extend({
     this.setVideoSizes();
     this.positionVideoElements();
 
-    var publisher = this.publisher = TB.initPublisher(apiKey, selfId)
-    var session = this.session = TB.initSession(sessionId);
+    this.publisher = TB.initPublisher(apiKey, selfId);
+    this.session = TB.initSession(sessionId);
 
-    this.setupEventListeners(publisher, session);
+    this.setupEventListeners();
 
-    session.connect(apiKey, token);
+    this.session.connect(apiKey, token);
   }.on('didInsertElement'),
 
   computeOptimalMateVideoSize: function() {
@@ -90,6 +90,12 @@ App.TokboxVideoComponent = Ember.Component.extend({
     this.selfHeight = size.height;
 
     self$.css(size);
+  },
+
+  getMateSize: function() {
+    var mate$ = this.mate$();
+
+    return { width: mate$.width(), height: mate$.height() };
   },
 
   setVideoSizes: function() {
@@ -136,18 +142,16 @@ App.TokboxVideoComponent = Ember.Component.extend({
   }.on('willDestroyElement'),
 
   subscribeToStreams: function(streams) {
-    var self = this;
+    var selfConnectionId = this.session.connection.connectionId;
 
     var notOwnStream = function(stream) {
-      return (stream.connection.connectionId != self.session.connection.connectionId);
+      return stream.connection.connectionId != selfConnectionId;
     };
 
     var mateStream = this.session.streams.find(notOwnStream);
 
     if (mateStream && this.mateStreamId != mateStream.streamId) {
-      this.session.subscribe(mateStream, mateId, {
-        width: this.mateWidth, height: this.mateHeight
-      });
+      this.session.subscribe(mateStream, mateId, this.getMateSize());
     }
   },
 
@@ -157,7 +161,7 @@ App.TokboxVideoComponent = Ember.Component.extend({
 
   actions: {
     accessDenied: function() {
-      //this.set('cameraAccessError', true);
+      this.set('cameraAccessError', true);
     },
 
     sessionConnected: function(event) {
