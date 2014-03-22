@@ -1,6 +1,8 @@
+import { cat, partial } from 'app/utils';
+
 var send = function(self, eventName) {
   return function() {
-    var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
+    var newArguments = cat([eventName], arguments);
     Ember.run(function() {
       self.send.apply(self, newArguments)
     });
@@ -12,9 +14,8 @@ var listenFor = function(object, self, eventName) {
 };
 
 var listenTo = function(object, self, events) {
-  events.forEach(function(eventName) {
-    listenFor(object, self, eventName);
-  });
+  var listener = partial(listenFor, object, self);
+  events.forEach(listener);
 };
 
 var getSize = function(el$) {

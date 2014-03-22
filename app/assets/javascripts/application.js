@@ -5,6 +5,7 @@
 //= require ember
 //= require ember-data
 //= require ember-appkit
+//= require utils
 //= require app
 //= require_self
 //= require_tree ./adapters
