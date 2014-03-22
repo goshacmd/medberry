@@ -1,4 +1,6 @@
-var QueueRoute = Ember.Route.extend({
+import DoctorOnlyRoute from 'app/routes/doctor_only';
+
+var QueueRoute = DoctorOnlyRoute.extend({
   model: function() {
     var isNew = function(request) { return request.get('isNewRequest') };
     return this.store.filter('consultation_request', { status: 'new' }, isNew);
