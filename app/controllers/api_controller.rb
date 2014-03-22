@@ -1,6 +1,8 @@
 class ApiController < ApplicationController
   before_action :check_sign_in
 
+  protect_from_forgery except: []
+
   rescue_from CanCan::AccessDenied, with: :not_authorized
 
   private
