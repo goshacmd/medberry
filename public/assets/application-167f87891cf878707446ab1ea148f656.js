@@ -67166,7 +67166,7 @@ define("app/components/modal-dialog",
     };
 
     var getSize = function(el$) {
-      return { width: el$.width(), height: el$.heigh() };
+      return { width: el$.width(), height: el$.height() };
     }
 
     var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
