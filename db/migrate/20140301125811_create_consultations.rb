@@ -1,11 +1,11 @@
 class CreateConsultations < ActiveRecord::Migration
   def change
     create_table :consultations, id: :uuid do |t|
-      t.string :patient_id
+      t.uuid :patient_id
       t.index :patient_id
-      t.string :doctor_id
+      t.uuid :doctor_id
       t.index :doctor_id
-      t.string :request_id
+      t.uuid :request_id
       t.index :request_id
 
       t.string :cause

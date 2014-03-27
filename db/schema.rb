@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140316134933) do
+ActiveRecord::Schema.define(version: 20140327163238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "consultation_requests", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.string   "patient_id"
-    t.string   "doctor_id"
+    t.uuid     "patient_id"
+    t.uuid     "doctor_id"
     t.string   "cause"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -30,9 +30,9 @@ ActiveRecord::Schema.define(version: 20140316134933) do
   add_index "consultation_requests", ["patient_id"], name: "index_consultation_requests_on_patient_id", using: :btree
 
   create_table "consultations", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.string   "patient_id"
-    t.string   "doctor_id"
-    t.string   "request_id"
+    t.uuid     "patient_id"
+    t.uuid     "doctor_id"
+    t.uuid     "request_id"
     t.string   "cause"
     t.string   "tokbox_session"
     t.text     "tokbox_token_patient"
@@ -54,6 +54,17 @@ ActiveRecord::Schema.define(version: 20140316134933) do
     t.string "last_name"
   end
 
+  create_table "insurance_companies", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.string "name"
+  end
+
+  create_table "insurance_policies", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid   "insurance_company_id"
+    t.string "number"
+  end
+
+  add_index "insurance_policies", ["insurance_company_id"], name: "index_insurance_policies_on_insurance_company_id", using: :btree
+
   create_table "patients", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "bsn"
     t.string "first_name"
@@ -63,6 +74,7 @@ ActiveRecord::Schema.define(version: 20140316134933) do
     t.string "zip"
     t.string "address"
     t.string "city"
+    t.string "insurance_policy_id"
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|

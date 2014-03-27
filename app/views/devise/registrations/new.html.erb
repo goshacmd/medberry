@@ -18,6 +18,15 @@
         <%= ff.input :city, placeholder: 'Amsterdam' %>
       <% end %>
 
+      <h3>Insurance information</h3>
+
+      <%= f.simple_fields_for :identity do |fi| %>
+        <%= fi.simple_fields_for :insurance_policy do |ff| %>
+          <%= ff.association :insurance_company, collection: InsuranceCompany.all, label_method: :name, prompt: 'Insurance company' %>
+          <%= ff.input :number, placeholder: 'Insurance policy number' %>
+        <% end %>
+      <% end %>
+
       <h3>Account information</h3>
 
       <%= f.input :email, label: 'Email address', placeholder: 'john.doe@gmail.com' %>
