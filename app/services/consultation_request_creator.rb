@@ -14,7 +14,7 @@ class ConsultationRequestCreator
   def perform
     consultation_request = ConsultationRequest.new params
     consultation_request.patient = current_user.identity
-    status = DoctorStatusChecker.new(consultation_request.doctor).check
+    status = UserStatusChecker.new(consultation_request.doctor.user).check
 
     if status == :online && consultation_request.save
       consultation_request

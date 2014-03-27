@@ -12,8 +12,8 @@ class ChannelAuthenticator
 
   def should_authenticate?
     case name
-    when 'private-patient-online-pulser' then user.patient?
-    when 'private-doctor-online-pulser' then user.doctor?
+    when 'private-patient-online-pulser' then current_user.patient?
+    when 'private-doctor-online-pulser' then current_user.doctor?
     else
       current_user.try(:pusher_channel_name) == name
     end
