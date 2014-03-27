@@ -1,13 +1,14 @@
 var PusherService = Ember.Object.extend({
   key: null,
   userChannelName: null,
+  pulserChannelName: null,
 
   init: function() {
     this._super();
 
     this.pusher = new Pusher(this.get('key'));
     this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
-    this.pulserChannel = this.pusher.subscribe('online_pulser');
+    this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
   },
 
   bindUser: function(eventName, handler) {

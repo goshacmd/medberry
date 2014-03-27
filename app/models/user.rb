@@ -26,4 +26,8 @@ class User < ActiveRecord::Base
   def pusher_channel_name
     "private-#{role}-#{identity.id}"
   end
+
+  def pulser_channel_name
+    "private-#{role}-online-pulser"
+  end
 end

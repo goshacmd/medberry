@@ -17,7 +17,12 @@
     <tbody>
       {{#each controller}}
         <tr>
-          <td>{{patient.fullName}}</td>
+          <td>
+            {{patient.fullName}}
+
+            <small>{{#if patient.isOnline}}online{{else}}offline{{/if}}</small>
+          </td>
+
           <td>{{cause}}</td>
           <td>{{createdAt}}</td>
         </tr>

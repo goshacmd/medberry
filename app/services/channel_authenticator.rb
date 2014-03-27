@@ -10,11 +10,16 @@ class ChannelAuthenticator
     @current_user = current_user
   end
 
-  def can_authenticate?
-    current_user && (current_user.pusher_channel_name == name || (current_user.patient? && name == 'online_pulser'))
+  def should_authenticate?
+    case name
+    when 'private-patient-online-pulser' then user.patient?
+    when 'private-doctor-online-pulser' then user.doctor?
+    else
+      current_user.try(:pusher_channel_name) == name
+    end
   end
 
   def authenticate
-    Pusher[name].authenticate(socket_id) if can_authenticate?
+    Pusher[name].authenticate(socket_id) if should_authenticate?
   end
 end
