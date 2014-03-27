@@ -1,11 +1,9 @@
-define("routes/application", 
+define("app/routes/application", 
   ["exports"],
   function(__exports__) {
     "use strict";
     var ApplicationRoute = Ember.Route.extend({
       activate: function() {
-        alert('here we go!');
-
         var store = this.store;
 
         var load = function(type) { return function(data) { store.pushPayload(type, data); } };

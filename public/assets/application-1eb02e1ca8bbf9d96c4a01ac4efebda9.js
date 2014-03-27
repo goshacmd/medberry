@@ -10342,6 +10342,404 @@ if ( typeof noGlobal === strundefined ) {
 return jQuery;
 
 }));
+(function($, undefined) {
+
+/**
+ * Unobtrusive scripting adapter for jQuery
+ * https://github.com/rails/jquery-ujs
+ *
+ * Requires jQuery 1.7.0 or later.
+ *
+ * Released under the MIT license
+ *
+ */
+
+  // Cut down on the number of issues from people inadvertently including jquery_ujs twice
+  // by detecting and raising an error when it happens.
+  if ( $.rails !== undefined ) {
+    $.error('jquery-ujs has already been loaded!');
+  }
+
+  // Shorthand to make it a little easier to call public rails functions from within rails.js
+  var rails;
+  var $document = $(document);
+
+  $.rails = rails = {
+    // Link elements bound by jquery-ujs
+    linkClickSelector: 'a[data-confirm], a[data-method], a[data-remote], a[data-disable-with]',
+
+    // Button elements bound by jquery-ujs
+    buttonClickSelector: 'button[data-remote]',
+
+    // Select elements bound by jquery-ujs
+    inputChangeSelector: 'select[data-remote], input[data-remote], textarea[data-remote]',
+
+    // Form elements bound by jquery-ujs
+    formSubmitSelector: 'form',
+
+    // Form input elements bound by jquery-ujs
+    formInputClickSelector: 'form input[type=submit], form input[type=image], form button[type=submit], form button:not([type])',
+
+    // Form input elements disabled during form submission
+    disableSelector: 'input[data-disable-with], button[data-disable-with], textarea[data-disable-with]',
+
+    // Form input elements re-enabled after form submission
+    enableSelector: 'input[data-disable-with]:disabled, button[data-disable-with]:disabled, textarea[data-disable-with]:disabled',
+
+    // Form required input elements
+    requiredInputSelector: 'input[name][required]:not([disabled]),textarea[name][required]:not([disabled])',
+
+    // Form file input elements
+    fileInputSelector: 'input[type=file]',
+
+    // Link onClick disable selector with possible reenable after remote submission
+    linkDisableSelector: 'a[data-disable-with]',
+
+    // Make sure that every Ajax request sends the CSRF token
+    CSRFProtection: function(xhr) {
+      var token = $('meta[name="csrf-token"]').attr('content');
+      if (token) xhr.setRequestHeader('X-CSRF-Token', token);
+    },
+
+    // making sure that all forms have actual up-to-date token(cached forms contain old one)
+    refreshCSRFTokens: function(){
+      var csrfToken = $('meta[name=csrf-token]').attr('content');
+      var csrfParam = $('meta[name=csrf-param]').attr('content');
+      $('form input[name="' + csrfParam + '"]').val(csrfToken);
+    },
+
+    // Triggers an event on an element and returns false if the event result is false
+    fire: function(obj, name, data) {
+      var event = $.Event(name);
+      obj.trigger(event, data);
+      return event.result !== false;
+    },
+
+    // Default confirm dialog, may be overridden with custom confirm dialog in $.rails.confirm
+    confirm: function(message) {
+      return confirm(message);
+    },
+
+    // Default ajax function, may be overridden with custom function in $.rails.ajax
+    ajax: function(options) {
+      return $.ajax(options);
+    },
+
+    // Default way to get an element's href. May be overridden at $.rails.href.
+    href: function(element) {
+      return element.attr('href');
+    },
+
+    // Submits "remote" forms and links with ajax
+    handleRemote: function(element) {
+      var method, url, data, elCrossDomain, crossDomain, withCredentials, dataType, options;
+
+      if (rails.fire(element, 'ajax:before')) {
+        elCrossDomain = element.data('cross-domain');
+        crossDomain = elCrossDomain === undefined ? null : elCrossDomain;
+        withCredentials = element.data('with-credentials') || null;
+        dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
+
+        if (element.is('form')) {
+          method = element.attr('method');
+          url = element.attr('action');
+          data = element.serializeArray();
+          // memoized value from clicked submit button
+          var button = element.data('ujs:submit-button');
+          if (button) {
+            data.push(button);
+            element.data('ujs:submit-button', null);
+          }
+        } else if (element.is(rails.inputChangeSelector)) {
+          method = element.data('method');
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + "&" + element.data('params');
+        } else if (element.is(rails.buttonClickSelector)) {
+          method = element.data('method') || 'get';
+          url = element.data('url');
+          data = element.serialize();
+          if (element.data('params')) data = data + "&" + element.data('params');
+        } else {
+          method = element.data('method');
+          url = rails.href(element);
+          data = element.data('params') || null;
+        }
+
+        options = {
+          type: method || 'GET', data: data, dataType: dataType,
+          // stopping the "ajax:beforeSend" event will cancel the ajax request
+          beforeSend: function(xhr, settings) {
+            if (settings.dataType === undefined) {
+              xhr.setRequestHeader('accept', '*/*;q=0.5, ' + settings.accepts.script);
+            }
+            return rails.fire(element, 'ajax:beforeSend', [xhr, settings]);
+          },
+          success: function(data, status, xhr) {
+            element.trigger('ajax:success', [data, status, xhr]);
+          },
+          complete: function(xhr, status) {
+            element.trigger('ajax:complete', [xhr, status]);
+          },
+          error: function(xhr, status, error) {
+            element.trigger('ajax:error', [xhr, status, error]);
+          },
+          crossDomain: crossDomain
+        };
+
+        // There is no withCredentials for IE6-8 when
+        // "Enable native XMLHTTP support" is disabled
+        if (withCredentials) {
+          options.xhrFields = {
+            withCredentials: withCredentials
+          };
+        }
+
+        // Only pass url to `ajax` options if not blank
+        if (url) { options.url = url; }
+
+        var jqxhr = rails.ajax(options);
+        element.trigger('ajax:send', jqxhr);
+        return jqxhr;
+      } else {
+        return false;
+      }
+    },
+
+    // Handles "data-method" on links such as:
+    // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
+    handleMethod: function(link) {
+      var href = rails.href(link),
+        method = link.data('method'),
+        target = link.attr('target'),
+        csrfToken = $('meta[name=csrf-token]').attr('content'),
+        csrfParam = $('meta[name=csrf-param]').attr('content'),
+        form = $('<form method="post" action="' + href + '"></form>'),
+        metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
+
+      if (csrfParam !== undefined && csrfToken !== undefined) {
+        metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
+      }
+
+      if (target) { form.attr('target', target); }
+
+      form.hide().append(metadataInput).appendTo('body');
+      form.submit();
+    },
+
+    /* Disables form elements:
+      - Caches element value in 'ujs:enable-with' data store
+      - Replaces element text with value of 'data-disable-with' attribute
+      - Sets disabled property to true
+    */
+    disableFormElements: function(form) {
+      form.find(rails.disableSelector).each(function() {
+        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        element.data('ujs:enable-with', element[method]());
+        element[method](element.data('disable-with'));
+        element.prop('disabled', true);
+      });
+    },
+
+    /* Re-enables disabled form elements:
+      - Replaces element text with cached value from 'ujs:enable-with' data store (created in `disableFormElements`)
+      - Sets disabled property to false
+    */
+    enableFormElements: function(form) {
+      form.find(rails.enableSelector).each(function() {
+        var element = $(this), method = element.is('button') ? 'html' : 'val';
+        if (element.data('ujs:enable-with')) element[method](element.data('ujs:enable-with'));
+        element.prop('disabled', false);
+      });
+    },
+
+   /* For 'data-confirm' attribute:
+      - Fires `confirm` event
+      - Shows the confirmation dialog
+      - Fires the `confirm:complete` event
+
+      Returns `true` if no function stops the chain and user chose yes; `false` otherwise.
+      Attaching a handler to the element's `confirm` event that returns a `falsy` value cancels the confirmation dialog.
+      Attaching a handler to the element's `confirm:complete` event that returns a `falsy` value makes this function
+      return false. The `confirm:complete` event is fired whether or not the user answered true or false to the dialog.
+   */
+    allowAction: function(element) {
+      var message = element.data('confirm'),
+          answer = false, callback;
+      if (!message) { return true; }
+
+      if (rails.fire(element, 'confirm')) {
+        answer = rails.confirm(message);
+        callback = rails.fire(element, 'confirm:complete', [answer]);
+      }
+      return answer && callback;
+    },
+
+    // Helper function which checks for blank inputs in a form that match the specified CSS selector
+    blankInputs: function(form, specifiedSelector, nonBlank) {
+      var inputs = $(), input, valueToCheck,
+          selector = specifiedSelector || 'input,textarea',
+          allInputs = form.find(selector);
+
+      allInputs.each(function() {
+        input = $(this);
+        valueToCheck = input.is('input[type=checkbox],input[type=radio]') ? input.is(':checked') : input.val();
+        // If nonBlank and valueToCheck are both truthy, or nonBlank and valueToCheck are both falsey
+        if (!valueToCheck === !nonBlank) {
+
+          // Don't count unchecked required radio if other radio with same name is checked
+          if (input.is('input[type=radio]') && allInputs.filter('input[type=radio]:checked[name="' + input.attr('name') + '"]').length) {
+            return true; // Skip to next input
+          }
+
+          inputs = inputs.add(input);
+        }
+      });
+      return inputs.length ? inputs : false;
+    },
+
+    // Helper function which checks for non-blank inputs in a form that match the specified CSS selector
+    nonBlankInputs: function(form, specifiedSelector) {
+      return rails.blankInputs(form, specifiedSelector, true); // true specifies nonBlank
+    },
+
+    // Helper function, needed to provide consistent behavior in IE
+    stopEverything: function(e) {
+      $(e.target).trigger('ujs:everythingStopped');
+      e.stopImmediatePropagation();
+      return false;
+    },
+
+    //  replace element's html with the 'data-disable-with' after storing original html
+    //  and prevent clicking on it
+    disableElement: function(element) {
+      element.data('ujs:enable-with', element.html()); // store enabled state
+      element.html(element.data('disable-with')); // set to disabled state
+      element.bind('click.railsDisable', function(e) { // prevent further clicking
+        return rails.stopEverything(e);
+      });
+    },
+
+    // restore element to its original state which was disabled by 'disableElement' above
+    enableElement: function(element) {
+      if (element.data('ujs:enable-with') !== undefined) {
+        element.html(element.data('ujs:enable-with')); // set to old enabled state
+        element.removeData('ujs:enable-with'); // clean up cache
+      }
+      element.unbind('click.railsDisable'); // enable element
+    }
+
+  };
+
+  if (rails.fire($document, 'rails:attachBindings')) {
+
+    $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
+
+    $document.delegate(rails.linkDisableSelector, 'ajax:complete', function() {
+        rails.enableElement($(this));
+    });
+
+    $document.delegate(rails.linkClickSelector, 'click.rails', function(e) {
+      var link = $(this), method = link.data('method'), data = link.data('params'), metaClick = e.metaKey || e.ctrlKey;
+      if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+      if (!metaClick && link.is(rails.linkDisableSelector)) rails.disableElement(link);
+
+      if (link.data('remote') !== undefined) {
+        if (metaClick && (!method || method === 'GET') && !data) { return true; }
+
+        var handleRemote = rails.handleRemote(link);
+        // response from rails.handleRemote() will either be false or a deferred object promise.
+        if (handleRemote === false) {
+          rails.enableElement(link);
+        } else {
+          handleRemote.error( function() { rails.enableElement(link); } );
+        }
+        return false;
+
+      } else if (link.data('method')) {
+        rails.handleMethod(link);
+        return false;
+      }
+    });
+
+    $document.delegate(rails.buttonClickSelector, 'click.rails', function(e) {
+      var button = $(this);
+      if (!rails.allowAction(button)) return rails.stopEverything(e);
+
+      rails.handleRemote(button);
+      return false;
+    });
+
+    $document.delegate(rails.inputChangeSelector, 'change.rails', function(e) {
+      var link = $(this);
+      if (!rails.allowAction(link)) return rails.stopEverything(e);
+
+      rails.handleRemote(link);
+      return false;
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'submit.rails', function(e) {
+      var form = $(this),
+        remote = form.data('remote') !== undefined,
+        blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
+        nonBlankFileInputs = rails.nonBlankInputs(form, rails.fileInputSelector);
+
+      if (!rails.allowAction(form)) return rails.stopEverything(e);
+
+      // skip other logic when required values are missing or file upload is present
+      if (blankRequiredInputs && form.attr("novalidate") == undefined && rails.fire(form, 'ajax:aborted:required', [blankRequiredInputs])) {
+        return rails.stopEverything(e);
+      }
+
+      if (remote) {
+        if (nonBlankFileInputs) {
+          // slight timeout so that the submit button gets properly serialized
+          // (make it easy for event handler to serialize form without disabled values)
+          setTimeout(function(){ rails.disableFormElements(form); }, 13);
+          var aborted = rails.fire(form, 'ajax:aborted:file', [nonBlankFileInputs]);
+
+          // re-enable form elements if event bindings return false (canceling normal form submission)
+          if (!aborted) { setTimeout(function(){ rails.enableFormElements(form); }, 13); }
+
+          return aborted;
+        }
+
+        rails.handleRemote(form);
+        return false;
+
+      } else {
+        // slight timeout so that the submit button gets properly serialized
+        setTimeout(function(){ rails.disableFormElements(form); }, 13);
+      }
+    });
+
+    $document.delegate(rails.formInputClickSelector, 'click.rails', function(event) {
+      var button = $(this);
+
+      if (!rails.allowAction(button)) return rails.stopEverything(event);
+
+      // register the pressed submit button
+      var name = button.attr('name'),
+        data = name ? {name:name, value:button.val()} : null;
+
+      button.closest('form').data('ujs:submit-button', data);
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'ajax:beforeSend.rails', function(event) {
+      if (this == event.target) rails.disableFormElements($(this));
+    });
+
+    $document.delegate(rails.formSubmitSelector, 'ajax:complete.rails', function(event) {
+      if (this == event.target) rails.enableFormElements($(this));
+    });
+
+    $(function(){
+      rails.refreshCSRFTokens();
+    });
+  }
+
+})( jQuery );
 /*!
 
  handlebars v1.3.0
@@ -66462,7 +66860,35 @@ define("ember/container-debug-adapter",
 
 
 
-define("app/app", 
+define("app/utils", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var slice = Array.prototype.slice;
+    var toA = function(aryLike) { return slice.call(aryLike, 0); }
+
+    var cat = function(/* arguments... */) {
+      return toA(arguments).map(toA).reduce(function(prev, curr) {
+        return prev.concat(curr);
+      });
+    };
+
+    var tail = function(ary) {
+      return toA(ary).slice(1, ary.length);
+    };
+
+    var partial = function(fun /* args... */) {
+      var args = tail(arguments);
+
+      return function(/* arguments... */) {
+        return fun.apply(null, cat(args, arguments));
+      };
+    };
+
+    __exports__.cat = cat;
+    __exports__.tail = tail;
+    __exports__.partial = partial;
+  });define("app/app", 
   ["ember/resolver","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -66486,32 +66912,11 @@ define("app/app",
 
 
 
+
+
+
 window.App = require('app/app').default.create();
-
-Ember.Application.initializer({
-  name: 'currentUser',
-
-  initialize: function(container, application) {
-    var store = container.lookup('store:main');
-    store.pushPayload('user', currentUser);
-
-    container.register('user:current', store.find('user', currentUser.user.id), { instantiate: false });
-
-    container.injection('route', 'currentUser', 'user:current');
-    container.injection('controller', 'currentUser', 'user:current');
-  }
-});
-
-Ember.Application.initializer({
-  name: 'pusher',
-
-  initialize: function(container, application) {
-    var pusher = App.Pusher.create({ key: pusherKey, userChannelName: userChannelName });
-    container.register('pusher:main', pusher, { instantiate: false });
-    container.injection('route', 'pusher', 'pusher:main');
-  }
-});
-define("adapters/application", 
+define("app/adapters/application", 
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -66520,7 +66925,7 @@ define("adapters/application",
     });
 
     __exports__["default"] = ApplicationAdapter;
-  });define("router", 
+  });define("app/router", 
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -66541,342 +66946,421 @@ define("adapters/application",
     });
 
     __exports__["default"] = Router;
-  });App.Pusher = Ember.Object.extend({
-  key: null,
-  userChannelName: null,
+  });define("app/services/pusher", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var PusherService = Ember.Object.extend({
+      key: null,
+      userChannelName: null,
+      pulserChannelName: null,
 
-  init: function() {
-    this._super();
+      init: function() {
+        this._super();
 
-    this.pusher = new Pusher(this.get('key'));
-    this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
-    this.pulserChannel = this.pusher.subscribe('online_pulser');
-  },
+        this.pusher = new Pusher(this.get('key'));
+        this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
+        this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
+      },
 
-  bindUser: function(eventName, handler) {
-    this.userChannel.bind(eventName, handler);
-  },
+      bindUser: function(eventName, handler) {
+        this.userChannel.bind(eventName, handler);
+      },
 
-  bindPulser: function(eventName, handler) {
-    this.pulserChannel.bind(eventName, handler);
-  }
-});
-App.Consultation = DS.Model.extend({
-  patient: DS.belongsTo('patient'),
-  doctor: DS.belongsTo('doctor'),
-  cause: DS.attr('string'),
-  tokboxSession: DS.attr('string'),
-  tokboxToken: DS.attr('string'),
-  createdAt: DS.attr('date'),
-  expiry: DS.attr('date'),
-  status: DS.attr('string'),
-  finishedAt: DS.attr('date'),
-  finishedByRole: DS.attr('string'),
+      bindPulser: function(eventName, handler) {
+        this.pulserChannel.bind(eventName, handler);
+      }
+    });
 
-  isNewConsultation: Ember.computed.equal('status', 'new'),
-  isFinished: Ember.computed.equal('status', 'finished'),
+    __exports__["default"] = PusherService;
+  });define("app/models/consultation", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var Consultation = DS.Model.extend({
+      patient: DS.belongsTo('patient'),
+      doctor: DS.belongsTo('doctor'),
+      cause: DS.attr('string'),
+      tokboxSession: DS.attr('string'),
+      tokboxToken: DS.attr('string'),
+      createdAt: DS.attr('date'),
+      expiry: DS.attr('date'),
+      status: DS.attr('string'),
+      finishedAt: DS.attr('date'),
+      finishedByRole: DS.attr('string'),
 
-  finish: function() {
-    this.set('status', 'finished');
-    return this.save();
-  }
-});
-App.ConsultationRequest = DS.Model.extend({
-  patient: DS.belongsTo('patient'),
-  doctor: DS.belongsTo('doctor'),
-  consultation: DS.belongsTo('consultation'),
-  cause: DS.attr('string'),
-  status: DS.attr('string'),
-  createdAt: DS.attr('date'),
+      isNewConsultation: Ember.computed.equal('status', 'new'),
+      isFinished: Ember.computed.equal('status', 'finished'),
 
-  isNewRequest: Ember.computed.equal('status', 'new'),
+      finish: function() {
+        this.set('status', 'finished');
+        return this.save();
+      }
+    });
 
-  accept: function() {
-    this.set('status', 'accepted');
-    return this.save();
-  },
+    __exports__["default"] = Consultation;
+  });define("app/models/consultation_request", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ConsultationRequest = DS.Model.extend({
+      patient: DS.belongsTo('patient'),
+      doctor: DS.belongsTo('doctor'),
+      consultation: DS.belongsTo('consultation'),
+      cause: DS.attr('string'),
+      status: DS.attr('string'),
+      createdAt: DS.attr('date'),
 
-  decline: function() {
-    this.set('status', 'declined');
-    return this.save();
-  }
-});
-App.Doctor = DS.Model.extend({
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string'),
-  status: DS.attr('string'),
+      isNewRequest: Ember.computed.equal('status', 'new'),
 
-  isOnline: Ember.computed.equal('status', 'online'),
-  isOffline: Ember.computed.equal('status', 'offline'),
+      accept: function() {
+        this.set('status', 'accepted');
+        return this.save();
+      },
 
-  fullName: function() {
-    return [this.get('firstName'), this.get('lastName')].join(' ')
-  }.property('firstName', 'lastName')
-});
-App.Patient = DS.Model.extend({
-  firstName: DS.attr('string'),
-  lastName: DS.attr('string'),
+      decline: function() {
+        this.set('status', 'declined');
+        return this.save();
+      }
+    });
 
-  fullName: function() {
-    return [this.get('firstName'), this.get('lastName')].join(' ')
-  }.property('firstName', 'lastName')
-});
-App.User = DS.Model.extend({
-  fullName: DS.attr('string'),
-  role: DS.attr('string'),
+    __exports__["default"] = ConsultationRequest;
+  });define("app/models/doctor", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var Doctor = DS.Model.extend({
+      firstName: DS.attr('string'),
+      lastName: DS.attr('string'),
+      status: DS.attr('string'),
 
-  isDoctor: Ember.computed.equal('role', 'doctor'),
-  isPatient: Ember.computed.equal('role', 'patient')
-});
-App.ClockServiceController = Ember.Controller.extend({
-  pulse: null,
+      isOnline: Ember.computed.equal('status', 'online'),
+      isOffline: Ember.computed.equal('status', 'offline'),
 
-  init: function() {
-    this.tick();
-    this._super();
-  },
+      fullName: function() {
+        return [this.get('firstName'), this.get('lastName')].join(' ')
+      }.property('firstName', 'lastName')
+    });
 
-  tick: function() {
-    this.notifyPropertyChange('pulse');
+    __exports__["default"] = Doctor;
+  });define("app/models/patient", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var Patient = DS.Model.extend({
+      firstName: DS.attr('string'),
+      lastName: DS.attr('string'),
+      status: DS.attr('string'),
 
-    Ember.run.later(this, 'tick', 1000);
-  }
-});
-App.ConsultationController = Ember.ObjectController.extend({
-  needs: ['clockService'],
+      isOnline: Ember.computed.equal('status', 'online'),
+      isOffline: Ember.computed.equal('status', 'offline'),
 
-  runTime: function() {
-    return (new Date) - this.get('createdAt');
-  }.property('createdAt', 'controllers.clockService.pulse')
-});
-App.NewConsultationRequestController = Ember.ObjectController.extend();
-App.QueueController = Ember.ArrayController.extend({
-  sortProperties: ['createdAt'],
-  nextRequest: Ember.computed.alias('arrangedContent.firstObject')
-});
-Ember.Handlebars.helper('time', function(diff) {
+      fullName: function() {
+        return [this.get('firstName'), this.get('lastName')].join(' ')
+      }.property('firstName', 'lastName')
+    });
+
+    __exports__["default"] = Patient;
+  });define("app/models/user", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var User = DS.Model.extend({
+      fullName: DS.attr('string'),
+      role: DS.attr('string'),
+
+      isDoctor: Ember.computed.equal('role', 'doctor'),
+      isPatient: Ember.computed.equal('role', 'patient')
+    });
+
+    __exports__["default"] = User;
+  });define("app/controllers/clock_service", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ClockServiceController = Ember.Controller.extend({
+      pulse: null,
+
+      init: function() {
+        this.tick();
+        this._super();
+      },
+
+      tick: function() {
+        this.notifyPropertyChange('pulse');
+
+        Ember.run.later(this, 'tick', 1000);
+      }
+    });
+
+    __exports__["default"] = ClockServiceController;
+  });define("app/controllers/consultation", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ConsultationController = Ember.ObjectController.extend({
+      needs: ['clockService'],
+
+      runTime: function() {
+        return (new Date) - this.get('createdAt');
+      }.property('createdAt', 'controllers.clockService.pulse')
+    });
+
+    __exports__["default"] = ConsultationController;
+  });define("app/controllers/new_consultation_request", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var NewConsultationRequestController = Ember.ObjectController.extend();
+
+    __exports__["default"] = NewConsultationRequestController;
+  });define("app/controllers/queue", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var QueueController = Ember.ArrayController.extend({
+      sortProperties: ['createdAt'],
+      nextRequest: Ember.computed.alias('arrangedContent.firstObject')
+    });
+
+    __exports__["default"] = QueueController;
+  });Ember.Handlebars.helper('time', function(diff) {
   return moment(diff).format('mm:ss');
 });
-App.ModalDialogComponent = Ember.Component.extend({
-  actions: {
-    close: function() {
-      this.sendAction();
-    }
-  }
-});
-var send = function(self, eventName) {
-  return function() {
-    var newArguments = [eventName].concat(Array.prototype.slice.call(arguments, 0));
-    Ember.run(function() {
-      self.send.apply(self, newArguments)
+define("app/components/modal-dialog", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ModalDialogComponent = Ember.Component.extend({
+      actions: {
+        close: function() {
+          this.sendAction();
+        }
+      }
     });
-  };
-};
 
-var listenFor = function(object, self, eventName) {
-  object.addEventListener(eventName, send(self, eventName))
-};
+    __exports__["default"] = ModalDialogComponent;
+  });define("app/components/tokbox-video", 
+  ["app/utils","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var cat = __dependency1__.cat;
+    var partial = __dependency1__.partial;
 
-var listenTo = function(object, self, events) {
-  events.forEach(function(eventName) {
-    listenFor(object, self, eventName);
-  });
-};
-
-var getSize = function(el$) {
-  return { width: el$.width(), height: el$.heigh() };
-}
-
-var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
-var sessionEvents = ['connectionCreated', 'connectionDestroyed', 'sessionConnected', 'sessionDisconnected', 'signal', 'streamCreated', 'streamDestroyed', 'streamPropertyChanged'];
-
-var selfId = 'video-self';
-var selfSel = '#video-self';
-var mateId = 'video-mate';
-var mateSel = '#video-mate';
-
-App.TokboxVideoComponent = Ember.Component.extend({
-  sessionId: null, // tokbox session id
-  token: null, // tokbox token
-  publisher: null, // TB.Publisher
-  session: null, // TB.Session
-  cameraAccessError: null, // was there an error?
-  selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
-
-  mateStreamId: null, // id of mate stream
-
-  mate$: function() {
-    return this.$(mateSel);
-  },
-
-  self$: function() {
-    return this.$(selfSel);
-  },
-
-  v$: function() {
-    return this.$('.videos');
-  },
-
-  setupEventListeners: function() {
-    listenTo(this.publisher, this, publisherEvents);
-    listenTo(this.session, this, sessionEvents);
-  },
-
-  bindResize: function() {
-    var self = this;
-
-    this.resizeHandler = function() {
-      Ember.run(function() { self.setAndPositionVideos(); });
+    var send = function(self, eventName) {
+      return function() {
+        var newArguments = cat([eventName], arguments);
+        Ember.run(function() {
+          self.send.apply(self, newArguments)
+        });
+      };
     };
 
-    $(window).bind('resize', this.resizeHandler);
-  },
-
-  unbindResize: function() {
-    $(window).unbind('resize', this.resizeHandler);
-  },
-
-  setupTokbox: function() {
-    var apiKey = tokboxApiKey,
-        sessionId = this.get('sessionId'),
-        token = this.get('token');
-
-    this.bindResize();
-    this.setAndPositionVideos();
-
-    this.publisher = TB.initPublisher(apiKey, selfId);
-    this.session = TB.initSession(sessionId);
-
-    this.setupEventListeners();
-
-    this.session.connect(apiKey, token);
-  }.on('didInsertElement'),
-
-  computeOptimalMateVideoSize: function() {
-    var vpWidth = this.$().width();
-    var vpHeight = $(window).height() - this.$().offset().top - 100;
-
-    var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
-    var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
-
-    return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
-  },
-
-  computeOptimalSelfVideoSize: function() {
-    var mateSize = this.computeOptimalMateVideoSize();
-    var mWidth = mateSize.width,
-        mHeight = mateSize.height;
-
-    return { width: mWidth / 3, height: mHeight / 3 };
-  },
-
-  setMateSize: function(size) {
-    this.mate$().css(size);
-  },
-
-  setSelfSize: function(size) {
-    this.self$().css(size);
-  },
-
-  getMateSize: function() {
-    return getSize(this.mate$());
-  },
-
-  setVideoSizes: function() {
-    var mateSize = this.computeOptimalMateVideoSize();
-    this.setMateSize(mateSize);
-
-    var selfSize = this.computeOptimalSelfVideoSize();
-    this.setSelfSize(selfSize);
-
-    this.v$().css(mateSize);
-  },
-
-  computeSelfVideoPosition: function() {
-    var pos = parseInt(this.get('selfPosition'));
-
-    var mate$ = this.mate$();
-    var self$ = this.self$();
-    var k = 20;
-
-    var left = pos == 1 || pos == 3 ? k : mate$.width() - self$.width() - k;
-    var top = pos == 1 || pos == 2 ? k : mate$.height() - self$.height() - k;
-
-    return { left: left, top: top };
-  },
-
-  computeMateVideoPosition: function() {
-    return { top: -this.self$().height() };
-  },
-
-  positionVideoContainer: function() {
-    var v$ = this.v$();
-
-    v$.css({ position: 'relative' });
-
-    var vPosition = { left: (this.$().width() - v$.width()) / 2 };
-    v$.css(vPosition);
-  },
-
-  positionVideoElements: function() {
-    var mate$ = this.mate$();
-    var self$ = this.self$();
-
-    mate$.css({ position: 'relative' });
-    self$.css({ position: 'relative', 'z-index': 100 });
-
-    var matePosition = this.computeMateVideoPosition();
-    var selfPosition = this.computeSelfVideoPosition();
-
-    mate$.css(matePosition);
-    self$.css(selfPosition);
-  },
-
-  setAndPositionVideos: function() {
-    this.setVideoSizes();
-    this.positionVideoContainer();
-    this.positionVideoElements();
-  },
-
-  unsubscribeTokbox: function() {
-    this.unbindResize();
-    this.session.disconnect();
-  }.on('willDestroyElement'),
-
-  subscribeToStreams: function(streams) {
-    var selfConnectionId = this.session.connection.connectionId;
-
-    var notOwnStream = function(stream) {
-      return stream.connection.connectionId != selfConnectionId;
+    var listenFor = function(object, self, eventName) {
+      object.addEventListener(eventName, send(self, eventName))
     };
 
-    var mateStream = this.session.streams.find(notOwnStream);
+    var listenTo = function(object, self, events) {
+      var listener = partial(listenFor, object, self);
+      events.forEach(listener);
+    };
 
-    if (mateStream && this.mateStreamId != mateStream.streamId) {
-      this.session.subscribe(mateStream, mateId, this.getMateSize());
+    var getSize = function(el$) {
+      return { width: el$.width(), height: el$.heigh() };
     }
-  },
 
-  publish: function() {
-    this.session.publish(this.publisher);
-  },
+    var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
+    var sessionEvents = ['connectionCreated', 'connectionDestroyed', 'sessionConnected', 'sessionDisconnected', 'signal', 'streamCreated', 'streamDestroyed', 'streamPropertyChanged'];
 
-  actions: {
-    accessDenied: function() {
-      this.set('cameraAccessError', true);
-    },
+    var selfId = 'video-self';
+    var selfSel = '#video-self';
+    var mateId = 'video-mate';
+    var mateSel = '#video-mate';
 
-    sessionConnected: function(event) {
-      this.subscribeToStreams(event.streams);
-      this.publish();
-    },
+    var TokboxVideoComponent = Ember.Component.extend({
+      sessionId: null, // tokbox session id
+      token: null, // tokbox token
+      publisher: null, // TB.Publisher
+      session: null, // TB.Session
+      cameraAccessError: null, // was there an error?
+      selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
 
-    streamCreated: function(event) {
-      this.subscribeToStreams(event.streams);
-    }
-  }
-});
-Ember.TEMPLATES["application"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+      mateStreamId: null, // id of mate stream
+
+      mate$: function() {
+        return this.$(mateSel);
+      },
+
+      self$: function() {
+        return this.$(selfSel);
+      },
+
+      v$: function() {
+        return this.$('.videos');
+      },
+
+      setupEventListeners: function() {
+        listenTo(this.publisher, this, publisherEvents);
+        listenTo(this.session, this, sessionEvents);
+      },
+
+      bindResize: function() {
+        var self = this;
+
+        this.resizeHandler = function() {
+          Ember.run(function() { self.setAndPositionVideos(); });
+        };
+
+        $(window).bind('resize', this.resizeHandler);
+      },
+
+      unbindResize: function() {
+        $(window).unbind('resize', this.resizeHandler);
+      },
+
+      setupTokbox: function() {
+        var apiKey = tokboxApiKey,
+            sessionId = this.get('sessionId'),
+            token = this.get('token');
+
+        this.bindResize();
+        this.setAndPositionVideos();
+
+        this.publisher = TB.initPublisher(apiKey, selfId);
+        this.session = TB.initSession(sessionId);
+
+        this.setupEventListeners();
+
+        this.session.connect(apiKey, token);
+      }.on('didInsertElement'),
+
+      computeOptimalMateVideoSize: function() {
+        var vpWidth = this.$().width();
+        var vpHeight = $(window).height() - this.$().offset().top - 100;
+
+        var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
+        var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
+
+        return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
+      },
+
+      computeOptimalSelfVideoSize: function() {
+        var mateSize = this.computeOptimalMateVideoSize();
+        var mWidth = mateSize.width,
+            mHeight = mateSize.height;
+
+        return { width: mWidth / 3, height: mHeight / 3 };
+      },
+
+      setMateSize: function(size) {
+        this.mate$().css(size);
+      },
+
+      setSelfSize: function(size) {
+        this.self$().css(size);
+      },
+
+      getMateSize: function() {
+        return getSize(this.mate$());
+      },
+
+      setVideoSizes: function() {
+        var mateSize = this.computeOptimalMateVideoSize();
+        this.setMateSize(mateSize);
+
+        var selfSize = this.computeOptimalSelfVideoSize();
+        this.setSelfSize(selfSize);
+
+        this.v$().css(mateSize);
+      },
+
+      computeSelfVideoPosition: function() {
+        var pos = parseInt(this.get('selfPosition'));
+
+        var mate$ = this.mate$();
+        var self$ = this.self$();
+        var k = 20;
+
+        var left = pos == 1 || pos == 3 ? k : mate$.width() - self$.width() - k;
+        var top = pos == 1 || pos == 2 ? k : mate$.height() - self$.height() - k;
+
+        return { left: left, top: top };
+      },
+
+      computeMateVideoPosition: function() {
+        return { top: -this.self$().height() };
+      },
+
+      positionVideoContainer: function() {
+        var v$ = this.v$();
+
+        v$.css({ position: 'relative' });
+
+        var vPosition = { left: (this.$().width() - v$.width()) / 2 };
+        v$.css(vPosition);
+      },
+
+      positionVideoElements: function() {
+        var mate$ = this.mate$();
+        var self$ = this.self$();
+
+        mate$.css({ position: 'relative' });
+        self$.css({ position: 'relative', 'z-index': 100 });
+
+        var matePosition = this.computeMateVideoPosition();
+        var selfPosition = this.computeSelfVideoPosition();
+
+        mate$.css(matePosition);
+        self$.css(selfPosition);
+      },
+
+      setAndPositionVideos: function() {
+        this.setVideoSizes();
+        this.positionVideoContainer();
+        this.positionVideoElements();
+      },
+
+      unsubscribeTokbox: function() {
+        this.unbindResize();
+        this.session.disconnect();
+      }.on('willDestroyElement'),
+
+      subscribeToStreams: function(streams) {
+        var selfConnectionId = this.session.connection.connectionId;
+
+        var notOwnStream = function(stream) {
+          return stream.connection.connectionId != selfConnectionId;
+        };
+
+        var mateStream = this.session.streams.find(notOwnStream);
+
+        if (mateStream && this.mateStreamId != mateStream.streamId) {
+          this.session.subscribe(mateStream, mateId, this.getMateSize());
+        }
+      },
+
+      publish: function() {
+        this.session.publish(this.publisher);
+      },
+
+      actions: {
+        accessDenied: function() {
+          this.set('cameraAccessError', true);
+        },
+
+        sessionConnected: function(event) {
+          this.subscribeToStreams(event.streams);
+          this.publish();
+        },
+
+        streamCreated: function(event) {
+          this.subscribeToStreams(event.streams);
+        }
+      }
+    });
+
+    __exports__["default"] = TokboxVideoComponent;
+  });define('app/templates/application', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
@@ -66890,8 +67374,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\n");
   return buffer;
   
-});
-Ember.TEMPLATES["components/modal-dialog"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/components/modal-dialog', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, escapeExpression=this.escapeExpression;
@@ -66909,8 +67392,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("\n    </div>\n  </div>\n</div>\n<div class=\"modal-backdrop in\"></div>\n");
   return buffer;
   
-});
-Ember.TEMPLATES["components/tokbox-video"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/components/tokbox-video', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, self=this;
@@ -66932,8 +67414,7 @@ function program3(depth0,data) {
   data.buffer.push("\n");
   return buffer;
   
-});
-Ember.TEMPLATES["consultation"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/consultation', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
@@ -66987,8 +67468,7 @@ function program6(depth0,data) {
   data.buffer.push("\n");
   return buffer;
   
-});
-Ember.TEMPLATES["consultation_request"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1;
@@ -67000,8 +67480,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("...</h5>\n");
   return buffer;
   
-});
-Ember.TEMPLATES["doctors"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/doctors', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
@@ -67031,8 +67510,7 @@ function program1(depth0,data) {
   data.buffer.push("\n</div>\n");
   return buffer;
   
-});
-Ember.TEMPLATES["new_consultation_request"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/new_consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
@@ -67063,8 +67541,7 @@ function program1(depth0,data) {
   data.buffer.push("\n");
   return buffer;
   
-});
-Ember.TEMPLATES["patient/dashboard"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/patient/dashboard', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
@@ -67086,11 +67563,10 @@ function program1(depth0,data) {
   data.buffer.push("\n");
   return buffer;
   
-});
-Ember.TEMPLATES["queue"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/queue', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, self=this, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
@@ -67109,10 +67585,13 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = '', stack1;
-  data.buffer.push("\n        <tr>\n          <td>");
+  data.buffer.push("\n        <tr>\n          <td>\n            ");
   stack1 = helpers._triageMustache.call(depth0, "patient.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</td>\n          <td>");
+  data.buffer.push("\n\n            <small>");
+  stack1 = helpers['if'].call(depth0, "patient.isOnline", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</small>\n          </td>\n\n          <td>");
   stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</td>\n          <td>");
@@ -67121,28 +67600,36 @@ function program2(depth0,data) {
   data.buffer.push("</td>\n        </tr>\n      ");
   return buffer;
   }
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("online");
+  }
 
-function program4(depth0,data) {
+function program5(depth0,data) {
+  
+  
+  data.buffer.push("offline");
+  }
+
+function program7(depth0,data) {
   
   
   data.buffer.push("\n  <p>The queue is empty.</p>\n");
   }
 
   data.buffer.push("<h4>Queue</h4>\n\n");
-  stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(7, program7, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
   
-});
-define("routes/application", 
+}); });define("app/routes/application", 
   ["exports"],
   function(__exports__) {
     "use strict";
     var ApplicationRoute = Ember.Route.extend({
       activate: function() {
-        alert('here we go!');
-
         var store = this.store;
 
         var load = function(type) { return function(data) { store.pushPayload(type, data); } };
@@ -67175,69 +67662,123 @@ define("routes/application",
     });
 
     __exports__["default"] = ApplicationRoute;
-  });App.ConsultationRoute = Ember.Route.extend({
-  actions: {
-    finish: function() {
-      this.currentModel.finish();
-    }
-  }
-});
-App.ConsultationRequestRoute = Ember.Route.extend({
-  afterModel: function(request) {
-    var self = this;
-
-    var id = request.get('id');
-    var eventName = 'requests:' + id;
-
-    this.pusher.bindUser(eventName, function(d) { self.send('showConsultation', d); });
-  },
-
-  actions: {
-    showConsultation: function(data) {
-      var self = this;
-
-      this.store.find('consultation', data.consultation).then(function(consultation) {
-        self.transitionTo('consultation', consultation);
-      });
-    }
-  }
-});
-App.DashboardRoute = Ember.Route.extend({
-  redirect: function() {
-    if (this.currentUser.get('isDoctor')) {
-      this.transitionTo('queue')
-    } else {
-      this.transitionTo('patient.dashboard')
-    }
-  },
-});
-App.DoctorsRoute = Ember.Route.extend({
-  model: function() {
-    return this.store.find('doctor');
-  },
-
-  actions: {
-    showRequestModal: function(doctor) {
-      var requestData = { doctor: doctor, cause: null };
-      this.send('openModal', 'new_consultation_request', requestData);
-    },
-
-    createRequest: function(requestData) {
-      var self = this;
-
-      var goToRequest = function(request) {
-        self.transitionTo('consultation_request', request);
-      }
-
-      this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
-    }
-  }
-});
-define("routes/queue", 
+  });define("app/routes/consultation", 
   ["exports"],
   function(__exports__) {
     "use strict";
-    var QueueRoute = Ember.Route.extend({
+    var ConsultationRoute = Ember.Route.extend({
+      actions: {
+        finish: function() {
+          this.currentModel.finish();
+        }
+      }
+    });
+
+    __exports__["default"] = ConsultationRoute;
+  });define("app/routes/consultation_request", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ConsultationRequestRoute = Ember.Route.extend({
+      afterModel: function(request) {
+        var self = this;
+
+        var id = request.get('id');
+        var eventName = 'requests:' + id;
+
+        this.pusher.bindUser(eventName, function(d) { self.send('showConsultation', d); });
+      },
+
+      actions: {
+        showConsultation: function(data) {
+          var self = this;
+
+          this.store.find('consultation', data.consultation).then(function(consultation) {
+            self.transitionTo('consultation', consultation);
+          });
+        }
+      }
+    });
+
+    __exports__["default"] = ConsultationRequestRoute;
+  });define("app/routes/dashboard", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var DashboardRoute = Ember.Route.extend({
+      redirect: function() {
+        if (this.currentUser.get('isDoctor')) {
+          this.transitionTo('queue')
+        } else {
+          this.transitionTo('patient.dashboard')
+        }
+      },
+    });
+
+    __exports__["default"] = DashboardRoute;
+  });define("app/routes/doctor_only", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var DoctorOnlyRoute = Ember.Route.extend({
+      redirect: function() {
+        if (!this.currentUser.get('isDoctor')) {
+          this.transitionTo('dashboard');
+        }
+      }
+    });
+
+    __exports__["default"] = DoctorOnlyRoute;
+  });define("app/routes/doctors", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var DoctorsRoute = PatientOnlyRoute.extend({
+      model: function() {
+        return this.store.find('doctor');
+      },
+
+      actions: {
+        showRequestModal: function(doctor) {
+          var requestData = { doctor: doctor, cause: null };
+          this.send('openModal', 'new_consultation_request', requestData);
+        },
+
+        createRequest: function(requestData) {
+          var self = this;
+
+          var goToRequest = function(request) {
+            self.transitionTo('consultation_request', request);
+          }
+
+          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
+        }
+      }
+    });
+
+    __exports__["default"] = DoctorsRoute;
+  });define("app/routes/patient_only", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var PatientOnlyRoute = Ember.Route.extend({
+      redirect: function() {
+        if (!this.currentUser.get('isPatient')) {
+          this.transitionTo('dashboard');
+        }
+      }
+    });
+
+    __exports__["default"] = PatientOnlyRoute;
+  });define("app/routes/queue", 
+  ["app/routes/doctor_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var DoctorOnlyRoute = __dependency1__["default"];
+
+    var QueueRoute = DoctorOnlyRoute.extend({
       model: function() {
         var isNew = function(request) { return request.get('isNewRequest') };
         return this.store.filter('consultation_request', { status: 'new' }, isNew);
@@ -67265,3 +67806,28 @@ define("routes/queue",
 
 
 
+Ember.Application.initializer({
+  name: 'currentUser',
+
+  initialize: function(container, application) {
+    var store = container.lookup('store:main');
+    store.pushPayload('user', currentUser);
+
+    container.register('user:current', store.find('user', currentUser.user.id), { instantiate: false });
+
+    container.injection('route', 'currentUser', 'user:current');
+    container.injection('controller', 'currentUser', 'user:current');
+  }
+});
+Ember.Application.initializer({
+  name: 'pusher',
+
+  initialize: function(container, application) {
+    var pusher = require('app/services/pusher').default.create({
+      key: pusherKey, userChannelName: userChannelName, pulserChannelName: pulserChannelName
+    });
+
+    container.register('pusher:main', pusher, { instantiate: false });
+    container.injection('route', 'pusher', 'pusher:main');
+  }
+});

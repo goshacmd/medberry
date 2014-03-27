@@ -1,4 +1,4 @@
-define("adapters/application", 
+define("app/adapters/application", 
   ["exports"],
   function(__exports__) {
     "use strict";
