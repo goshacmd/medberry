@@ -66940,7 +66940,11 @@ define("app/adapters/application",
         this.route('dashboard');
       });
 
-      this.resource('doctors');
+      this.resource('doctors', function() {
+        this.route('family_doctors');
+        this.route('pharmacists');
+      });
+
       this.resource('consultation_request', { path: '/requests/:consultation_request_id' });
       this.resource('consultation', { path: '/consults/:consultation_id' });
     });
@@ -67033,13 +67037,18 @@ define("app/adapters/application",
       firstName: DS.attr('string'),
       lastName: DS.attr('string'),
       status: DS.attr('string'),
+      practice: DS.attr('string'),
 
       isOnline: Ember.computed.equal('status', 'online'),
       isOffline: Ember.computed.equal('status', 'offline'),
 
       fullName: function() {
         return [this.get('firstName'), this.get('lastName')].join(' ')
-      }.property('firstName', 'lastName')
+      }.property('firstName', 'lastName'),
+
+      humanPractice: function() {
+        return this.get('practice') == 'family' ? 'Family doctor' : 'Pharmacist';
+      }.property('practice')
     });
 
     __exports__["default"] = Doctor;
@@ -67480,18 +67489,66 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("...</h5>\n");
   return buffer;
   
-}); });define('app/templates/doctors', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/doctors/index', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n      ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.index", options) : helperMissing.call(depth0, "link-to", "doctors.index", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  data.buffer.push("All");
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n      ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.family_doctors", options) : helperMissing.call(depth0, "link-to", "doctors.family_doctors", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  
+  data.buffer.push("Family doctors only");
+  }
+
+function program7(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n      ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.pharmacists", options) : helperMissing.call(depth0, "link-to", "doctors.pharmacists", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  
+  data.buffer.push("Pharmacists only");
+  }
+
+function program10(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n    <div class=\"col-lg-3 text-center\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n          <h3>Dr. ");
   stack1 = helpers._triageMustache.call(depth0, "fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</h3>\n          <h6>\n            Family doctor &mdash; ");
+  data.buffer.push("</h3>\n          <h6>\n            ");
+  stack1 = helpers._triageMustache.call(depth0, "humanPractice", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" &mdash; ");
   stack1 = helpers._triageMustache.call(depth0, "status", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n          </h6>\n\n          <a href=\"#\" ");
@@ -67504,8 +67561,23 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<h2>Doctors</h2>\n\n<div class=\"row\">\n  ");
-  stack1 = helpers.each.call(depth0, {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[],types:[],data:data});
+  data.buffer.push("<h2>Doctors</h2>\n\n<div class=\"form-group\">\n  <ul class=\"nav nav-pills\">\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.index", options) : helperMissing.call(depth0, "link-to", "doctors.index", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.family_doctors", options) : helperMissing.call(depth0, "link-to", "doctors.family_doctors", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.pharmacists", options) : helperMissing.call(depth0, "link-to", "doctors.pharmacists", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  </ul>\n</div>\n\n<div class=\"row\">\n  ");
+  stack1 = helpers.each.call(depth0, {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[],types:[],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n</div>\n");
   return buffer;
@@ -67759,6 +67831,53 @@ function program7(depth0,data) {
     });
 
     __exports__["default"] = DoctorsRoute;
+  });define("app/routes/doctors/family_doctors", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var FamilyDoctorsRoute = PatientOnlyRoute.extend({
+      model: function() {
+        return this.modelFor('doctors').filterProperty('practice', 'family');
+      },
+
+      renderTemplate: function(controller) {
+        this.render('doctors/index', { controller: controller });
+      }
+    });
+
+    __exports__["default"] = FamilyDoctorsRoute;
+  });define("app/routes/doctors/index", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var DoctorsIndexRoute = PatientOnlyRoute.extend({
+      model: function() {
+        return this.modelFor('doctors');
+      }
+    });
+
+    __exports__["default"] = DoctorsIndexRoute;
+  });define("app/routes/doctors/pharmacists", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var PharmacistsRoute = PatientOnlyRoute.extend({
+      model: function() {
+        return this.modelFor('doctors').filterProperty('practice', 'pharmacist');
+      },
+
+      renderTemplate: function(controller) {
+        this.render('doctors/index', { controller: controller });
+      }
+    });
+
+    __exports__["default"] = PharmacistsRoute;
   });define("app/routes/patient_only", 
   ["exports"],
   function(__exports__) {
