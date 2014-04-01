@@ -13,7 +13,7 @@ class ConsultationRequest < ActiveRecord::Base
 
   enum :status, STATUSES
 
-  scope :unfilled, -> { where(status: :new) }
+  scope :unfilled, -> { where(status: STATUSES[:new]) }
 
   def new_request?
     status == :new
