@@ -5908,7 +5908,8 @@ a.list-group-item.active > .badge,
 /* line 36, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_thumbnails.scss */
 a.thumbnail:hover,
 a.thumbnail:focus,
-a.thumbnail.active {
+a.thumbnail.active,
+.selector a.thumbnail.active:hover {
   border-color: #428bca;
 }
 
@@ -6206,7 +6207,7 @@ a.list-group-item:hover, a.list-group-item:focus {
   background-color: whitesmoke;
 }
 /* line 71, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_list-group.scss */
-a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+a.list-group-item.active, .selector a.list-group-item.active:hover, a.list-group-item.active:hover, a.list-group-item.active:focus {
   z-index: 2;
   color: white;
   background-color: #428bca;
@@ -6241,7 +6242,7 @@ a.list-group-item-success:hover, a.list-group-item-success:focus {
   background-color: #d0e9c6;
 }
 /* line 488, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_mixins.scss */
-a.list-group-item-success.active, a.list-group-item-success.active:hover, a.list-group-item-success.active:focus {
+a.list-group-item-success.active, .selector a.list-group-item-success.active:hover, a.list-group-item-success.active:hover, a.list-group-item-success.active:focus {
   color: #fff;
   background-color: #3c763d;
   border-color: #3c763d;
@@ -6267,7 +6268,7 @@ a.list-group-item-info:hover, a.list-group-item-info:focus {
   background-color: #c4e3f3;
 }
 /* line 488, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_mixins.scss */
-a.list-group-item-info.active, a.list-group-item-info.active:hover, a.list-group-item-info.active:focus {
+a.list-group-item-info.active, .selector a.list-group-item-info.active:hover, a.list-group-item-info.active:hover, a.list-group-item-info.active:focus {
   color: #fff;
   background-color: #31708f;
   border-color: #31708f;
@@ -6293,7 +6294,7 @@ a.list-group-item-warning:hover, a.list-group-item-warning:focus {
   background-color: #faf2cc;
 }
 /* line 488, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_mixins.scss */
-a.list-group-item-warning.active, a.list-group-item-warning.active:hover, a.list-group-item-warning.active:focus {
+a.list-group-item-warning.active, .selector a.list-group-item-warning.active:hover, a.list-group-item-warning.active:hover, a.list-group-item-warning.active:focus {
   color: #fff;
   background-color: #8a6d3b;
   border-color: #8a6d3b;
@@ -6319,7 +6320,7 @@ a.list-group-item-danger:hover, a.list-group-item-danger:focus {
   background-color: #ebcccc;
 }
 /* line 488, /var/lib/gems/2.1.0/gems/bootstrap-sass-3.1.1.0/vendor/assets/stylesheets/bootstrap/_mixins.scss */
-a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus {
+a.list-group-item-danger.active, .selector a.list-group-item-danger.active:hover, a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus {
   color: #fff;
   background-color: #a94442;
   border-color: #a94442;
@@ -7607,24 +7608,48 @@ button.close {
     display: none !important;
   }
 }
-/* line 18, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 19, /home/app/app/assets/stylesheets/application.css.scss */
+.selector a.active, .selector a.active:hover {
+  color: #000;
+  text-decoration: none;
+  cursor: default;
+}
+/* line 29, /home/app/app/assets/stylesheets/application.css.scss */
+.selector label {
+  padding-left: 1em;
+  font-weight: normal;
+  font-size: 0.75em;
+}
+
+/* line 36, /home/app/app/assets/stylesheets/application.css.scss */
+.doctor-card {
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+/* line 37, /home/app/app/assets/stylesheets/application.css.scss */
+.doctor-card img {
+  max-width: 100%;
+}
+
+/* line 46, /home/app/app/assets/stylesheets/application.css.scss */
 .modal {
   display: block;
 }
 
-/* line 22, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 50, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate {
   background-color: #999;
   border-radius: 10px;
 }
 
-/* line 27, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 55, /home/app/app/assets/stylesheets/application.css.scss */
 #video-self {
   background-color: #666;
   border-radius: 10px;
 }
 
-/* line 32, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 60, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate video, #video-self video {
   border-radius: 10px;
 }
