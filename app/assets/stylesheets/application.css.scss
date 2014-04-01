@@ -32,6 +32,16 @@
   }
 }
 
+.doctor-card {
+  img {
+    max-width: 100%;
+  }
+
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 .modal {
   display: block;
 }
