@@ -2,8 +2,11 @@ module Enum
   extend ActiveSupport::Concern
 
   module ClassMethods
+    # @param field_name [String, Symbol]
+    # @param enum_hash [Hash]
     def enum(field_name, enum_hash)
-      inverted = enum_hash.invert
+      hash = enum_hash.with_indifferent_access
+      inverted = hash.invert
       getter = field_name.to_s
       setter = "#{field_name}="
 

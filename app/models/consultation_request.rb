@@ -2,7 +2,7 @@ class ConsultationRequest < ActiveRecord::Base
   include PusherChannels
   include Enum
 
-  STATUSES = HashWithIndifferentAccess.new new: 0, accepted: 1, declined: 2
+  STATUSES = { new: 0, accepted: 1, declined: 2 }
 
   belongs_to :patient
   belongs_to :doctor

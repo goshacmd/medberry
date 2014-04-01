@@ -28,12 +28,12 @@ insurance_no_prefix = Time.now.strftime '%Y%m%d'
 end
 
 [
-  ['Olivia', 'Wilde'],
-  ['Patrick', 'White']
-].each_with_index do |(fname, lname), index|
+  ['Olivia', 'Wilde', :family],
+  ['Patrick', 'White', :pharmacist]
+].each_with_index do |(fname, lname, type), index|
   create_user_with_identity(
     { email: email('doctor', fname, lname), password: 'doctorqq' },
-    { first_name: fname, last_name: lname },
+    { first_name: fname, last_name: lname, practice: type },
     Doctor
   )
 end

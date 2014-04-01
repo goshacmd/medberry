@@ -7,7 +7,7 @@
         <div class="panel-body">
           <h3>Dr. {{fullName}}</h3>
           <h6>
-            Family doctor &mdash; {{status}}
+            {{humanPractice}} &mdash; {{status}}
           </h6>
 
           <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>Call now</a>
