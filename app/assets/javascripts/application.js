@@ -2,6 +2,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require handlebars
+//= require env
 //= require ember
 //= require ember-data
 //= require ember-appkit
@@ -12,5 +13,7 @@
 //= require router
 //= require medlive
 //= require_tree ./initializers
+
+TB.setLogLevel(1);
 
 window.App = require('app/app').default.create();

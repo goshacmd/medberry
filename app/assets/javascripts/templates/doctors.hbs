@@ -1,0 +1,35 @@
+<h2>
+  Doctors
+
+  <small class="selector">
+    {{#link-to (query-params practice=false)}}All{{/link-to}} /
+    {{#link-to (query-params practice="family")}}family doctors{{/link-to}} /
+    {{#link-to (query-params practice="pharmacist")}}pharmacists{{/link-to}}
+
+    <label>
+      {{input type="checkbox" checked=online}}
+      only show available doctors
+    </label>
+  </small>
+</h2>
+
+{{#if filteredContent}}
+  <div class="row">
+    {{#each filteredContent}}
+      <div class="col-lg-3 text-center">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h3>Dr. {{fullName}}</h3>
+            <h6>
+              {{humanPractice}} &mdash; {{status}}
+            </h6>
+
+            <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>Call now</a>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <p>There are no doctors matching the specified criteria.</p>
+{{/if}}
