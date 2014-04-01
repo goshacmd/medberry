@@ -3,6 +3,7 @@ var Doctor = DS.Model.extend({
   lastName: DS.attr('string'),
   status: DS.attr('string'),
   practice: DS.attr('string'),
+  favorite: DS.attr('boolean'),
 
   isOnline: Ember.computed.equal('status', 'online'),
   isOffline: Ember.computed.equal('status', 'offline'),

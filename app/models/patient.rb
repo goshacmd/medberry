@@ -1,7 +1,9 @@
 class Patient < ActiveRecord::Base
   has_one :user, as: :identity
-  has_many :consultation_requests
   belongs_to :insurance_policy, autosave: true
+  has_many :consultation_requests
+  has_many :favorite_doctors
+  has_many :fav_doctors, through: :favorite_doctors, source: :doctor
 
   validates :bsn, presence: true, length: { is: 9 }, format: { with: /\A[0-9]+\z/ }
   validates :first_name, presence: true

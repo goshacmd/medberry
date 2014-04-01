@@ -14,11 +14,25 @@
 
 @import "bootstrap";
 
+%text-like-link {
+  color: #000;
+  text-decoration: none;
+  cursor: default;
+}
+
+.star {
+  @extend %text-like-link;
+  color: #e6d600;
+
+  &:hover {
+    color: #fff01a;
+    text-decoration: none;
+  }
+}
+
 .selector {
   a.active {
-    color: #000;
-    text-decoration: none;
-    cursor: default;
+    @extend %text-like-link;
 
     &:hover {
       @extend a.active;
@@ -34,7 +48,7 @@
 
 .doctor-card {
   img {
-    max-width: 100%;
+    max-width: 75%;
   }
 
   border: none;

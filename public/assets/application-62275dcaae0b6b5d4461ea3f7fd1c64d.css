@@ -7608,48 +7608,59 @@ button.close {
     display: none !important;
   }
 }
-/* line 19, /home/app/app/assets/stylesheets/application.css.scss */
-.selector a.active, .selector a.active:hover {
+/* line 18, /home/app/app/assets/stylesheets/application.css.scss */
+.star, .selector a.active, .selector a.active:hover {
   color: #000;
   text-decoration: none;
   cursor: default;
 }
-/* line 29, /home/app/app/assets/stylesheets/application.css.scss */
+
+/* line 24, /home/app/app/assets/stylesheets/application.css.scss */
+.star {
+  color: #e6d600;
+}
+/* line 28, /home/app/app/assets/stylesheets/application.css.scss */
+.star:hover {
+  color: #fff01a;
+  text-decoration: none;
+}
+
+/* line 43, /home/app/app/assets/stylesheets/application.css.scss */
 .selector label {
   padding-left: 1em;
   font-weight: normal;
   font-size: 0.75em;
 }
 
-/* line 36, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 50, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card {
   border: none;
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 37, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 51, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card img {
-  max-width: 100%;
+  max-width: 75%;
 }
 
-/* line 46, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 60, /home/app/app/assets/stylesheets/application.css.scss */
 .modal {
   display: block;
 }
 
-/* line 50, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 64, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate {
   background-color: #999;
   border-radius: 10px;
 }
 
-/* line 55, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 69, /home/app/app/assets/stylesheets/application.css.scss */
 #video-self {
   background-color: #666;
   border-radius: 10px;
 }
 
-/* line 60, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 74, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate video, #video-self video {
   border-radius: 10px;
 }

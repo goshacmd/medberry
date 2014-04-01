@@ -71635,6 +71635,7 @@ define("app/adapters/application",
       lastName: DS.attr('string'),
       status: DS.attr('string'),
       practice: DS.attr('string'),
+      favorite: DS.attr('boolean'),
 
       isOnline: Ember.computed.equal('status', 'online'),
       isOffline: Ember.computed.equal('status', 'offline'),
@@ -71713,6 +71714,23 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = ConsultationController;
+  });define("app/controllers/doctor_card", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var DoctorCardController = Ember.ObjectController.extend({
+      thing: 'a',
+      actions: {
+        toggleStar: function() {
+          var model = this.get('model');
+
+          model.toggleProperty('favorite');
+          model.save();
+        }
+      }
+    });
+
+    __exports__["default"] = DoctorCardController;
   });define("app/controllers/doctors", 
   ["exports"],
   function(__exports__) {
@@ -71757,6 +71775,15 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = QueueController;
+  });define("app/views/doctor_card", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var DoctorCardView = Ember.View.extend({
+      templateName: 'doctor_card'
+    });
+
+    __exports__["default"] = DoctorCardView;
   });Ember.Handlebars.helper('time', function(diff) {
   return moment(diff).format('mm:ss');
 });
@@ -72113,10 +72140,50 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push("...</h5>\n");
   return buffer;
   
+}); });define('app/templates/doctor_card', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  
+  data.buffer.push("\n            &#9733;\n          ");
+  }
+
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n            &#9734;\n          ");
+  }
+
+  data.buffer.push("<div class=\"col-lg-3 text-center\">\n  <div class=\"panel panel-default doctor-card\">\n    <div class=\"panel-body\">\n      <h3>\n        Dr. ");
+  stack1 = helpers._triageMustache.call(depth0, "fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n        <a href=\"#\" class=\"star\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleStar", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(">\n          ");
+  stack1 = helpers['if'].call(depth0, "favorite", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        </a>\n      </h3>\n\n      <h6>\n        ");
+  stack1 = helpers._triageMustache.call(depth0, "humanPractice", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" &mdash; ");
+  stack1 = helpers._triageMustache.call(depth0, "status", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      </h6>\n\n      <img src=\"/assets/no-avatar.png\" class=\"img-circle\">\n\n      <a href=\"#\" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":btn :btn-success isOffline:disabled")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "showRequestModal", "", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
+  data.buffer.push(">Call now</a>\n    </div>\n  </div>\n</div>\n");
+  return buffer;
+  
 }); });define('app/templates/doctors', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, helper, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
 
 function program1(depth0,data) {
   
@@ -72138,36 +72205,17 @@ function program5(depth0,data) {
 
 function program7(depth0,data) {
   
-  var buffer = '', stack1;
+  var buffer = '';
   data.buffer.push("\n  <div class=\"row\">\n    ");
-  stack1 = helpers.each.call(depth0, "filteredContent", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(escapeExpression(helpers.each.call(depth0, "filteredContent", {hash:{
+    'itemController': ("doctor_card"),
+    'itemView': ("doctor_card")
+  },hashTypes:{'itemController': "STRING",'itemView': "STRING"},hashContexts:{'itemController': depth0,'itemView': depth0},contexts:[depth0],types:["ID"],data:data})));
   data.buffer.push("\n  </div>\n");
   return buffer;
   }
-function program8(depth0,data) {
-  
-  var buffer = '', stack1;
-  data.buffer.push("\n      <div class=\"col-lg-3 text-center\">\n        <div class=\"panel panel-default doctor-card\">\n          <div class=\"panel-body\">\n            <h3>Dr. ");
-  stack1 = helpers._triageMustache.call(depth0, "fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</h3>\n            <h6>\n              ");
-  stack1 = helpers._triageMustache.call(depth0, "humanPractice", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" &mdash; ");
-  stack1 = helpers._triageMustache.call(depth0, "status", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n            </h6>\n\n            <img src=\"/assets/no-avatar.png\" class=\"img-circle\">\n\n            <a href=\"#\" ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': (":btn :btn-success isOffline:disabled")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(" ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "showRequestModal", "", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(">Call now</a>\n          </div>\n        </div>\n      </div>\n    ");
-  return buffer;
-  }
 
-function program10(depth0,data) {
+function program9(depth0,data) {
   
   
   data.buffer.push("\n  <p>There are no doctors matching the specified criteria.</p>\n");
@@ -72197,7 +72245,7 @@ function program10(depth0,data) {
     'checked': ("online")
   },hashTypes:{'type': "STRING",'checked': "ID"},hashContexts:{'type': depth0,'checked': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
   data.buffer.push("\n      only show available doctors\n    </label>\n  </small>\n</h2>\n\n");
-  stack1 = helpers['if'].call(depth0, "filteredContent", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(10, program10, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "filteredContent", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
