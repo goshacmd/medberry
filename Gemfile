@@ -5,6 +5,7 @@ gem 'rails', '4.0.4'
 
 gem 'rails_12factor'
 gem 'pg'
+gem 'redis'
 gem 'rails-observers'
 gem 'rufus-scheduler'
 gem 'devise', '~> 3.2.0'

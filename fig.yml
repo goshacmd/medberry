@@ -3,6 +3,11 @@ db:
   ports:
     - 5432
 
+redis:
+  image: orchardup/redis
+  ports:
+    - 6379
+
 web:
   build: .
   command: rails s -p 3000
@@ -12,3 +17,4 @@ web:
     - 3000:3000
   links:
     - db
+    - redis
