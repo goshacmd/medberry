@@ -9,6 +9,10 @@ class DoctorSerializer < ApplicationSerializer
     current_user.identity.fav_doctors.where(id: object.id).size == 1
   end
 
+  def include_favorite?
+    current_user.try(:patient?)
+  end
+
   def filter(keys)
     if current_user && current_user.patient?
       keys

@@ -1,4 +1,4 @@
-{{#if isNewConsultation}}
+{{#if isActive}}
   <div class="alert alert-info">
     <div class="row">
       <div class="col-lg-3">
@@ -22,5 +22,11 @@
 
   {{tokbox-video sessionId=tokboxSession token=tokboxToken}}
 {{else}}
-  The consultation has been ended.
+  <h4>The consultation is over</h4>
+
+  {{#if currentUser.isDoctor}}
+    {{#link-to 'queue' class="btn btn-lg btn-success btn-block"}}Go to queue{{/link-to}}
+  {{else}}
+    {{#link-to 'patient.dashboard' class="btn btn-lg btn-success btn-block"}}Go to dashboard{{/link-to}}
+  {{/if}}
 {{/if}}

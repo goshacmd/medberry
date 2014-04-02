@@ -71710,7 +71710,16 @@ define("app/adapters/application",
 
       runTime: function() {
         return (new Date) - this.get('createdAt');
-      }.property('createdAt', 'controllers.clockService.pulse')
+      }.property('createdAt', 'controllers.clockService.pulse'),
+
+      isExpired: function() {
+        return (new Date) >= this.get('expiry')
+      }.property('expiry', 'controllers.clockService.pulse'),
+
+      isOver: Ember.computed.or('isFinished', 'isExpired'),
+      isNotOver: Ember.computed.not('isOver'),
+
+      isActive: Ember.computed.and('isNewConsultation', 'isNotOver')
     });
 
     __exports__["default"] = ConsultationController;
@@ -72119,11 +72128,48 @@ function program4(depth0,data) {
 
 function program6(depth0,data) {
   
+  var buffer = '', stack1;
+  data.buffer.push("\n  <h4>The consultation is over</h4>\n\n  ");
+  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(10, program10, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  }
+function program7(depth0,data) {
   
-  data.buffer.push("\n  The consultation has been ended.\n");
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'class': ("btn btn-lg btn-success btn-block")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  
+  data.buffer.push("Go to queue");
   }
 
-  stack1 = helpers['if'].call(depth0, "isNewConsultation", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+function program10(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'class': ("btn btn-lg btn-success btn-block")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+function program11(depth0,data) {
+  
+  
+  data.buffer.push("Go to dashboard");
+  }
+
+  stack1 = helpers['if'].call(depth0, "isActive", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
