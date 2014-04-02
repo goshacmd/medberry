@@ -2,9 +2,10 @@ task scheduler: [:environment] do
   Rails.application.eager_load!
 
   scheduler = Rufus::Scheduler.new
+
   marker = OnlineStatusMarker.new
   pusher = OnlineStatusPusher.new
-  finisher = AutoConsultationFinisher.new
+  finisher = ConsultationFinisher.new
 
   scheduler.every '10s' do
     marker.perform

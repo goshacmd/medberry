@@ -33,6 +33,10 @@ class Consultation < ActiveRecord::Base
     save
   end
 
+  def parties
+    [doctor, patient]
+  end
+
   def tokbox_token_for_role(role)
     role == 'doctor' ? tokbox_token_doctor : tokbox_token_patient
   end
