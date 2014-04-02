@@ -23,8 +23,12 @@ class User < ActiveRecord::Base
     [identity.first_name, identity.last_name].join(' ')
   end
 
+  def id_string
+    "#{role}-#{identity.id}"
+  end
+
   def pusher_channel_name
-    "private-#{role}-#{identity.id}"
+    "private-#{id_string}"
   end
 
   def pulser_channel_name
