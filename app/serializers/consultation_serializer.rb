@@ -1,5 +1,5 @@
 class ConsultationSerializer < ApplicationSerializer
-  attributes :id, :cause, :tokbox_session, :tokbox_token, :created_at, :expiry, :status
+  attributes :id, :cause, :tokbox_session, :tokbox_token, :created_at, :expiry, :status, :finished_at, :finished_by
   has_one :doctor
   has_one :patient
 

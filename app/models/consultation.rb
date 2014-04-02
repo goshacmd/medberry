@@ -3,12 +3,14 @@ class Consultation < ActiveRecord::Base
   include Enum
 
   STATUSES = { new: 0, finished: 1 }
+  FINISHERS = { system: 0, patient: 1, doctor: 2 }
 
   belongs_to :patient
   belongs_to :doctor
   belongs_to :request, class_name: 'ConsultationRequest'
 
   enum :status, STATUSES
+  enum :finished_by, FINISHERS
 
   class << self
     def create_from_request(request)

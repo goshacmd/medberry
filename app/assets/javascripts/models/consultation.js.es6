@@ -8,7 +8,7 @@ var Consultation = DS.Model.extend({
   expiry: DS.attr('date'),
   status: DS.attr('string'),
   finishedAt: DS.attr('date'),
-  finishedByRole: DS.attr('string'),
+  finishedBy: DS.attr('string'),
 
   isNewConsultation: Ember.computed.equal('status', 'new'),
   isFinished: Ember.computed.equal('status', 'finished'),
