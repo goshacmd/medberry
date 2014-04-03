@@ -4,20 +4,16 @@
 # 2. the patient has been offline for more than 5 minutes AND the request is
 #    the first in the queue to that doctor
 class ConsultationRequestCanceler
+  include BatchProcessor
+
   attr_reader :status_service
 
-  def initialize
-    @status_service = OnlineStatusService.new
+  def initialize(status_service: OnlineStatusService.new)
+    @status_service = status_service
   end
 
   def selector
     ConsultationRequest.unfilled
-  end
-
-  def perform
-    selector.each do |request|
-      process request
-    end
   end
 
   def process(request)

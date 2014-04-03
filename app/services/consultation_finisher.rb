@@ -4,20 +4,16 @@
 # 1. it has already expired
 # 2. either doctor or patient was offline for more than 2 mins
 class ConsultationFinisher
+  include BatchProcessor
+
   attr_reader :status_service
 
-  def initialize
-    @status_service = OnlineStatusService.new
+  def initialize(status_service: OnlineStatusService.new)
+    @status_service = status_service
   end
 
   def selector
     Consultation.where('finished_at IS NULL and created_at <= :now', now: Time.now)
-  end
-
-  def perform
-    selector.each do |consultation|
-      process consultation
-    end
   end
 
   def process(consultation)

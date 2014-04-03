@@ -1,11 +1,13 @@
 class OnlineStatusService
-  attr_reader :redis
+  attr_reader :redis, :pusher
 
   # Initialize a status service.
   #
   # @param redis [Redis] redis connection
-  def initialize(redis: $redis)
+  # @param pusher [Pusher] pusher connection
+  def initialize(redis: $redis, pusher: Pusher)
     @redis = redis
+    @pusher = pusher
   end
 
   # Check if the user is online.
@@ -13,7 +15,7 @@ class OnlineStatusService
   # @param user [User]
   def online?(user)
     # user is online if they have a pusher connection to their private channel
-    Pusher[user.pusher_channel_name].info[:occupied]
+    pusher[user.pusher_channel_name].info[:occupied]
   end
 
   # Check the status of the user.
