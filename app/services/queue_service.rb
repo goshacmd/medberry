@@ -26,9 +26,22 @@ class QueueService
     unfilled_requests.index(request)
   end
 
+  # Check if the doctor is busy (in middle of active consultation).
+  def busy?
+    !doctor.consultations.order(created_at: :desc).first.finished?
+  end
+
+  # Get some stats for the request.
+  #
+  # @param request [ConsultationRequest]
   def stats(request)
+    position = position_in_queue(request)
+    busy = busy?
+    waiting = ((busy ? 1 : 0) + position) * 20
+
     {
-      position: position_in_queue(request)
+      position: position_in_queue(request),
+      waiting: waiting
     }
   end
 end
