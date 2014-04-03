@@ -1,5 +1,8 @@
-# Cancels the consultation requests when either doctor or patient has been
-# offline for more than 5 minutes.
+# Cancels the consultation requests when:
+#
+# 1. the doctor has been offline for more than 5 minutes
+# 2. the patient has been offline for more than 5 minutes AND the request is
+#    the first in the queue to that doctor
 class ConsultationRequestCanceler
   attr_reader :status_service
 
@@ -24,8 +27,16 @@ class ConsultationRequestCanceler
   def should_be_canceled?(request)
     return false unless request.new_request?
 
-    request.parties.none? do |party|
-      status_service.was_recently_online?(party.user, window: 5.minutes)
-    end
+    doctor = request.doctor
+    patient = request.patient
+
+    queue = QueueService.new(doctor)
+
+    not_recently_online?(doctor) ||
+      (not_recently_online?(patient) && queue.next_request == request)
+  end
+
+  def not_recently_online?(identity)
+    !status_service.was_recently_online?(identity.user, window: 5.minutes)
   end
 end
