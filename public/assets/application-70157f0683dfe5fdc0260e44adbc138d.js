@@ -71585,10 +71585,10 @@ define("app/adapters/application",
       tokboxSession: DS.attr('string'),
       tokboxToken: DS.attr('string'),
       createdAt: DS.attr('date'),
-      expiry: DS.attr('date'),
+      expiresAt: DS.attr('date'),
       status: DS.attr('string'),
       finishedAt: DS.attr('date'),
-      finishedByRole: DS.attr('string'),
+      finishedBy: DS.attr('string'),
 
       isNewConsultation: Ember.computed.equal('status', 'new'),
       isFinished: Ember.computed.equal('status', 'finished'),
@@ -71713,8 +71713,8 @@ define("app/adapters/application",
       }.property('createdAt', 'controllers.clockService.pulse'),
 
       isExpired: function() {
-        return (new Date) >= this.get('expiry')
-      }.property('expiry', 'controllers.clockService.pulse'),
+        return (new Date) >= this.get('expiresAt')
+      }.property('expiresAt', 'controllers.clockService.pulse'),
 
       isOver: Ember.computed.or('isFinished', 'isExpired'),
       isNotOver: Ember.computed.not('isOver'),

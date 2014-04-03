@@ -6,8 +6,8 @@ var ConsultationController = Ember.ObjectController.extend({
   }.property('createdAt', 'controllers.clockService.pulse'),
 
   isExpired: function() {
-    return (new Date) >= this.get('expiry')
-  }.property('expiry', 'controllers.clockService.pulse'),
+    return (new Date) >= this.get('expiresAt')
+  }.property('expiresAt', 'controllers.clockService.pulse'),
 
   isOver: Ember.computed.or('isFinished', 'isExpired'),
   isNotOver: Ember.computed.not('isOver'),

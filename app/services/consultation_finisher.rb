@@ -28,7 +28,7 @@ class ConsultationFinisher
 
   def should_be_finished?(consultation)
     return false if consultation.finished_at
-    return true if consultation.expiry > Time.now
+    return true if consultation.expires_at > Time.now
 
     consultation.parties.all? do |party|
       status_service.was_recently_online?(party.user, window: 2.minutes)

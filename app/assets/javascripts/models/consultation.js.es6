@@ -5,7 +5,7 @@ var Consultation = DS.Model.extend({
   tokboxSession: DS.attr('string'),
   tokboxToken: DS.attr('string'),
   createdAt: DS.attr('date'),
-  expiry: DS.attr('date'),
+  expiresAt: DS.attr('date'),
   status: DS.attr('string'),
   finishedAt: DS.attr('date'),
   finishedBy: DS.attr('string'),
