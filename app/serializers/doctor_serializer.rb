@@ -2,7 +2,7 @@ class DoctorSerializer < ApplicationSerializer
   attributes :id, :first_name, :last_name, :status, :practice, :favorite
 
   def status
-    UserStatusChecker.new(object.user).check
+    OnlineStatusService.new.status(object.user)
   end
 
   def favorite

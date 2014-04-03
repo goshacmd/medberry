@@ -12,7 +12,7 @@ task scheduler: [:environment] do
   end
 
   scheduler.every '10s' do
-    pusher.trigger
+    pusher.perform
   end
 
   scheduler.every '30s' do

@@ -1,23 +1,42 @@
 class OnlineStatusService
-  def key_for(user)
-    "last_seen:#{user.id_string}"
+  attr_reader :redis
+
+  # Initialize a status service.
+  #
+  # @param redis [Redis] redis connection
+  def initialize(redis: $redis)
+    @redis = redis
+  end
+
+  # Check if the user is online.
+  #
+  # @param user [User]
+  def online?(user)
+    # user is online if they have a pusher connection to their private channel
+    Pusher[user.pusher_channel_name].info[:occupied]
+  end
+
+  # Check the status of the user.
+  #
+  # @param user [User]
+  # @return [:online, :offline]
+  def status(user)
+    online?(user) ? :online : :offline
   end
 
   # Record current timestamp as the last time seen online for user.
   #
   # @param user [User]
   def mark(user)
-    if UserStatusChecker.new(user).check == :online
-      $redis.set key_for(user), Time.now.to_i
-    end
+    redis.set last_seen_key_for(user), Time.now.to_i if online?(user)
   end
 
   # Get the timestamp of the user's last appearance.
   #
   # @param user [User]
-  # @return [Time]
-  def query(user)
-    last = $redis.get(key_for(user))
+  # @return [Time, nil]
+  def last_seen(user)
+    last = redis.get(last_seen_key_for(user))
     Time.at(last.to_i) if last
   end
 
@@ -26,8 +45,11 @@ class OnlineStatusService
   # @param user [User]
   # @param window [Integer] number of seconds
   def was_recently_online?(user, window:)
-    if last = query(user)
-      last + window >= Time.now
-    end
+    last = last_seen(user) && last + window >= Time.now
+  end
+
+  # Get a redis key to store last seen timestamp.
+  def last_seen_key_for(user)
+    "last_seen:#{user.id_string}"
   end
 end

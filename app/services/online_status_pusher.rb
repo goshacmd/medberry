@@ -1,7 +1,7 @@
 class OnlineStatusPusher
   # Push the online statuses of all doctors.
-  def trigger
-    mapper = -> i { { id: i.id, status: UserStatusChecker.new(i.user).check } }
+  def perform
+    mapper = -> i { { id: i.id, status: OnlineStatusService.new.status(i.user) } }
 
     doctors_data = Doctor.all.map(&mapper)
     patients_data = Patient.all.map(&mapper)
