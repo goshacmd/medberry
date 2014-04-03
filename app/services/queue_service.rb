@@ -25,4 +25,10 @@ class QueueService
   def position_in_queue(request)
     unfilled_requests.index(request)
   end
+
+  def stats(request)
+    {
+      position: position_in_queue(request)
+    }
+  end
 end
