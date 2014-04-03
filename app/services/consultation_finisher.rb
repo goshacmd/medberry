@@ -30,7 +30,7 @@ class ConsultationFinisher
     return false if consultation.finished_at
     return true if consultation.expires_at > Time.now
 
-    consultation.parties.all? do |party|
+    consultation.parties.none? do |party|
       status_service.was_recently_online?(party.user, window: 2.minutes)
     end
   end

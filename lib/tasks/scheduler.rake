@@ -6,6 +6,7 @@ task scheduler: [:environment] do
   marker = OnlineStatusMarker.new
   pusher = OnlineStatusPusher.new
   finisher = ConsultationFinisher.new
+  canceler = ConsultationRequestCanceler.new
 
   scheduler.every '10s' do
     marker.perform
@@ -17,6 +18,10 @@ task scheduler: [:environment] do
 
   scheduler.every '30s' do
     finisher.perform
+  end
+
+  scheduler.every '30s' do
+    canceler.perform
   end
 
   scheduler.join

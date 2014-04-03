@@ -22,4 +22,8 @@ class ConsultationRequest < ActiveRecord::Base
   def accepted?
     status == :accepted
   end
+
+  def parties
+    [doctor, patient]
+  end
 end
