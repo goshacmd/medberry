@@ -28,7 +28,8 @@ class QueueService
 
   # Check if the doctor is busy (in middle of active consultation).
   def busy?
-    !doctor.consultations.order(created_at: :desc).first.finished?
+    consultation = doctor.consultations.order(created_at: :desc).first
+    (consultation && !consultation.finished?)
   end
 
   # Get some stats for the request.

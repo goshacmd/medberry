@@ -1,3 +1,7 @@
 <h4>Connecting...</h4>
 
 <h5>Please wait while we are connecting you to Dr. {{doctor.fullName}}...</h5>
+
+{{#if queueMeta.updatedAt}}
+  <p>You are #{{queueMeta.position}} in the queue. Estimated waiting time: {{queueMeta.waiting}} min.</p>
+{{/if}}

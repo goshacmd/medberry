@@ -2,6 +2,8 @@ var ConsultationRequest = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
   consultation: DS.belongsTo('consultation'),
+  queueMeta: DS.belongsTo('consultation_request_queue_meta'),
+
   cause: DS.attr('string'),
   status: DS.attr('string'),
   createdAt: DS.attr('date'),

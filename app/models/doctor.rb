@@ -5,6 +5,7 @@ class Doctor < ActiveRecord::Base
 
   has_one :user, as: :identity
   has_many :consultation_requests
+  has_many :consultations
 
   enum :practice, PRACTICES
 

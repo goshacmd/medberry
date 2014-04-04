@@ -4,7 +4,8 @@ task scheduler: [:environment] do
   scheduler = Rufus::Scheduler.new
 
   marker = OnlineStatusMarker.new
-  pusher = OnlineStatusPusher.new
+  status_pusher = OnlineStatusPusher.new
+  queue_pusher = QueueStatsPusher.new
   finisher = ConsultationFinisher.new
   canceler = ConsultationRequestCanceler.new
 
@@ -13,7 +14,11 @@ task scheduler: [:environment] do
   end
 
   scheduler.every '10s' do
-    pusher.perform
+    status_pusher.perform
+  end
+
+  scheduler.every '30s' do
+    queue_pusher.perform
   end
 
   scheduler.every '30s' do

@@ -16,4 +16,7 @@
 
 TB.setLogLevel(1);
 
+Ember.Inflector.inflector.irregular('meta', 'meta');
+Ember.Inflector.inflector.irregular('consultationRequestQueueMeta', 'consultationRequestQueueMeta');
+
 window.App = require('app/app').default.create();

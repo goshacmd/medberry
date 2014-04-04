@@ -1,8 +1,9 @@
 class OnlineStatusPusher
-  attr_reader :status_service
+  attr_reader :status_service, :pusher
 
-  def initialize(status_service: OnlineStatusService.new)
+  def initialize(status_service: OnlineStatusService.new, pusher: Pusher)
     @status_service = status_service
+    @pusher = pusher
   end
 
   # Push the online statuses of all doctors.
@@ -12,7 +13,7 @@ class OnlineStatusPusher
     doctors_data = Doctor.all.map(&mapper)
     patients_data = Patient.all.map(&mapper)
 
-    Pusher.trigger 'private-patient-online-pulser', 'pulse', doctors_data
-    Pusher.trigger 'private-doctor-online-pulser', 'pulse', patients_data
+    pusher.trigger 'private-patient-online-pulser', 'pulse', doctors_data
+    pusher.trigger 'private-doctor-online-pulser', 'pulse', patients_data
   end
 end

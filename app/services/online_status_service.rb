@@ -47,7 +47,8 @@ class OnlineStatusService
   # @param user [User]
   # @param window [Integer] number of seconds
   def was_recently_online?(user, window:)
-    last = last_seen(user) && last + window >= Time.now
+    last = last_seen(user)
+    (last + window) >= Time.now if last
   end
 
   # Get a redis key to store last seen timestamp.

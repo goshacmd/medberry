@@ -4,7 +4,8 @@ var ApplicationRoute = Ember.Route.extend({
 
     var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-    this.pusher.bindUser('requests', load('consultation_request'));
+    this.pusher.bindUser('consultation_requests', load('consultation_request'));
+    this.pusher.bindUser('consultation_request_queue_metas', load('consultation_request_queue_meta'));
     this.pusher.bindUser('consultations', load('consultation'));
 
     var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
