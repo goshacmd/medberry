@@ -18,6 +18,8 @@ class ConsultationRequestCanceler
 
   def process(request)
     return unless should_be_canceled?(request)
+
+    request.update(status: :declined)
   end
 
   def should_be_canceled?(request)
