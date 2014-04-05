@@ -1,6 +1,6 @@
-# Medlive
+# medberry
 
-Medlive is a platform to connect patients with doctors via live video
+medberry is a platform to connect patients with doctors via live video
 chat.
 
 ## Development environment
@@ -21,3 +21,13 @@ needed services using the following command:
 
 This will build docker containers and expose the Rails application at
 http://localdocker:3000/ (if you are using docker-osx).
+
+## Configuration
+
+To function properly, the application needs to connect to Tokbox,
+Pusher, etc. These are the environment variables that need to be present
+at runtime:
+
+* `OPEN_TOK_KEY`
+* `OPEN_TOK_SECRET`
+* `PUSHER_URL`
