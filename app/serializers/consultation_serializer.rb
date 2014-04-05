@@ -8,4 +8,8 @@ class ConsultationSerializer < ApplicationSerializer
   def tokbox_token
     object.tokbox_token_for_role(current_user.role)
   end
+
+  def include_tokbox_token?
+    current_user
+  end
 end

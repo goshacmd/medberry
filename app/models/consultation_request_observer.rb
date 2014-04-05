@@ -1,9 +1,8 @@
 class ConsultationRequestObserver < ActiveRecord::Observer
   def after_save(request)
-    Pusher.trigger request.patient_channel, 'requests',
-      ConsultationRequestSerializer.new(request, scope: request.patient.user).as_json
+    update_pusher = UpdatePusher.new
 
-    Pusher.trigger request.doctor_channel, 'requests',
-      ConsultationRequestSerializer.new(request, scope: request.doctor.user).as_json
+    update_pusher.push request.patient_channel, request, scope: request.patient.user
+    update_pusher.push request.doctor_channel, request, scope: request.doctor.user
   end
 end

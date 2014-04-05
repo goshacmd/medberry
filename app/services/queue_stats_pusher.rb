@@ -1,12 +1,14 @@
 class QueueStatsPusher
   include BatchProcessor
 
-  attr_reader :queue_service, :pusher
+  attr_reader :queue_service, :update_pusher, :pusher
 
   # @param queue_service [Class]
+  # @param update_pusher [UpdatePusher]
   # @param pusher [Pusher]
-  def initialize(queue_service: QueueService, pusher: Pusher)
+  def initialize(queue_service: QueueService, update_pusher: nil, pusher: Pusher)
     @queue_service = queue_service
+    @update_pusher = update_pusher || UpdatePusher.new(pusher: pusher)
     @pusher = pusher
   end
 
@@ -19,7 +21,6 @@ class QueueStatsPusher
 
     meta = ConsultationRequestQueueMeta.new(stats)
 
-    pusher.trigger request.patient_channel, 'consultation_request_queue_metas',
-      ConsultationRequestQueueMetaSerializer.new(meta).as_json
+    update_pusher.push request.patient_channel, meta
   end
 end
