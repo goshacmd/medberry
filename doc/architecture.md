@@ -29,7 +29,7 @@ There is a helper status marker that periodically goes through the list
 of users and tells status service to update data on them.
 
 The data from status service is used by other parts of the application —
-raning from consultation request creation to queue cleaning.
+ranging from consultation request creation to queue cleaning.
 
 ### Queue service
 
