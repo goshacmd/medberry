@@ -19,6 +19,11 @@ class QueueService
     unfilled_requests.first
   end
 
+  # @return [Consultation, nil]
+  def last_consultation
+    doctor.consultations.order(created_at: :desc).first
+  end
+
   # Get the position of a request in the queue.
   #
   # @return [Integer]
@@ -28,8 +33,8 @@ class QueueService
 
   # Check if the doctor is busy (in middle of active consultation).
   def busy?
-    consultation = doctor.consultations.order(created_at: :desc).first
-    (consultation && !consultation.finished?)
+    consultation = last_consultation
+    consultation && !consultation.finished?
   end
 
   # Get some stats for the request.

@@ -1,3 +1,6 @@
+# Online status service is responsible for dealing with online statuses of the
+# users. It checks if they are online at the moment, queries if they were
+# online recently.
 class OnlineStatusService
   attr_reader :redis, :pusher
 
@@ -10,12 +13,20 @@ class OnlineStatusService
     @pusher = pusher
   end
 
+  # Check if a channel is occupied.
+  #
+  # @param channel [String] channel name
+  def occupied?(channel)
+    # user is online if they have a pusher connection to their private channel
+    pusher[channel].info[:occupied]
+  end
+
   # Check if the user is online.
   #
   # @param user [User]
   def online?(user)
     # user is online if they have a pusher connection to their private channel
-    pusher[user.pusher_channel_name].info[:occupied]
+    occupied?(user.pusher_channel_name)
   end
 
   # Check the status of the user.
