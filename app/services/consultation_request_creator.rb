@@ -16,6 +16,8 @@ class ConsultationRequestCreator
     consultation_request.patient = current_user.identity
     online = OnlineStatusService.new.online?(consultation_request.doctor.user)
 
+    # TODO: do not allow more than 1 open request at a time from a single user
+
     if online && consultation_request.save
       consultation_request
     else

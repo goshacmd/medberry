@@ -1,6 +1,6 @@
 var DoctorsController = Ember.ArrayController.extend({
   queryParams: ['practice', 'online'],
-  practice: false,
+  practice: 'all',
   online: false,
 
   filteredContent: function() {
@@ -8,7 +8,7 @@ var DoctorsController = Ember.ArrayController.extend({
     var online = this.get('online');
     var content = this.get('content');
 
-    if (practice) {
+    if (practice !== 'all') {
       content = content.filterProperty('practice', practice);
     }
 
