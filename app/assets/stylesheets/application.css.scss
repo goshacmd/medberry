@@ -30,6 +30,14 @@
   }
 }
 
+.dot-offline {
+  color: #aaa;
+}
+
+.dot-online {
+  color: #7ec700;
+}
+
 .selector {
   a.active {
     @extend %text-like-link;
@@ -48,7 +56,7 @@
 
 .doctor-card {
   img {
-    max-width: 75%;
+    max-width: 55%;
   }
 
   border: none;
