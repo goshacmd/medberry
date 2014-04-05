@@ -1,13 +1,15 @@
 class ChannelAuthenticator
-  attr_reader :name, :socket_id, :current_user
+  attr_reader :name, :socket_id, :current_user, :pusher
 
   # @param name [String]
   # @param socket_id [String]
   # @param current_user [User]
-  def initialize(name, socket_id, current_user)
+  # @param pusher [Pusher]
+  def initialize(name, socket_id, current_user, pusher: Pusher)
     @name = name
     @socket_id = socket_id
     @current_user = current_user
+    @pusher = pusher
   end
 
   def should_authenticate?
@@ -20,6 +22,6 @@ class ChannelAuthenticator
   end
 
   def authenticate
-    Pusher[name].authenticate(socket_id) if should_authenticate?
+    pusher[name].authenticate(socket_id) if should_authenticate?
   end
 end
