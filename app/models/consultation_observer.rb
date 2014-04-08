@@ -1,6 +1,6 @@
 class ConsultationObserver < ActiveRecord::Observer
   def after_create(consultation)
-    Pusher.trigger consultation.channels, "requests:#{consultation.request.id}",
+    Pusher.trigger consultation.channels, 'consultation_started',
       consultation: consultation.id
   end
 

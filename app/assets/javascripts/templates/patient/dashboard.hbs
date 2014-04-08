@@ -2,6 +2,37 @@
   {{#link-to 'doctors' class="btn btn-primary"}}Talk to a doctor{{/link-to}}
 </div>
 
+{{#if showLastRequest}}
+  {{#with lastConsultationRequest}}
+    <div class="media">
+      <div class="pull-left">
+        <img src="/assets/no-avatar.png" class="media-object img-circle" style="height: 64px; width: 64px;">
+      </div>
+
+      <div class="media-body">
+        <h4 class="media-heading">Please wait for your consultation with Dr. {{doctor.fullName}} to begin</h4>
+
+        {{#if queueMeta.updatedAt}}
+          <p>
+            {{#if queueMeta.firstInQueue}}
+              You are first in the queue. Dr. {{doctor.fullName}} will get
+              to you as soon as they finish their current consultation.
+              The waiting time should not be more than
+              {{queueMeta.waiting}} minutes.
+            {{else}}
+              There are <b>{{queueMeta.position}}</b> people in the queue before
+              you. The estimated waiting time is
+              <b>{{queueMeta.waiting}}</b> minutes.
+            {{/if}}
+          </p>
+        {{else}}
+          <p>...</p>
+        {{/if}}
+      </div>
+    </div>
+  {{/with}}
+{{/if}}
+
 {{#if favoriteDoctors}}
   <h4>Favorite doctors</h4>
 
