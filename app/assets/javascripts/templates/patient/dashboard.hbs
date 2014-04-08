@@ -1,3 +1,11 @@
-<h3>Welcome, {{currentUser.fullName}}</h3>
+<div>
+  {{#link-to 'doctors' class="btn btn-primary"}}Talk to a doctor{{/link-to}}
+</div>
 
-{{#link-to 'doctors' class="btn btn-primary"}}Talk to a doctor{{/link-to}}
+{{#if favoriteDoctors}}
+  <h4>Favorite doctors</h4>
+
+  <div class="row">
+    {{each favoriteDoctors itemController='doctor_card' itemView='doctor_card'}}
+  </div>
+{{/if}}
