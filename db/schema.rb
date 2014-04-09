@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140403123707) do
+ActiveRecord::Schema.define(version: 20140409175107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,8 @@ ActiveRecord::Schema.define(version: 20140403123707) do
     t.string   "cause"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "status",     default: 0
+    t.integer  "status",            default: 0
+    t.integer  "cancelation_cause"
   end
 
   add_index "consultation_requests", ["doctor_id"], name: "index_consultation_requests_on_doctor_id", using: :btree

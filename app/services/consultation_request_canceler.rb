@@ -17,12 +17,13 @@ class ConsultationRequestCanceler
   end
 
   def process(request)
-    return unless should_be_canceled?(request)
+    cause = cancelation_cause(request)
+    return unless cause
 
-    request.update(status: :declined)
+    request.update(status: :declined, cancelation_cause: cause)
   end
 
-  def should_be_canceled?(request)
+  def cancelation_cause(request)
     return false unless request.new_request?
 
     doctor = request.doctor
@@ -30,8 +31,8 @@ class ConsultationRequestCanceler
 
     queue = QueueService.new(doctor)
 
-    not_recently_online?(doctor) ||
-      (not_recently_online?(patient) && queue.next_request == request)
+    return :doctor_offline if not_recently_online?(doctor)
+    return :patient_offline if not_recently_online?(patient) && queue.next_request == request
   end
 
   def not_recently_online?(identity)

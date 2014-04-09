@@ -3,6 +3,7 @@ class ConsultationRequest < ActiveRecord::Base
   include Enum
 
   STATUSES = { new: 0, accepted: 1, declined: 2 }
+  CANCELATION_CAUSES = { doctor_offline: 1, patient_offline: 2 }
 
   belongs_to :patient
   belongs_to :doctor
@@ -12,6 +13,7 @@ class ConsultationRequest < ActiveRecord::Base
   validates :doctor, presence: true
 
   enum :status, STATUSES
+  enum :cancelation_cause, CANCELATION_CAUSES
 
   scope :unfilled, -> { where(status: STATUSES[:new]) }
 
