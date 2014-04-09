@@ -17,17 +17,21 @@ class ConsultationFinisher
   end
 
   def process(consultation)
-    return unless should_be_finished?(consultation)
+    cause = finishing_cause(consultation)
+    return unless cause
 
-    consultation.update(status: :finished, finished_at: Time.now, finished_by: :system)
+    consultation.update status: :finished, finished_at: Time.now,
+      finished_by: :system, finishing_cause: cause
   end
 
   def should_be_finished?(consultation)
     return false if consultation.finished_at
-    return true if consultation.expires_at > Time.now
+    return :out_of_time if consultation.expires_at > Time.now
+    return :doctor_offline if not_recently_online?(consultation.doctor)
+    return :patient_offline if not_recently_online?(consultation.patient)
+  end
 
-    consultation.parties.none? do |party|
-      status_service.was_recently_online?(party.user, window: 2.minutes)
-    end
+  def not_recently_online?(identity)
+    !status_service.was_recently_online?(identity.user, window: 2.minutes)
   end
 end

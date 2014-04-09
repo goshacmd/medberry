@@ -15,7 +15,8 @@ class ConsultationUpdater
     if consultation.new_consultation? && status == 'finished' &&
       role = consultation.role_of(current_user)
 
-      consultation.update(status: status, finished_at: Time.now, finished_by: role)
+      consultation.update status: status, finished_at: Time.now,
+        finished_by: role, finishing_cause: :manual
     end
   end
 end

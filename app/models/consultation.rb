@@ -3,6 +3,7 @@ class Consultation < ActiveRecord::Base
   include Enum
 
   STATUSES = { new: 0, finished: 1 }
+  FINISHING_CAUSES = { manual: 0, out_of_time: 1, doctor_offline: 2, patient_offline: 3 }
   FINISHERS = { system: 0, patient: 1, doctor: 2 }
 
   belongs_to :patient
@@ -10,6 +11,7 @@ class Consultation < ActiveRecord::Base
   belongs_to :request, class_name: 'ConsultationRequest'
 
   enum :status, STATUSES
+  enum :finishing_cause, FINISHING_CAUSES
   enum :finished_by, FINISHERS
 
   class << self
