@@ -9,26 +9,49 @@
         <img src="/assets/no-avatar.png" class="media-object img-circle" style="height: 64px; width: 64px;">
       </div>
 
-      <div class="media-body">
-        <h4 class="media-heading">Please wait for your consultation with Dr. {{doctor.fullName}} to begin</h4>
+      {{#if isNewRequest}}
+        <div class="media-body">
+          <h4 class="media-heading">Please wait for your consultation with Dr. {{doctor.fullName}} to begin</h4>
 
-        {{#if queueMeta.updatedAt}}
+          <p>The stated cause for the consultation was: {{cause}}</p>
+
+          {{#if queueMeta.updatedAt}}
+            <p>
+              {{#if queueMeta.firstInQueue}}
+                You are first in the queue. Dr. {{doctor.fullName}} will get
+                to you as soon as they finish their current consultation.
+                The waiting time should not be more than
+                {{queueMeta.waiting}} minutes.
+              {{else}}
+                There are <b>{{queueMeta.position}}</b> people in the queue before
+                you. The estimated waiting time is
+                <b>{{queueMeta.waiting}}</b> minutes.
+              {{/if}}
+            </p>
+          {{else}}
+            <p><i>Updating waiting estimates...</i></p>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{#if isCanceled}}
+        <div class="media-body">
+          <h4 class="media-heading">Consultation with Dr. {{doctor.fullName}} canceled</h4>
+
           <p>
-            {{#if queueMeta.firstInQueue}}
-              You are first in the queue. Dr. {{doctor.fullName}} will get
-              to you as soon as they finish their current consultation.
-              The waiting time should not be more than
-              {{queueMeta.waiting}} minutes.
+            You have requested a consultation with Dr.
+            {{doctor.fullName}} on {{createdAt}} to talk about
+            "{{cause}}".
+
+            {{#if canceledDoctorOffline}}
+              However, the doctor has gone offline, so your request was
+              canceled.
             {{else}}
-              There are <b>{{queueMeta.position}}</b> people in the queue before
-              you. The estimated waiting time is
-              <b>{{queueMeta.waiting}}</b> minutes.
+              However, you went offline, and your request was canceled.
             {{/if}}
           </p>
-        {{else}}
-          <p>...</p>
-        {{/if}}
-      </div>
+        </div>
+      {{/if}}
     </div>
   {{/with}}
 {{/if}}

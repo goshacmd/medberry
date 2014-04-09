@@ -6,9 +6,15 @@ var ConsultationRequest = DS.Model.extend({
 
   cause: DS.attr('string'),
   status: DS.attr('string'),
+  cancelationCause: DS.attr('string'),
   createdAt: DS.attr('date'),
 
   isNewRequest: Ember.computed.equal('status', 'new'),
+  isDeclined: Ember.computed.equal('status', 'declined'),
+  isCanceled: Ember.computed.equal('status', 'canceled'),
+
+  canceledDoctorOffline: Ember.computed.equal('cancelationCause', 'doctor_offline'),
+  canceledPatientOffline: Ember.computed.equal('cancelationCause', 'patient_offline'),
 
   accept: function() {
     this.set('status', 'accepted');

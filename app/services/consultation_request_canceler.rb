@@ -20,7 +20,7 @@ class ConsultationRequestCanceler
     cause = cancelation_cause(request)
     return unless cause
 
-    request.update(status: :declined, cancelation_cause: cause)
+    request.update(status: :canceled, cancelation_cause: cause)
   end
 
   def cancelation_cause(request)

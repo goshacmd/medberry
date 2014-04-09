@@ -2,7 +2,7 @@ class ConsultationRequest < ActiveRecord::Base
   include PusherChannels
   include Enum
 
-  STATUSES = { new: 0, accepted: 1, declined: 2 }
+  STATUSES = { new: 0, accepted: 1, declined: 2, canceled: 3 }
   CANCELATION_CAUSES = { doctor_offline: 1, patient_offline: 2 }
 
   belongs_to :patient

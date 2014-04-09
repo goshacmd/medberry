@@ -5,7 +5,10 @@ var PatientDashboardController = Ember.ObjectController.extend({
 
   lastConsultationRequest: Ember.computed.alias('sortedConsultationRequests.lastObject'),
 
-  showLastRequest: Ember.computed.alias('lastConsultationRequest.isNewRequest')
+  lastRequestNew: Ember.computed.alias('lastConsultationRequest.isNewRequest'),
+  lastRequestCanceled: Ember.computed.alias('lastConsulationRequest.isCanceled'),
+
+  showLastRequest: Ember.computed.or('lastRequestNew', 'lastRequestCanceled')
 });
 
 export default PatientDashboardController;
