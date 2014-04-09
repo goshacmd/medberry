@@ -8,6 +8,7 @@ var ConsultationRequest = DS.Model.extend({
   status: DS.attr('string'),
   cancelationCause: DS.attr('string'),
   createdAt: DS.attr('date'),
+  canceledAt: DS.attr('date'),
 
   isNewRequest: Ember.computed.equal('status', 'new'),
   isDeclined: Ember.computed.equal('status', 'declined'),

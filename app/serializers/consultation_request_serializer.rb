@@ -1,5 +1,5 @@
 class ConsultationRequestSerializer < ApplicationSerializer
-  attributes :id, :cause, :status, :cancelation_cause, :created_at
+  attributes :id, :cause, :status, :cancelation_cause, :created_at, :canceled_at
 
   has_one :doctor
   has_one :patient
