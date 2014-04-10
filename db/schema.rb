@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140409182457) do
+ActiveRecord::Schema.define(version: 20140410141002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,18 +31,26 @@ ActiveRecord::Schema.define(version: 20140409182457) do
   add_index "consultation_requests", ["doctor_id"], name: "index_consultation_requests_on_doctor_id", using: :btree
   add_index "consultation_requests", ["patient_id"], name: "index_consultation_requests_on_patient_id", using: :btree
 
+  create_table "consultation_sessions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid     "consultation_id"
+    t.text     "tokbox_token_patient"
+    t.text     "tokbox_token_doctor"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "consultation_sessions", ["consultation_id"], name: "index_consultation_sessions_on_consultation_id", using: :btree
+
   create_table "consultations", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "patient_id"
     t.uuid     "doctor_id"
     t.uuid     "request_id"
     t.string   "cause"
     t.string   "tokbox_session"
-    t.text     "tokbox_token_patient"
-    t.text     "tokbox_token_doctor"
-    t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "status",               default: 0
+    t.integer  "status",          default: 0
     t.datetime "finished_at"
     t.integer  "finished_by"
     t.integer  "finishing_cause"

@@ -24,9 +24,9 @@ class ConsultationFinisher
       finished_by: :system, finishing_cause: cause
   end
 
-  def should_be_finished?(consultation)
-    return false if consultation.finished_at
-    return :out_of_time if consultation.expires_at > Time.now
+  def finishing_cause(consultation)
+    return false if consultation.finished_at || consultation.expires_at == nil
+    return :out_of_time if Time.now > consultation.expires_at
     return :doctor_offline if not_recently_online?(consultation.doctor)
     return :patient_offline if not_recently_online?(consultation.patient)
   end

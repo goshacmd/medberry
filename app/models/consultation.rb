@@ -9,6 +9,7 @@ class Consultation < ActiveRecord::Base
   belongs_to :patient
   belongs_to :doctor
   belongs_to :request, class_name: 'ConsultationRequest'
+  has_many :sessions, class_name: 'ConsultationSession'
 
   enum :status, STATUSES
   enum :finishing_cause, FINISHING_CAUSES
@@ -20,19 +21,10 @@ class Consultation < ActiveRecord::Base
     end
   end
 
-  after_create :create_tokbox_session
+  delegate :tokbox_token_patient, :tokbox_token_doctor, :expires_at, to: :latest_session
 
-  def create_tokbox_session
-    session = $open_tok.create_session.session_id
-    self.expires_at = 20.minutes.from_now # tokens expire 20 mins after creation
-    patient_data = { consultation: id, role: 'patient' }.to_json
-    doctor_data = { consultation: id, role: 'doctor' }.to_json
-
-    self.tokbox_session = session
-    self.tokbox_token_patient = $open_tok.generate_token session_id: tokbox_session, connection_data: patient_data, expire_time: expires_at.to_i
-    self.tokbox_token_doctor = $open_tok.generate_token session_id: tokbox_session, connection_data: doctor_data, expire_time: expires_at.to_i
-
-    save
+  def latest_session
+    sessions.first || ConsultationSession.new
   end
 
   def parties
