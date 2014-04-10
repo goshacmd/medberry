@@ -7,6 +7,7 @@ Router.map(function() {
 
   this.resource('patient', function() {
     this.route('dashboard');
+    this.route('history');
   });
 
   this.resource('doctors', function() {

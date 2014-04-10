@@ -1,0 +1,22 @@
+{{#if content}}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Doctor</th>
+        <th>Status</th>
+    </thead>
+
+    <tbody>
+      {{#each controller}}
+        <tr>
+          <td>{{createdAt}}</td>
+          <td>{{doctor.fullName}}</td>
+          <td>{{#if isAccepted}}Consulted{{else}}Request canceled{{/if}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>Nothing to show.</p>
+{{/if}}

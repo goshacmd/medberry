@@ -1,0 +1,9 @@
+<ul class="nav nav-pills">
+  {{#if currentUser.isDoctor}}
+    {{#link-to 'queue' tagName='li'}}{{#link-to 'queue'}}Queue{{/link-to}}{{/link-to}}
+  {{else}}
+    {{#link-to 'patient.dashboard' tagName='li'}}{{#link-to 'patient.dashboard'}}Dashboard{{/link-to}}{{/link-to}}
+    {{#link-to 'patient.history' tagName='li'}}{{#link-to 'patient.history'}}History{{/link-to}}{{/link-to}}
+    {{#link-to 'doctors' tagName='li'}}{{#link-to 'doctors'}}Talk to a doctor{{/link-to}}{{/link-to}}
+  {{/if}}
+</ul>
