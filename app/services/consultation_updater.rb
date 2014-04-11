@@ -27,7 +27,7 @@ class ConsultationUpdater
 
   # Consultation can only be extended one time within 1 minute of finishing.
   def can_extend?
-    consultation.sessions.size == 1 && (consultation.expires_at + 1.minute) > Time.now
+    consultation.sessions.size == 1 && (consultation.finished_at + 1.minute) > Time.now
   end
 
   def add_session

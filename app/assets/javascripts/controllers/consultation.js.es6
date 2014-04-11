@@ -15,6 +15,20 @@ var ConsultationController = Ember.ObjectController.extend({
     return this.get('expiresAt') - (new Date);
   }.property('expiresAt', 'controllers.clockService.pulse'),
 
+  extensionEdge: function() {
+    var finishedAt = this.get('finishedAt');
+
+    if (!finishedAt) return;
+
+    return moment(finishedAt).add('m', 1).toDate();
+  }.property('finishedAt'),
+
+  extensionTimeLeft: function() {
+    return this.get('extensionEdge') - (new Date);
+  }.property('extensionEdge', 'controllers.clockService.pulse'),
+
+  canExtend: Ember.computed.gt('extensionTimeLeft', 0),
+
   isExpired: function() {
     return (new Date) >= this.get('expiresAt');
   }.property('expiresAt', 'controllers.clockService.pulse')
