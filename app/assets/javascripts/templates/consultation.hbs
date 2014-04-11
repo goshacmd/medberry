@@ -2,7 +2,7 @@
   <div class="alert alert-info">
     <div class="row">
       <div class="col-lg-3">
-        {{time runTime}}
+        <b>{{time runTime}}</b> (remaining time: {{time remainingTime}})
       </div>
 
       <div class="col-lg-6 text-center">
@@ -20,7 +20,9 @@
     </div>
   </div>
 
-  {{tokbox-video sessionId=tokboxSession token=tokboxToken}}
+  {{#if showVideo}}
+    {{tokbox-video sessionId=tokboxSession token=tokboxToken}}
+  {{/if}}
 {{else}}
   <h4>The consultation is over</h4>
 
