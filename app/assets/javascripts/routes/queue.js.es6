@@ -9,12 +9,15 @@ var QueueRoute = DoctorOnlyRoute.extend({
   actions: {
     acceptNext: function() {
       var self = this;
+      var nextRequest = this.controller.get('nextRequest');
+
+      if (!nextRequest) return;
 
       var goToConsultation = function(request) {
         self.transitionTo('consultation', request.get('consultation'));
       };
 
-      this.controller.get('nextRequest').accept().then(goToConsultation);
+      nextRequest.accept().then(goToConsultation);
     }
   }
 });

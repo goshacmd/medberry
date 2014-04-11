@@ -3,7 +3,9 @@ var Router = Ember.Router.extend();
 Router.map(function() {
   this.route('dashboard', { path: '/' });
 
-  this.resource('queue');
+  this.resource('queue', function() {
+    this.route('next');
+  });
 
   this.resource('patient', function() {
     this.route('dashboard');

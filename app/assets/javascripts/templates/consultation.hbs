@@ -28,6 +28,7 @@
 
   {{#if currentUser.isDoctor}}
     {{#link-to 'queue' class="btn btn-lg btn-success btn-block"}}Go to queue{{/link-to}}
+    {{#link-to 'queue.next' class="btn btn-lg btn-success btn-block"}}Proceed to next patient{{/link-to}}
   {{else}}
     {{#link-to 'patient.dashboard' class="btn btn-lg btn-success btn-block"}}Go to dashboard{{/link-to}}
   {{/if}}
