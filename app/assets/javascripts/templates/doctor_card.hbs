@@ -2,9 +2,7 @@
   <div class="panel panel-default doctor-card">
     <div class="panel-body">
       <h4>
-        <span {{bind-attr class="isOffline:dot-offline:dot-online"}}>
-          &#9679;
-        </span>
+        {{online-dot isOffline=isOffline}}
 
         Dr. {{fullName}}
 

@@ -20,7 +20,7 @@
           <td>
             {{patient.fullName}}
 
-            <small>{{#if patient.isOnline}}online{{else}}offline{{/if}}</small>
+            {{online-dot isOffline=patient.isOffline}}
           </td>
 
           <td>{{cause}}</td>
