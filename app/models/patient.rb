@@ -1,6 +1,7 @@
 class Patient < ActiveRecord::Base
   has_one :user, as: :identity
   belongs_to :insurance_policy, autosave: true
+  has_many :consultations
   has_many :consultation_requests
   has_many :favorite_doctors
   has_many :fav_doctors, through: :favorite_doctors, source: :doctor

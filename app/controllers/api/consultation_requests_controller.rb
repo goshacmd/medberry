@@ -13,6 +13,8 @@ class Api::ConsultationRequestsController < ApiController
     @request = ConsultationRequestCreator.new(cr_params, current_user).perform
 
     render json: @request
+  rescue ConsultationRequestCreator::NotAuthorized
+    return not_authorized
   rescue ConsultationRequestCreator::ValidationError => e
     render json: { errors: e.data.full_error_messages }, status: :unprocessable_entity
   end
