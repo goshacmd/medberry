@@ -9,12 +9,18 @@ var Consultation = DS.Model.extend({
   status: DS.attr('string'),
   finishedAt: DS.attr('date'),
   finishedBy: DS.attr('string'),
+  extension: DS.attr('boolean'),
 
   isNewConsultation: Ember.computed.equal('status', 'new'),
   isFinished: Ember.computed.equal('status', 'finished'),
 
   finish: function() {
     this.set('status', 'finished');
+    return this.save();
+  },
+
+  requestExtension: function() {
+    this.set('extension', true);
     return this.save();
   }
 });

@@ -12,7 +12,7 @@ class Api::ConsultationsController < ApiController
 
     authorize! :update, @consultation
 
-    ConsultationUpdater.new(@consultation, params[:consultation][:status], current_user).perform
+    ConsultationUpdater.new(@consultation, params[:consultation], current_user).perform
 
     render json: @consultation
   end

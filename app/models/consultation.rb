@@ -24,7 +24,7 @@ class Consultation < ActiveRecord::Base
   delegate :tokbox_token_patient, :tokbox_token_doctor, :expires_at, to: :latest_session
 
   def latest_session
-    sessions.first || ConsultationSession.new
+    sessions.order(created_at: :desc).first || ConsultationSession.new
   end
 
   def parties

@@ -1,6 +1,6 @@
 class ConsultationSerializer < ApplicationSerializer
   attributes :id, :cause, :tokbox_session, :tokbox_token, :created_at,
-    :expires_at, :status, :finished_at, :finished_by
+    :expires_at, :status, :finished_at, :finished_by, :extension
 
   has_one :doctor
   has_one :patient
@@ -11,5 +11,9 @@ class ConsultationSerializer < ApplicationSerializer
 
   def include_tokbox_token?
     current_user
+  end
+
+  def extension
+    false
   end
 end

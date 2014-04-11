@@ -19,10 +19,10 @@ class ConsultationDispatcher
     create_session_for consultation
   end
 
-  def create_session_for(consultation)
+  def create_session_for(consultation, duration: 20.minutes)
     session = consultation.sessions.new
 
-    expiry = 20.minutes.from_now
+    expiry = duration.from_now
     cid = consultation.id
     sid = consultation.tokbox_session
 
