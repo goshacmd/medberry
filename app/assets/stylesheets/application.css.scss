@@ -81,3 +81,8 @@
 #video-mate video, #video-self video {
   border-radius: 10px;
 }
+
+.messages-area {
+  height: 300px;
+  overflow-y: scroll;
+}
