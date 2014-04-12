@@ -8,8 +8,10 @@ define("app/routes/application",
 
         var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-        this.pusher.bindUser('requests', load('consultation_request'));
+        this.pusher.bindUser('consultation_requests', load('consultation_request'));
+        this.pusher.bindUser('consultation_request_queue_meta', load('consultation_request_queue_meta'));
         this.pusher.bindUser('consultations', load('consultation'));
+        this.pusher.bindUser('messages', load('message'));
 
         var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
         var updateDoctor = function(item) { store.update('doctor', item); };
@@ -27,6 +29,17 @@ define("app/routes/application",
 
         closeModal: function() {
           this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
+        },
+
+        createRequest: function(requestData) {
+          var self = this;
+
+          var goToRequest = function(request) {
+            self.transitionTo('patient.dashboard');
+            self.send('closeModal');
+          }
+
+          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
         },
 
         willTransition: function() {

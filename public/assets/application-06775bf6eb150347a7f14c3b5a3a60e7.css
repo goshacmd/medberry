@@ -7625,42 +7625,58 @@ button.close {
   text-decoration: none;
 }
 
-/* line 43, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 34, /home/app/app/assets/stylesheets/application.css.scss */
+.dot-offline {
+  color: #aaa;
+}
+
+/* line 38, /home/app/app/assets/stylesheets/application.css.scss */
+.dot-online {
+  color: #7ec700;
+}
+
+/* line 51, /home/app/app/assets/stylesheets/application.css.scss */
 .selector label {
   padding-left: 1em;
   font-weight: normal;
   font-size: 0.75em;
 }
 
-/* line 50, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 58, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card {
   border: none;
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 51, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 59, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card img {
-  max-width: 75%;
+  max-width: 55%;
 }
 
-/* line 60, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 68, /home/app/app/assets/stylesheets/application.css.scss */
 .modal {
   display: block;
 }
 
-/* line 64, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 72, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate {
   background-color: #999;
   border-radius: 10px;
 }
 
-/* line 69, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 77, /home/app/app/assets/stylesheets/application.css.scss */
 #video-self {
   background-color: #666;
   border-radius: 10px;
 }
 
-/* line 74, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 82, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate video, #video-self video {
   border-radius: 10px;
+}
+
+/* line 86, /home/app/app/assets/stylesheets/application.css.scss */
+.messages-area {
+  height: 300px;
+  overflow-y: scroll;
 }

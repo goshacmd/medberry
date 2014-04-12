@@ -13489,7 +13489,7 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
 })();
 EmberENV = { FEATURES: { 'query-params-new': true } };
 // Fetched from channel: beta, with url http://builds.emberjs.com/beta/ember.js
-// Fetched on: 2014-04-01T13:43:59Z
+// Fetched on: 2014-04-05T16:22:43Z
 /*!
  * @overview  Ember - JavaScript Application Framework
  * @copyright Copyright 2011-2014 Tilde Inc. and contributors
@@ -13497,7 +13497,7 @@ EmberENV = { FEATURES: { 'query-params-new': true } };
  *            Portions Copyright 2008-2011 Apple Inc. All rights reserved.
  * @license   Licensed under MIT license
  *            See https://raw.github.com/emberjs/ember.js/master/LICENSE
- * @version   1.6.0-beta.2+pre.df35d7c0
+ * @version   1.6.0-beta.2+pre.75ea875e
  */
 
 
@@ -13566,7 +13566,7 @@ var define, requireModule, require, requirejs, Ember;
   }
 })();
 (function() {
-define("ember-debug", 
+define("ember-debug",
   ["ember-metal/core","ember-metal/error","ember-metal/logger"],
   function(__dependency1__, __dependency2__, __dependency3__) {
     "use strict";
@@ -13758,7 +13758,7 @@ define("ember-debug",
 })();
 
 (function() {
-define("ember-metal/array", 
+define("ember-metal/array",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -13883,7 +13883,7 @@ define("ember-metal/array",
     __exports__.filter = filter;
     __exports__.indexOf = indexOf;
   });
-define("ember-metal/binding", 
+define("ember-metal/binding",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/map","ember-metal/observer","ember-metal/run_loop","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -14369,7 +14369,7 @@ define("ember-metal/binding",
     __exports__.oneWay = oneWay;
     __exports__.isGlobalPath = isGlobalPath;
   });
-define("ember-metal/chains", 
+define("ember-metal/chains",
   ["ember-metal/core","ember-metal/property_get","ember-metal/utils","ember-metal/array","ember-metal/watch_key","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -14385,7 +14385,7 @@ define("ember-metal/chains",
 
     var metaFor = meta,
         warn = Ember.warn,
-        FIRST_KEY = /^([^\.\*]+)/;
+        FIRST_KEY = /^([^\.]+)/;
 
     function firstKey(path) {
       return path.match(FIRST_KEY)[0];
@@ -14711,7 +14711,7 @@ define("ember-metal/chains",
     __exports__.ChainNode = ChainNode;
     __exports__.finishChains = finishChains;
   });
-define("ember-metal/computed", 
+define("ember-metal/computed",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/watching","ember-metal/expand_properties","ember-metal/error","ember-metal/properties","ember-metal/property_events","ember-metal/is_empty","ember-metal/is_none","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __exports__) {
     "use strict";
@@ -15968,7 +15968,7 @@ define("ember-metal/computed",
     __exports__.computed = computed;
     __exports__.cacheFor = cacheFor;
   });
-define("ember-metal/core", 
+define("ember-metal/core",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -15996,7 +15996,7 @@ define("ember-metal/core",
 
       @class Ember
       @static
-      @version 1.6.0-beta.2+pre.df35d7c0
+      @version 1.6.0-beta.2+pre.75ea875e
     */
 
     if ('undefined' === typeof Ember) {
@@ -16023,10 +16023,10 @@ define("ember-metal/core",
     /**
       @property VERSION
       @type String
-      @default '1.6.0-beta.2+pre.df35d7c0'
+      @default '1.6.0-beta.2+pre.75ea875e'
       @static
     */
-    Ember.VERSION = '1.6.0-beta.2+pre.df35d7c0';
+    Ember.VERSION = '1.6.0-beta.2+pre.75ea875e';
 
     /**
       Standard environmental variables. You can define these in a global `EmberENV`
@@ -16185,7 +16185,7 @@ define("ember-metal/core",
 
     __exports__["default"] = Ember;
   });
-define("ember-metal/enumerable_utils", 
+define("ember-metal/enumerable_utils",
   ["ember-metal/array","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -16295,7 +16295,7 @@ define("ember-metal/enumerable_utils",
         });
       },
 
-      /** 
+      /**
        * Adds an object to an array. If the array already includes the object this
        * method has no effect.
        *
@@ -16358,7 +16358,7 @@ define("ember-metal/enumerable_utils",
        *   var array = [1,2,3];
        *   Ember.EnumerableUtils.replace(array, 10, 1, [4, 5]); // [1, 2, 3, 4, 5]
        * ```
-       * 
+       *
        * @method replace
        * @param {Array} array The array the objects should be inserted into.
        * @param {Number} idx Starting index in the array to replace. If *idx* >=
@@ -16380,7 +16380,7 @@ define("ember-metal/enumerable_utils",
 
       /**
        * Calculates the intersection of two arrays. This method returns a new array
-       * filled with the records that the two passed arrays share with each other. 
+       * filled with the records that the two passed arrays share with each other.
        * If there is no intersection, an empty array will be returned.
        *
        * ```javascript
@@ -16416,7 +16416,7 @@ define("ember-metal/enumerable_utils",
 
     __exports__["default"] = utils;
   });
-define("ember-metal/error", 
+define("ember-metal/error",
   ["ember-metal/platform","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -16455,7 +16455,7 @@ define("ember-metal/error",
 
     __exports__["default"] = EmberError;
   });
-define("ember-metal/events", 
+define("ember-metal/events",
   ["ember-metal/core","ember-metal/utils","ember-metal/platform","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -16879,7 +16879,7 @@ define("ember-metal/events",
     __exports__.listenersDiff = listenersDiff;
     __exports__.listenersUnion = listenersUnion;
   });
-define("ember-metal/expand_properties", 
+define("ember-metal/expand_properties",
   ["ember-metal/enumerable_utils","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -16932,7 +16932,7 @@ define("ember-metal/expand_properties",
 
     __exports__["default"] = expandProperties;
   });
-define("ember-metal/get_properties", 
+define("ember-metal/get_properties",
   ["ember-metal/property_get","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -16977,7 +16977,7 @@ define("ember-metal/get_properties",
 
     __exports__["default"] = getProperties;
   });
-define("ember-metal/instrumentation", 
+define("ember-metal/instrumentation",
   ["ember-metal/core","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -17188,7 +17188,7 @@ define("ember-metal/instrumentation",
     __exports__.unsubscribe = unsubscribe;
     __exports__.reset = reset;
   });
-define("ember-metal/is_blank", 
+define("ember-metal/is_blank",
   ["ember-metal/core","ember-metal/is_empty","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -17224,7 +17224,7 @@ define("ember-metal/is_blank",
 
     __exports__["default"] = isBlank;
   });
-define("ember-metal/is_empty", 
+define("ember-metal/is_empty",
   ["ember-metal/core","ember-metal/property_get","ember-metal/is_none","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -17264,7 +17264,7 @@ define("ember-metal/is_empty",
     __exports__.isEmpty = isEmpty;
     __exports__.empty = empty;
   });
-define("ember-metal/is_none", 
+define("ember-metal/is_none",
   ["ember-metal/core","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -17299,7 +17299,7 @@ define("ember-metal/is_none",
     __exports__.isNone = isNone;
     __exports__.none = none;
   });
-define("ember-metal/libraries", 
+define("ember-metal/libraries",
   ["ember-metal/enumerable_utils","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -17349,7 +17349,7 @@ define("ember-metal/libraries",
 
     __exports__["default"] = libraries;
   });
-define("ember-metal/logger", 
+define("ember-metal/logger",
   ["ember-metal/core","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -17499,7 +17499,7 @@ define("ember-metal/logger",
 
     __exports__["default"] = Logger;
   });
-define("ember-metal", 
+define("ember-metal",
   ["ember-metal/core","ember-metal/merge","ember-metal/instrumentation","ember-metal/utils","ember-metal/error","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/array","ember-metal/logger","ember-metal/property_get","ember-metal/events","ember-metal/observer_set","ember-metal/property_events","ember-metal/properties","ember-metal/property_set","ember-metal/map","ember-metal/get_properties","ember-metal/set_properties","ember-metal/watch_key","ember-metal/chains","ember-metal/watch_path","ember-metal/watching","ember-metal/expand_properties","ember-metal/computed","ember-metal/observer","ember-metal/mixin","ember-metal/binding","ember-metal/run_loop","ember-metal/libraries","ember-metal/is_none","ember-metal/is_empty","ember-metal/is_blank","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __dependency28__, __dependency29__, __dependency30__, __dependency31__, __dependency32__, __exports__) {
     "use strict";
@@ -17688,7 +17688,7 @@ define("ember-metal",
 
     __exports__["default"] = Ember;
   });
-define("ember-metal/map", 
+define("ember-metal/map",
   ["ember-metal/property_set","ember-metal/utils","ember-metal/array","ember-metal/platform","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -17898,14 +17898,14 @@ define("ember-metal/map",
     Map.prototype = {
       /**
         This property will change as the number of objects in the map changes.
-       
+
         @property length
         @type number
         @default 0
       */
       length: 0,
-        
-        
+
+
       /**
         Retrieve the value associated with a given key.
 
@@ -18071,7 +18071,7 @@ define("ember-metal/map",
     __exports__.Map = Map;
     __exports__.MapWithDefault = MapWithDefault;
   });
-define("ember-metal/merge", 
+define("ember-metal/merge",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -18100,7 +18100,7 @@ define("ember-metal/merge",
 
     __exports__["default"] = merge;
   });
-define("ember-metal/mixin", 
+define("ember-metal/mixin",
   ["ember-metal/core","ember-metal/merge","ember-metal/array","ember-metal/platform","ember-metal/utils","ember-metal/expand_properties","ember-metal/properties","ember-metal/computed","ember-metal/binding","ember-metal/observer","ember-metal/events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
     "use strict";
@@ -18929,7 +18929,7 @@ define("ember-metal/mixin",
     __exports__.immediateObserver = immediateObserver;
     __exports__.beforeObserver = beforeObserver;
   });
-define("ember-metal/observer", 
+define("ember-metal/observer",
   ["ember-metal/watching","ember-metal/array","ember-metal/events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -19057,7 +19057,7 @@ define("ember-metal/observer",
     __exports__.beforeObserversFor = beforeObserversFor;
     __exports__.removeBeforeObserver = removeBeforeObserver;
   });
-define("ember-metal/observer_set", 
+define("ember-metal/observer_set",
   ["ember-metal/utils","ember-metal/events","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -19127,7 +19127,7 @@ define("ember-metal/observer_set",
 
     __exports__["default"] = ObserverSet;
   });
-define("ember-metal/platform", 
+define("ember-metal/platform",
   ["ember-metal/core","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -19297,7 +19297,7 @@ define("ember-metal/platform",
     __exports__.create = create;
     __exports__.platform = platform;
   });
-define("ember-metal/properties", 
+define("ember-metal/properties",
   ["ember-metal/core","ember-metal/utils","ember-metal/platform","ember-metal/property_events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -19456,7 +19456,7 @@ define("ember-metal/properties",
     __exports__.Descriptor = Descriptor;
     __exports__.defineProperty = defineProperty;
   });
-define("ember-metal/property_events", 
+define("ember-metal/property_events",
   ["ember-metal/utils","ember-metal/events","ember-metal/observer_set","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -19695,7 +19695,7 @@ define("ember-metal/property_events",
     __exports__.endPropertyChanges = endPropertyChanges;
     __exports__.changeProperties = changeProperties;
   });
-define("ember-metal/property_get", 
+define("ember-metal/property_get",
   ["ember-metal/core","ember-metal/utils","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -19711,9 +19711,9 @@ define("ember-metal/property_get",
 
     var MANDATORY_SETTER = Ember.ENV.MANDATORY_SETTER;
 
-    var IS_GLOBAL_PATH = /^([A-Z$]|([0-9][A-Z$])).*[\.\*]/;
-    var HAS_THIS  = /^this[\.\*]/;
-    var FIRST_KEY = /^([^\.\*]+)/;
+    var IS_GLOBAL_PATH = /^([A-Z$]|([0-9][A-Z$])).*[\.]/;
+    var HAS_THIS  = 'this.';
+    var FIRST_KEY = /^([^\.]+)/;
 
     // ..........................................................
     // GET AND SET
@@ -19797,7 +19797,7 @@ define("ember-metal/property_get",
       Normalizes a target/path pair to reflect that actual target/path that should
       be observed, etc. This takes into account passing in global property
       paths (i.e. a path beginning with a captial letter not defined on the
-      target) and * separators.
+      target).
 
       @private
       @method normalizeTuple
@@ -19807,7 +19807,7 @@ define("ember-metal/property_get",
       @return {Array} a temporary array with the normalized target/path pair.
     */
     function normalizeTuple(target, path) {
-      var hasThis  = HAS_THIS.test(path),
+      var hasThis  = path.indexOf(HAS_THIS) === 0,
           isGlobal = !hasThis && IS_GLOBAL_PATH.test(path),
           key;
 
@@ -19835,7 +19835,7 @@ define("ember-metal/property_get",
       if (root === null && path.indexOf('.') === -1) { return get(Ember.lookup, path); }
 
       // detect complicated paths and normalize them
-      hasThis  = HAS_THIS.test(path);
+      hasThis = path.indexOf(HAS_THIS) === 0;
 
       if (!root || hasThis) {
         tuple = normalizeTuple(root, path);
@@ -19866,7 +19866,7 @@ define("ember-metal/property_get",
     __exports__.normalizeTuple = normalizeTuple;
     __exports__._getPath = _getPath;
   });
-define("ember-metal/property_set", 
+define("ember-metal/property_set",
   ["ember-metal/core","ember-metal/property_get","ember-metal/utils","ember-metal/property_events","ember-metal/properties","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -20015,7 +20015,7 @@ define("ember-metal/property_set",
     __exports__.set = set;
     __exports__.trySet = trySet;
   });
-define("ember-metal/run_loop", 
+define("ember-metal/run_loop",
   ["ember-metal/core","ember-metal/utils","ember-metal/array","ember-metal/property_events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -20650,7 +20650,7 @@ define("ember-metal/run_loop",
 
     __exports__["default"] = run
   });
-define("ember-metal/set_properties", 
+define("ember-metal/set_properties",
   ["ember-metal/property_events","ember-metal/property_set","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -20686,7 +20686,7 @@ define("ember-metal/set_properties",
 
     __exports__["default"] = setProperties;
   });
-define("ember-metal/utils", 
+define("ember-metal/utils",
   ["ember-metal/core","ember-metal/platform","ember-metal/array","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -21481,7 +21481,7 @@ define("ember-metal/utils",
     __exports__.applyStr = applyStr;
     __exports__.apply = apply;
   });
-define("backburner/queue", 
+define("backburner/queue",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -21591,7 +21591,7 @@ define("backburner/queue",
     __exports__.Queue = Queue;
   });
 
-define("backburner/deferred_action_queues", 
+define("backburner/deferred_action_queues",
   ["backburner/queue","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -21693,7 +21693,7 @@ define("backburner/deferred_action_queues",
     __exports__.DeferredActionQueues = DeferredActionQueues;
   });
 
-define("backburner", 
+define("backburner",
   ["backburner/deferred_action_queues","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -22136,7 +22136,7 @@ define("backburner",
     __exports__.Backburner = Backburner;
   });
 
-define("ember-metal/watch_key", 
+define("ember-metal/watch_key",
   ["ember-metal/core","ember-metal/utils","ember-metal/platform","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -22212,7 +22212,7 @@ define("ember-metal/watch_key",
     __exports__.watchKey = watchKey;
     __exports__.unwatchKey = unwatchKey;
   });
-define("ember-metal/watch_path", 
+define("ember-metal/watch_path",
   ["ember-metal/utils","ember-metal/chains","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -22263,7 +22263,7 @@ define("ember-metal/watch_path",
     __exports__.watchPath = watchPath;
     __exports__.unwatchPath = unwatchPath;
   });
-define("ember-metal/watching", 
+define("ember-metal/watching",
   ["ember-metal/utils","ember-metal/chains","ember-metal/watch_key","ember-metal/watch_path","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -22283,12 +22283,11 @@ define("ember-metal/watching",
     var watchPath = __dependency4__.watchPath;
     var unwatchPath = __dependency4__.unwatchPath;
 
-    var metaFor = meta, // utils.js
-        IS_PATH = /[\.\*]/;
+    var metaFor = meta; // utils.js
 
     // returns true if the passed path is just a keyName
     function isKeyName(path) {
-      return path==='*' || !IS_PATH.test(path);
+      return path.indexOf('.') === -1;
     }
 
     /**
@@ -22413,7 +22412,7 @@ define("ember-metal/watching",
   @class RSVP
   @module RSVP
   */
-define("rsvp/all", 
+define("rsvp/all",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -22433,7 +22432,7 @@ define("rsvp/all",
       return Promise.all(array, label);
     };
   });
-define("rsvp/all_settled", 
+define("rsvp/all_settled",
   ["./promise","./utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -22548,7 +22547,7 @@ define("rsvp/all_settled",
       return { state: 'rejected', reason: reason };
     }
   });
-define("rsvp/config", 
+define("rsvp/config",
   ["./events","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -22579,7 +22578,7 @@ define("rsvp/config",
     __exports__.config = config;
     __exports__.configure = configure;
   });
-define("rsvp/defer", 
+define("rsvp/defer",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -22628,7 +22627,7 @@ define("rsvp/defer",
       return deferred;
     };
   });
-define("rsvp/events", 
+define("rsvp/events",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -22832,7 +22831,7 @@ define("rsvp/events",
       }
     };
   });
-define("rsvp/filter", 
+define("rsvp/filter",
   ["./all","./map","./utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -22948,7 +22947,7 @@ define("rsvp/filter",
 
     __exports__["default"] = filter;
   });
-define("rsvp/hash", 
+define("rsvp/hash",
   ["./promise","./utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -23086,7 +23085,7 @@ define("rsvp/hash",
       });
     };
   });
-define("rsvp/instrument", 
+define("rsvp/instrument",
   ["./config","./utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -23112,7 +23111,7 @@ define("rsvp/instrument",
       }
     };
   });
-define("rsvp/map", 
+define("rsvp/map",
   ["./promise","./all","./utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -23221,7 +23220,7 @@ define("rsvp/map",
       });
     };
   });
-define("rsvp/node", 
+define("rsvp/node",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -23334,7 +23333,7 @@ define("rsvp/node",
       };
     };
   });
-define("rsvp/promise", 
+define("rsvp/promise",
   ["./config","./events","./instrument","./utils","./promise/cast","./promise/all","./promise/race","./promise/resolve","./promise/reject","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
@@ -23963,7 +23962,7 @@ define("rsvp/promise",
       publish(promise, promise._state = REJECTED);
     }
   });
-define("rsvp/promise/all", 
+define("rsvp/promise/all",
   ["../utils","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24064,7 +24063,7 @@ define("rsvp/promise/all",
       }, label);
     };
   });
-define("rsvp/promise/cast", 
+define("rsvp/promise/cast",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -24148,7 +24147,7 @@ define("rsvp/promise/cast",
       }, label);
     };
   });
-define("rsvp/promise/race", 
+define("rsvp/promise/race",
   ["../utils","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24251,7 +24250,7 @@ define("rsvp/promise/race",
       }, label);
     };
   });
-define("rsvp/promise/reject", 
+define("rsvp/promise/reject",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -24299,7 +24298,7 @@ define("rsvp/promise/reject",
       }, label);
     };
   });
-define("rsvp/promise/resolve", 
+define("rsvp/promise/resolve",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -24344,7 +24343,7 @@ define("rsvp/promise/resolve",
       }, label);
     };
   });
-define("rsvp/race", 
+define("rsvp/race",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24363,7 +24362,7 @@ define("rsvp/race",
       return Promise.race(array, label);
     };
   });
-define("rsvp/reject", 
+define("rsvp/reject",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24384,7 +24383,7 @@ define("rsvp/reject",
       return Promise.reject(reason, label);
     };
   });
-define("rsvp/resolve", 
+define("rsvp/resolve",
   ["./promise","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24406,7 +24405,7 @@ define("rsvp/resolve",
       return Promise.resolve(value, label);
     };
   });
-define("rsvp/rethrow", 
+define("rsvp/rethrow",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -24456,7 +24455,7 @@ define("rsvp/rethrow",
       throw reason;
     };
   });
-define("rsvp/utils", 
+define("rsvp/utils",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -24491,7 +24490,7 @@ define("rsvp/utils",
     };
     __exports__.keysOf = keysOf;
   });
-define("rsvp", 
+define("rsvp",
   ["./rsvp/promise","./rsvp/events","./rsvp/node","./rsvp/all","./rsvp/all_settled","./rsvp/race","./rsvp/hash","./rsvp/rethrow","./rsvp/defer","./rsvp/config","./rsvp/map","./rsvp/resolve","./rsvp/reject","./rsvp/filter","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __exports__) {
     "use strict";
@@ -24556,7 +24555,7 @@ define("rsvp",
 })();
 
 (function() {
-define("container/container", 
+define("container/container",
   ["container/inheriting_dict","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -24974,7 +24973,7 @@ define("container/container",
         validateFullName(fullName);
         if (this.parent) { illegalChildOperation('typeInjection'); }
 
-        var fullNameType = fullName.split(':')[0];        
+        var fullNameType = fullName.split(':')[0];
         if(fullNameType === type) {
           throw new Error('Cannot inject a `' + fullName + '` on other ' + type + '(s). Register the `' + fullName + '` as a different type and perform the typeInjection.');
         }
@@ -25372,7 +25371,7 @@ define("container/container",
 
     __exports__["default"] = Container;
   });
-define("container/inheriting_dict", 
+define("container/inheriting_dict",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -25486,7 +25485,7 @@ define("container/inheriting_dict",
 
     __exports__["default"] = InheritingDict;
   });
-define("container", 
+define("container",
   ["container/container","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -25516,7 +25515,7 @@ define("container",
 })();
 
 (function() {
-define("ember-runtime/compare", 
+define("ember-runtime/compare",
   ["ember-metal/core","ember-metal/utils","ember-runtime/mixins/comparable","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -25653,7 +25652,7 @@ define("ember-runtime/compare",
 
     __exports__["default"] = compare;
   });
-define("ember-runtime/computed/array_computed", 
+define("ember-runtime/computed/array_computed",
   ["ember-metal/core","ember-runtime/computed/reduce_computed","ember-metal/enumerable_utils","ember-metal/platform","ember-metal/observer","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -25846,7 +25845,7 @@ define("ember-runtime/computed/array_computed",
     __exports__.arrayComputed = arrayComputed;
     __exports__.ArrayComputedProperty = ArrayComputedProperty;
   });
-define("ember-runtime/computed/reduce_computed", 
+define("ember-runtime/computed/reduce_computed",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/error","ember-metal/property_events","ember-metal/expand_properties","ember-metal/observer","ember-metal/computed","ember-metal/platform","ember-metal/enumerable_utils","ember-runtime/system/tracked_array","ember-runtime/mixins/array","ember-metal/run_loop","ember-runtime/system/set","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __exports__) {
     "use strict";
@@ -26637,6 +26636,10 @@ define("ember-runtime/computed/reduce_computed",
       semantics.  When an item is added or removed from such a dependency, the
       computed property is completely recomputed.
 
+      When the computed property is completely recomputed, the `accumulatedValue`
+      is discarded, it starts with `initialValue` again, and each item is passed
+      to `addedItem` in turn.
+
       Example
 
       ```javascript
@@ -26692,7 +26695,7 @@ define("ember-runtime/computed/reduce_computed",
     __exports__.reduceComputed = reduceComputed;
     __exports__.ReduceComputedProperty = ReduceComputedProperty;
   });
-define("ember-runtime/computed/reduce_computed_macros", 
+define("ember-runtime/computed/reduce_computed_macros",
   ["ember-metal/core","ember-metal/merge","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/error","ember-metal/enumerable_utils","ember-metal/run_loop","ember-metal/observer","ember-runtime/computed/array_computed","ember-runtime/computed/reduce_computed","ember-runtime/system/object_proxy","ember-runtime/system/subarray","ember-runtime/keys","ember-runtime/compare","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __exports__) {
     "use strict";
@@ -27477,7 +27480,7 @@ define("ember-runtime/computed/reduce_computed_macros",
     __exports__.union = union;
     __exports__.intersect = intersect;
   });
-define("ember-runtime/controllers/array_controller", 
+define("ember-runtime/controllers/array_controller",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/enumerable_utils","ember-runtime/system/array_proxy","ember-runtime/mixins/sortable","ember-runtime/controllers/controller","ember-metal/computed","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
@@ -27731,7 +27734,7 @@ define("ember-runtime/controllers/array_controller",
 
     __exports__["default"] = ArrayController;
   });
-define("ember-runtime/controllers/controller", 
+define("ember-runtime/controllers/controller",
   ["ember-metal/core","ember-metal/property_get","ember-runtime/system/object","ember-metal/mixin","ember-metal/computed","ember-runtime/mixins/action_handler","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -27807,7 +27810,7 @@ define("ember-runtime/controllers/controller",
     __exports__.Controller = Controller;
     __exports__.ControllerMixin = ControllerMixin;
   });
-define("ember-runtime/controllers/object_controller", 
+define("ember-runtime/controllers/object_controller",
   ["ember-runtime/controllers/controller","ember-runtime/system/object_proxy","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -27835,7 +27838,7 @@ define("ember-runtime/controllers/object_controller",
     var ObjectController = ObjectProxy.extend(ControllerMixin);
     __exports__["default"] = ObjectController;
   });
-define("ember-runtime/copy", 
+define("ember-runtime/copy",
   ["ember-metal/enumerable_utils","ember-metal/utils","ember-runtime/system/object","ember-runtime/mixins/copyable","ember-metal/platform","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -27914,7 +27917,7 @@ define("ember-runtime/copy",
 
     __exports__["default"] = copy;
   });
-define("ember-runtime/core", 
+define("ember-runtime/core",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -27943,12 +27946,15 @@ define("ember-runtime/core",
     */
     function isEqual(a, b) {
       if (a && 'function'===typeof a.isEqual) return a.isEqual(b);
+      if (a instanceof Date && b instanceof Date) {
+        return a.getTime() === b.getTime();
+      } 
       return a === b;
     };
 
     __exports__.isEqual = isEqual;
   });
-define("ember-runtime/ext/function", 
+define("ember-runtime/ext/function",
   ["ember-metal/core","ember-metal/expand_properties","ember-metal/computed"],
   function(__dependency1__, __dependency2__, __dependency3__) {
     "use strict";
@@ -28170,7 +28176,7 @@ define("ember-runtime/ext/function",
       };
     }
   });
-define("ember-runtime/ext/rsvp", 
+define("ember-runtime/ext/rsvp",
   ["ember-metal/core","ember-metal/logger","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -28204,7 +28210,7 @@ define("ember-runtime/ext/rsvp",
 
     __exports__["default"] = RSVP;
   });
-define("ember-runtime/ext/string", 
+define("ember-runtime/ext/string",
   ["ember-metal/core","ember-runtime/system/string"],
   function(__dependency1__, __dependency2__) {
     "use strict";
@@ -28319,7 +28325,7 @@ define("ember-runtime/ext/string",
       };
     }
   });
-define("ember-runtime/keys", 
+define("ember-runtime/keys",
   ["ember-metal/enumerable_utils","ember-metal/platform","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -28377,7 +28383,7 @@ define("ember-runtime/keys",
 
     __exports__["default"] = keys;
   });
-define("ember-runtime", 
+define("ember-runtime",
   ["ember-metal","ember-runtime/core","ember-runtime/keys","ember-runtime/compare","ember-runtime/copy","ember-runtime/system/namespace","ember-runtime/system/object","ember-runtime/system/tracked_array","ember-runtime/system/subarray","ember-runtime/system/container","ember-runtime/system/application","ember-runtime/system/array_proxy","ember-runtime/system/object_proxy","ember-runtime/system/core_object","ember-runtime/system/each_proxy","ember-runtime/system/native_array","ember-runtime/system/set","ember-runtime/system/string","ember-runtime/system/deferred","ember-runtime/system/lazy_load","ember-runtime/mixins/array","ember-runtime/mixins/comparable","ember-runtime/mixins/copyable","ember-runtime/mixins/enumerable","ember-runtime/mixins/freezable","ember-runtime/mixins/observable","ember-runtime/mixins/action_handler","ember-runtime/mixins/deferred","ember-runtime/mixins/mutable_enumerable","ember-runtime/mixins/mutable_array","ember-runtime/mixins/target_action_support","ember-runtime/mixins/evented","ember-runtime/mixins/promise_proxy","ember-runtime/mixins/sortable","ember-runtime/computed/array_computed","ember-runtime/computed/reduce_computed","ember-runtime/computed/reduce_computed_macros","ember-runtime/controllers/array_controller","ember-runtime/controllers/object_controller","ember-runtime/controllers/controller","ember-runtime/ext/rsvp","ember-runtime/ext/string","ember-runtime/ext/function","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __dependency28__, __dependency29__, __dependency30__, __dependency31__, __dependency32__, __dependency33__, __dependency34__, __dependency35__, __dependency36__, __dependency37__, __dependency38__, __dependency39__, __dependency40__, __dependency41__, __dependency42__, __dependency43__, __exports__) {
     "use strict";
@@ -28473,7 +28479,7 @@ define("ember-runtime",
 
     __exports__["default"] = Ember;
   });
-define("ember-runtime/mixins/action_handler", 
+define("ember-runtime/mixins/action_handler",
   ["ember-metal/merge","ember-metal/mixin","ember-metal/property_get","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -28709,7 +28715,7 @@ define("ember-runtime/mixins/action_handler",
 
     __exports__["default"] = ActionHandler;
   });
-define("ember-runtime/mixins/array", 
+define("ember-runtime/mixins/array",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/computed","ember-metal/is_none","ember-runtime/mixins/enumerable","ember-metal/enumerable_utils","ember-metal/mixin","ember-metal/property_events","ember-metal/events","ember-metal/watching","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
     "use strict";
@@ -29169,7 +29175,7 @@ define("ember-runtime/mixins/array",
 
     __exports__["default"] = EmberArray;
   });
-define("ember-runtime/mixins/comparable", 
+define("ember-runtime/mixins/comparable",
   ["ember-metal/mixin","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -29215,7 +29221,7 @@ define("ember-runtime/mixins/comparable",
 
     __exports__["default"] = Comparable;
   });
-define("ember-runtime/mixins/copyable", 
+define("ember-runtime/mixins/copyable",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/mixin","ember-runtime/mixins/freezable","ember-runtime/system/string","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -29286,7 +29292,7 @@ define("ember-runtime/mixins/copyable",
 
     __exports__["default"] = Copyable;
   });
-define("ember-runtime/mixins/deferred", 
+define("ember-runtime/mixins/deferred",
   ["ember-metal/core","ember-metal/property_get","ember-metal/mixin","ember-metal/computed","ember-metal/run_loop","ember-runtime/ext/rsvp","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -29405,7 +29411,7 @@ define("ember-runtime/mixins/deferred",
 
     __exports__["default"] = DeferredMixin;
   });
-define("ember-runtime/mixins/enumerable", 
+define("ember-runtime/mixins/enumerable",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/mixin","ember-metal/enumerable_utils","ember-metal/computed","ember-metal/property_events","ember-metal/events","ember-runtime/compare","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
     "use strict";
@@ -30444,7 +30450,7 @@ define("ember-runtime/mixins/enumerable",
 
     __exports__["default"] = Enumerable;
   });
-define("ember-runtime/mixins/evented", 
+define("ember-runtime/mixins/evented",
   ["ember-metal/mixin","ember-metal/events","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -30600,7 +30606,7 @@ define("ember-runtime/mixins/evented",
 
     __exports__["default"] = Evented;
   });
-define("ember-runtime/mixins/freezable", 
+define("ember-runtime/mixins/freezable",
   ["ember-metal/mixin","ember-metal/property_get","ember-metal/property_set","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -30700,7 +30706,7 @@ define("ember-runtime/mixins/freezable",
     __exports__.Freezable = Freezable;
     __exports__.FROZEN_ERROR = FROZEN_ERROR;
   });
-define("ember-runtime/mixins/mutable_array", 
+define("ember-runtime/mixins/mutable_array",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/error","ember-metal/mixin","ember-runtime/mixins/array","ember-runtime/mixins/mutable_enumerable","ember-runtime/mixins/enumerable","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -31056,7 +31062,7 @@ define("ember-runtime/mixins/mutable_array",
 
     __exports__["default"] = MutableArray;
   });
-define("ember-runtime/mixins/mutable_enumerable", 
+define("ember-runtime/mixins/mutable_enumerable",
   ["ember-metal/enumerable_utils","ember-runtime/mixins/enumerable","ember-metal/mixin","ember-metal/property_events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -31179,7 +31185,7 @@ define("ember-runtime/mixins/mutable_enumerable",
 
     __exports__["default"] = MutableEnumerable;
   });
-define("ember-runtime/mixins/observable", 
+define("ember-runtime/mixins/observable",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/get_properties","ember-metal/set_properties","ember-metal/mixin","ember-metal/events","ember-metal/property_events","ember-metal/observer","ember-metal/computed","ember-metal/is_none","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __exports__) {
     "use strict";
@@ -31628,7 +31634,7 @@ define("ember-runtime/mixins/observable",
       incrementProperty: function(keyName, increment) {
         if (isNone(increment)) { increment = 1; }
         Ember.assert("Must pass a numeric value to incrementProperty", (!isNaN(parseFloat(increment)) && isFinite(increment)));
-        set(this, keyName, (get(this, keyName) || 0) + increment);
+        set(this, keyName, (parseFloat(get(this, keyName)) || 0) + increment);
         return get(this, keyName);
       },
 
@@ -31691,7 +31697,7 @@ define("ember-runtime/mixins/observable",
 
     __exports__["default"] = Observable;
   });
-define("ember-runtime/mixins/promise_proxy", 
+define("ember-runtime/mixins/promise_proxy",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/computed","ember-metal/mixin","ember-metal/error","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -31898,7 +31904,7 @@ define("ember-runtime/mixins/promise_proxy",
 
     __exports__["default"] = PromiseProxyMixin;
   });
-define("ember-runtime/mixins/sortable", 
+define("ember-runtime/mixins/sortable",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/enumerable_utils","ember-metal/mixin","ember-runtime/mixins/mutable_enumerable","ember-runtime/compare","ember-metal/observer","ember-metal/computed","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
@@ -32200,7 +32206,7 @@ define("ember-runtime/mixins/sortable",
 
     __exports__["default"] = SortableMixin;
   });
-define("ember-runtime/mixins/target_action_support", 
+define("ember-runtime/mixins/target_action_support",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/mixin","ember-metal/computed","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -32350,7 +32356,7 @@ define("ember-runtime/mixins/target_action_support",
 
     __exports__["default"] = TargetActionSupport;
   });
-define("ember-runtime/system/application", 
+define("ember-runtime/system/application",
   ["ember-runtime/system/namespace","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -32359,7 +32365,7 @@ define("ember-runtime/system/application",
     var Application = Namespace.extend();
     __exports__["default"] = Application;
   });
-define("ember-runtime/system/array_proxy", 
+define("ember-runtime/system/array_proxy",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/computed","ember-metal/mixin","ember-metal/property_events","ember-metal/error","ember-runtime/system/object","ember-runtime/mixins/mutable_array","ember-runtime/mixins/enumerable","ember-runtime/system/string","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __exports__) {
     "use strict";
@@ -32713,7 +32719,7 @@ define("ember-runtime/system/array_proxy",
 
     __exports__["default"] = ArrayProxy;
   });
-define("ember-runtime/system/container", 
+define("ember-runtime/system/container",
   ["ember-metal/property_set","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -32724,7 +32730,7 @@ define("ember-runtime/system/container",
 
     __exports__["default"] = Container;
   });
-define("ember-runtime/system/core_object", 
+define("ember-runtime/system/core_object",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/platform","ember-metal/watching","ember-metal/chains","ember-metal/events","ember-metal/mixin","ember-metal/enumerable_utils","ember-metal/error","ember-runtime/keys","ember-runtime/mixins/action_handler","ember-metal/properties","ember-metal/binding","ember-metal/computed","ember-metal/run_loop","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __exports__) {
     "use strict";
@@ -32734,7 +32740,6 @@ define("ember-runtime/system/core_object",
     */
 
     var Ember = __dependency1__["default"];
-
     // Ember.ENV.MANDATORY_SETTER, Ember.assert, Ember.K, Ember.config
 
     // NOTE: this object should never be included directly. Instead use `Ember.Object`.
@@ -33507,7 +33512,7 @@ define("ember-runtime/system/core_object",
 
     __exports__["default"] = CoreObject;
   });
-define("ember-runtime/system/deferred", 
+define("ember-runtime/system/deferred",
   ["ember-runtime/mixins/deferred","ember-metal/property_get","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -33527,7 +33532,7 @@ define("ember-runtime/system/deferred",
 
     __exports__["default"] = Deferred;
   });
-define("ember-runtime/system/each_proxy", 
+define("ember-runtime/system/each_proxy",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/enumerable_utils","ember-metal/array","ember-runtime/mixins/array","ember-runtime/system/object","ember-metal/computed","ember-metal/observer","ember-metal/events","ember-metal/properties","ember-metal/property_events","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __exports__) {
     "use strict";
@@ -33758,7 +33763,7 @@ define("ember-runtime/system/each_proxy",
     __exports__.EachArray = EachArray;
     __exports__.EachProxy = EachProxy;
   });
-define("ember-runtime/system/lazy_load", 
+define("ember-runtime/system/lazy_load",
   ["ember-metal/core","ember-metal/array","ember-runtime/system/native_array","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -33833,7 +33838,7 @@ define("ember-runtime/system/lazy_load",
     __exports__.onLoad = onLoad;
     __exports__.runLoadHooks = runLoadHooks;
   });
-define("ember-runtime/system/namespace", 
+define("ember-runtime/system/namespace",
   ["ember-metal/core","ember-metal/property_get","ember-metal/array","ember-metal/utils","ember-metal/mixin","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -34011,7 +34016,7 @@ define("ember-runtime/system/namespace",
       if (this[NAME_KEY]) {
         ret = this[NAME_KEY];
       } else if (this._toString) {
-        ret = this._toString; 
+        ret = this._toString;
       } else {
         var str = superClassString(this);
         if (str) {
@@ -34053,7 +34058,7 @@ define("ember-runtime/system/namespace",
 
     __exports__["default"] = Namespace;
   });
-define("ember-runtime/system/native_array", 
+define("ember-runtime/system/native_array",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/enumerable_utils","ember-metal/mixin","ember-runtime/mixins/array","ember-runtime/mixins/mutable_array","ember-runtime/mixins/observable","ember-runtime/mixins/copyable","ember-runtime/mixins/freezable","ember-runtime/copy","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
     "use strict";
@@ -34253,7 +34258,7 @@ define("ember-runtime/system/native_array",
     __exports__.A = A;
     __exports__.NativeArray = NativeArray;__exports__["default"] = NativeArray;
   });
-define("ember-runtime/system/object", 
+define("ember-runtime/system/object",
   ["ember-runtime/system/core_object","ember-runtime/mixins/observable","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -34280,7 +34285,7 @@ define("ember-runtime/system/object",
 
     __exports__["default"] = EmberObject;
   });
-define("ember-runtime/system/object_proxy", 
+define("ember-runtime/system/object_proxy",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/observer","ember-metal/property_events","ember-metal/computed","ember-metal/properties","ember-metal/mixin","ember-runtime/system/string","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
     "use strict";
@@ -34438,7 +34443,7 @@ define("ember-runtime/system/object_proxy",
 
     __exports__["default"] = ObjectProxy;
   });
-define("ember-runtime/system/set", 
+define("ember-runtime/system/set",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-metal/is_none","ember-runtime/system/string","ember-runtime/system/core_object","ember-runtime/mixins/mutable_enumerable","ember-runtime/mixins/enumerable","ember-runtime/mixins/copyable","ember-runtime/mixins/freezable","ember-metal/error","ember-metal/property_events","ember-metal/mixin","ember-metal/computed","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __exports__) {
     "use strict";
@@ -34914,7 +34919,7 @@ define("ember-runtime/system/set",
 
     __exports__["default"] = Set;
   });
-define("ember-runtime/system/string", 
+define("ember-runtime/system/string",
   ["ember-metal/core","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -35202,7 +35207,7 @@ define("ember-runtime/system/string",
     __exports__.underscore = underscore;
     __exports__.capitalize = capitalize;
   });
-define("ember-runtime/system/subarray", 
+define("ember-runtime/system/subarray",
   ["ember-metal/property_get","ember-metal/error","ember-metal/enumerable_utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -35387,7 +35392,7 @@ define("ember-runtime/system/subarray",
 
     __exports__["default"] = SubArray;
   });
-define("ember-runtime/system/tracked_array", 
+define("ember-runtime/system/tracked_array",
   ["ember-metal/property_get","ember-metal/enumerable_utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -35731,7 +35736,7 @@ define("ember-runtime/system/tracked_array",
 })();
 
 (function() {
-define("ember-views", 
+define("ember-views",
   ["ember-runtime","ember-views/system/jquery","ember-views/system/utils","ember-views/system/render_buffer","ember-views/system/ext","ember-views/views/states","ember-views/views/view","ember-views/views/container_view","ember-views/views/collection_view","ember-views/views/component","ember-views/system/event_dispatcher","ember-views/mixins/view_target_action_support","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __exports__) {
     "use strict";
@@ -35768,7 +35773,7 @@ define("ember-views",
 
     __exports__["default"] = Ember;
   });
-define("ember-views/mixins/component_template_deprecation", 
+define("ember-views/mixins/component_template_deprecation",
   ["ember-metal/core","ember-metal/property_get","ember-metal/mixin","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -35837,7 +35842,7 @@ define("ember-views/mixins/component_template_deprecation",
 
     __exports__["default"] = ComponentTemplateDeprecation;
   });
-define("ember-views/mixins/view_target_action_support", 
+define("ember-views/mixins/view_target_action_support",
   ["ember-metal/mixin","ember-runtime/mixins/target_action_support","ember-metal/computed","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -35902,7 +35907,7 @@ define("ember-views/mixins/view_target_action_support",
 
     __exports__["default"] = ViewTargetActionSupport;
   });
-define("ember-views/system/event_dispatcher", 
+define("ember-views/system/event_dispatcher",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/is_none","ember-metal/run_loop","ember-metal/utils","ember-runtime/system/string","ember-runtime/system/object","ember-views/system/jquery","ember-views/views/view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
     "use strict";
@@ -36136,7 +36141,7 @@ define("ember-views/system/event_dispatcher",
 
     __exports__["default"] = EventDispatcher;
   });
-define("ember-views/system/ext", 
+define("ember-views/system/ext",
   ["ember-metal/run_loop"],
   function(__dependency1__) {
     "use strict";
@@ -36154,7 +36159,7 @@ define("ember-views/system/ext",
     run._addQueue('render', 'actions');
     run._addQueue('afterRender', 'render');
   });
-define("ember-views/system/jquery", 
+define("ember-views/system/jquery",
   ["ember-metal/core","ember-runtime/system/string","ember-metal/enumerable_utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -36199,7 +36204,7 @@ define("ember-views/system/jquery",
 
     __exports__["default"] = jQuery;
   });
-define("ember-views/system/render_buffer", 
+define("ember-views/system/render_buffer",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-views/system/utils","ember-views/system/jquery","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -36752,7 +36757,7 @@ define("ember-views/system/render_buffer",
 
     __exports__["default"] = RenderBuffer;
   });
-define("ember-views/system/utils", 
+define("ember-views/system/utils",
   ["ember-metal/core","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -36894,7 +36899,7 @@ define("ember-views/system/utils",
     __exports__.setInnerHTML = setInnerHTML;
     __exports__.isSimpleClick = isSimpleClick;
   });
-define("ember-views/views/collection_view", 
+define("ember-views/views/collection_view",
   ["ember-metal/core","ember-metal/platform","ember-metal/merge","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/string","ember-views/views/container_view","ember-views/views/view","ember-metal/mixin","ember-runtime/mixins/array","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
     "use strict";
@@ -37335,7 +37340,7 @@ define("ember-views/views/collection_view",
 
     __exports__["default"] = CollectionView;
   });
-define("ember-views/views/component", 
+define("ember-views/views/component",
   ["ember-metal/core","ember-views/mixins/component_template_deprecation","ember-runtime/mixins/target_action_support","ember-views/views/view","ember-metal/property_get","ember-metal/property_set","ember-metal/is_none","ember-metal/computed","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -37643,7 +37648,7 @@ define("ember-views/views/component",
 
     __exports__["default"] = Component;
   });
-define("ember-views/views/container_view", 
+define("ember-views/views/container_view",
   ["ember-metal/core","ember-metal/merge","ember-runtime/mixins/mutable_array","ember-metal/property_get","ember-metal/property_set","ember-views/views/view","ember-views/views/states","ember-metal/error","ember-metal/enumerable_utils","ember-metal/computed","ember-metal/run_loop","ember-metal/properties","ember-views/system/render_buffer","ember-metal/mixin","ember-runtime/system/native_array","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __exports__) {
     "use strict";
@@ -38068,7 +38073,7 @@ define("ember-views/views/container_view",
 
     __exports__["default"] = ContainerView;
   });
-define("ember-views/views/states", 
+define("ember-views/views/states",
   ["ember-metal/platform","ember-metal/merge","ember-views/views/states/default","ember-views/views/states/pre_render","ember-views/views/states/in_buffer","ember-views/views/states/has_element","ember-views/views/states/in_dom","ember-views/views/states/destroying","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -38111,7 +38116,7 @@ define("ember-views/views/states",
     __exports__.cloneStates = cloneStates;
     __exports__.states = states;
   });
-define("ember-views/views/states/default", 
+define("ember-views/views/states/default",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/run_loop","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -38163,7 +38168,7 @@ define("ember-views/views/states/default",
 
     __exports__["default"] = _default;
   });
-define("ember-views/views/states/destroying", 
+define("ember-views/views/states/destroying",
   ["ember-metal/merge","ember-metal/platform","ember-runtime/system/string","ember-views/views/states/default","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -38209,7 +38214,7 @@ define("ember-views/views/states/destroying",
 
     __exports__["default"] = destroying;
   });
-define("ember-views/views/states/has_element", 
+define("ember-views/views/states/has_element",
   ["ember-views/views/states/default","ember-metal/run_loop","ember-metal/merge","ember-metal/platform","ember-views/system/jquery","ember-metal/property_get","ember-metal/property_set","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -38307,7 +38312,7 @@ define("ember-views/views/states/has_element",
 
     __exports__["default"] = hasElement;
   });
-define("ember-views/views/states/in_buffer", 
+define("ember-views/views/states/in_buffer",
   ["ember-views/views/states/default","ember-metal/error","ember-metal/core","ember-metal/platform","ember-metal/merge","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -38405,7 +38410,7 @@ define("ember-views/views/states/in_buffer",
 
     __exports__["default"] = inBuffer;
   });
-define("ember-views/views/states/in_dom", 
+define("ember-views/views/states/in_dom",
   ["ember-metal/core","ember-metal/platform","ember-metal/merge","ember-metal/error","ember-views/views/states/has_element","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -38454,7 +38459,7 @@ define("ember-views/views/states/in_dom",
 
     __exports__["default"] = inDOM;
   });
-define("ember-views/views/states/pre_render", 
+define("ember-views/views/states/pre_render",
   ["ember-views/views/states/default","ember-metal/platform","ember-metal/merge","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -38504,7 +38509,7 @@ define("ember-views/views/states/pre_render",
 
     __exports__["default"] = preRender;
   });
-define("ember-views/views/view", 
+define("ember-views/views/view",
   ["ember-metal/core","ember-metal/error","ember-runtime/system/object","ember-runtime/mixins/evented","ember-runtime/mixins/action_handler","ember-views/system/render_buffer","ember-metal/property_get","ember-metal/property_set","ember-metal/set_properties","ember-metal/run_loop","ember-metal/observer","ember-metal/properties","ember-metal/utils","ember-metal/computed","ember-metal/mixin","ember-metal/is_none","container/container","ember-runtime/system/native_array","ember-metal/instrumentation","ember-runtime/system/string","ember-metal/enumerable_utils","ember-runtime/copy","ember-metal/binding","ember-metal/property_events","ember-views/views/states","ember-views/system/jquery","ember-views/system/ext","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __dependency27__, __exports__) {
     "use strict";
@@ -38668,7 +38673,7 @@ define("ember-views/views/view",
       // return the current view, not including virtual views
       concreteView: computed('parentView', function() {
         if (!this.isVirtual) { return this; }
-        else { return get(this, 'parentView'); }
+        else { return get(this, 'parentView.concreteView'); }
       }),
 
       instrumentName: 'core_view',
@@ -41595,7 +41600,7 @@ define("metamorph",
 })();
 
 (function() {
-define("ember-handlebars-compiler", 
+define("ember-handlebars-compiler",
   ["ember-metal/core","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -41865,7 +41870,7 @@ define("ember-handlebars-compiler",
       @for Ember.Handlebars
       @static
       @param {String} string The template to precompile
-      @param {Boolean} asObject optional parameter, defaulting to true, of whether or not the 
+      @param {Boolean} asObject optional parameter, defaulting to true, of whether or not the
                                 compiled template should be returned as an Object or a String
     */
     EmberHandlebars.precompile = function(string, asObject) {
@@ -41921,7 +41926,7 @@ define("ember-handlebars-compiler",
 })();
 
 (function() {
-define("ember-handlebars/component_lookup", 
+define("ember-handlebars/component_lookup",
   ["ember-runtime/system/object","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -41956,7 +41961,7 @@ define("ember-handlebars/component_lookup",
 
     __exports__["default"] = ComponentLookup;
   });
-define("ember-handlebars/controls", 
+define("ember-handlebars/controls",
   ["ember-handlebars/controls/checkbox","ember-handlebars/controls/text_field","ember-handlebars/controls/text_area","ember-metal/core","ember-handlebars-compiler","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -42310,7 +42315,7 @@ define("ember-handlebars/controls",
     __exports__.inputHelper = inputHelper;
     __exports__.textareaHelper = textareaHelper;
   });
-define("ember-handlebars/controls/checkbox", 
+define("ember-handlebars/controls/checkbox",
   ["ember-metal/property_get","ember-metal/property_set","ember-views/views/view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -42377,7 +42382,7 @@ define("ember-handlebars/controls/checkbox",
 
     __exports__["default"] = Checkbox;
   });
-define("ember-handlebars/controls/select", 
+define("ember-handlebars/controls/select",
   ["ember-handlebars-compiler","ember-metal/enumerable_utils","ember-metal/property_get","ember-metal/property_set","ember-views/views/view","ember-views/views/collection_view","ember-metal/utils","ember-metal/is_none","ember-metal/computed","ember-runtime/system/native_array","ember-metal/mixin","ember-metal/properties","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __exports__) {
     "use strict";
@@ -43060,7 +43065,7 @@ function program7(depth0,data) {
     __exports__.SelectOption = SelectOption;
     __exports__.SelectOptgroup = SelectOptgroup;
   });
-define("ember-handlebars/controls/text_area", 
+define("ember-handlebars/controls/text_area",
   ["ember-metal/property_get","ember-views/views/component","ember-handlebars/controls/text_support","ember-metal/mixin","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -43117,7 +43122,7 @@ define("ember-handlebars/controls/text_area",
 
     __exports__["default"] = TextArea;
   });
-define("ember-handlebars/controls/text_field", 
+define("ember-handlebars/controls/text_field",
   ["ember-metal/property_get","ember-metal/property_set","ember-views/views/component","ember-handlebars/controls/text_support","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -43217,7 +43222,7 @@ define("ember-handlebars/controls/text_field",
 
     __exports__["default"] = TextField;
   });
-define("ember-handlebars/controls/text_support", 
+define("ember-handlebars/controls/text_support",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/mixin","ember-runtime/mixins/target_action_support","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -43244,7 +43249,8 @@ define("ember-handlebars/controls/text_support",
       value: "",
 
       attributeBindings: ['placeholder', 'disabled', 'maxlength', 'tabindex', 'readonly',
-                          'autofocus', 'form', 'selectionDirection', 'spellcheck', 'required'],
+                          'autofocus', 'form', 'selectionDirection', 'spellcheck', 'required',
+                          'title'],
       placeholder: null,
       disabled: false,
       maxlength: null,
@@ -43408,7 +43414,7 @@ define("ember-handlebars/controls/text_support",
 
     __exports__["default"] = TextSupport;
   });
-define("ember-handlebars/ext", 
+define("ember-handlebars/ext",
   ["ember-metal/core","ember-runtime/system/string","ember-handlebars-compiler","ember-metal/property_get","ember-metal/binding","ember-metal/error","ember-metal/mixin","ember-metal/is_empty","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -43979,7 +43985,7 @@ define("ember-handlebars/ext",
     __exports__.helperMissingHelper = helperMissingHelper;
     __exports__.blockHelperMissingHelper = blockHelperMissingHelper;
   });
-define("ember-handlebars/helpers/binding", 
+define("ember-handlebars/helpers/binding",
   ["ember-metal/core","ember-handlebars-compiler","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/string","ember-metal/platform","ember-metal/is_none","ember-metal/enumerable_utils","ember-metal/array","ember-views/views/view","ember-metal/run_loop","ember-handlebars/views/handlebars_bound_view","ember-metal/observer","ember-metal/binding","ember-metal/utils","ember-views/system/jquery","ember-handlebars/ext","ember-runtime/keys","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __exports__) {
     "use strict";
@@ -44829,7 +44835,7 @@ define("ember-handlebars/helpers/binding",
     __exports__.bindAttrHelperDeprecated = bindAttrHelperDeprecated;
     __exports__.bindClasses = bindClasses;
   });
-define("ember-handlebars/helpers/collection", 
+define("ember-handlebars/helpers/collection",
   ["ember-metal/core","ember-metal/utils","ember-handlebars-compiler","ember-runtime/system/string","ember-metal/property_get","ember-handlebars/ext","ember-handlebars/helpers/view","ember-metal/computed","ember-views/views/collection_view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __exports__) {
     "use strict";
@@ -45084,7 +45090,7 @@ define("ember-handlebars/helpers/collection",
 
     __exports__["default"] = collectionHelper;
   });
-define("ember-handlebars/helpers/debug", 
+define("ember-handlebars/helpers/debug",
   ["ember-metal/core","ember-metal/utils","ember-metal/logger","ember-metal/property_get","ember-handlebars/ext","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -45190,7 +45196,7 @@ define("ember-handlebars/helpers/debug",
     __exports__.logHelper = logHelper;
     __exports__.debuggerHelper = debuggerHelper;
   });
-define("ember-handlebars/helpers/each", 
+define("ember-handlebars/helpers/each",
   ["ember-metal/core","ember-handlebars-compiler","ember-runtime/system/string","ember-metal/property_get","ember-metal/property_set","ember-handlebars/views/metamorph_view","ember-views/views/collection_view","ember-metal/binding","ember-runtime/controllers/controller","ember-runtime/controllers/array_controller","ember-runtime/mixins/array","ember-runtime/copy","ember-metal/run_loop","ember-metal/observer","ember-metal/events","ember-handlebars/ext","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __exports__) {
     "use strict";
@@ -45657,7 +45663,7 @@ define("ember-handlebars/helpers/each",
     __exports__.GroupedEach = GroupedEach;
     __exports__.eachHelper = eachHelper;
   });
-define("ember-handlebars/helpers/loc", 
+define("ember-handlebars/helpers/loc",
   ["ember-runtime/system/string","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -45695,7 +45701,7 @@ define("ember-handlebars/helpers/loc",
 
     __exports__["default"] = locHelper;
   });
-define("ember-handlebars/helpers/partial", 
+define("ember-handlebars/helpers/partial",
   ["ember-metal/core","ember-metal/is_none","ember-handlebars/ext","ember-handlebars/helpers/binding","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -45806,7 +45812,7 @@ define("ember-handlebars/helpers/partial",
 
     __exports__["default"] = partialHelper;
   });
-define("ember-handlebars/helpers/shared", 
+define("ember-handlebars/helpers/shared",
   ["ember-handlebars/ext","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -45827,7 +45833,7 @@ define("ember-handlebars/helpers/shared",
 
     __exports__["default"] = resolvePaths;
   });
-define("ember-handlebars/helpers/template", 
+define("ember-handlebars/helpers/template",
   ["ember-metal/core","ember-handlebars-compiler","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -45891,7 +45897,7 @@ define("ember-handlebars/helpers/template",
 
     __exports__["default"] = templateHelper;
   });
-define("ember-handlebars/helpers/unbound", 
+define("ember-handlebars/helpers/unbound",
   ["ember-handlebars-compiler","ember-handlebars/ext","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -45948,7 +45954,7 @@ define("ember-handlebars/helpers/unbound",
 
     __exports__["default"] = unboundHelper;
   });
-define("ember-handlebars/helpers/view", 
+define("ember-handlebars/helpers/view",
   ["ember-metal/core","ember-runtime/system/object","ember-metal/property_get","ember-metal/property_set","ember-metal/mixin","ember-views/system/jquery","ember-views/views/view","ember-metal/binding","ember-handlebars/ext","ember-runtime/system/string","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
     "use strict";
@@ -46339,7 +46345,7 @@ define("ember-handlebars/helpers/view",
     __exports__.ViewHelper = ViewHelper;
     __exports__.viewHelper = viewHelper;
   });
-define("ember-handlebars/helpers/yield", 
+define("ember-handlebars/helpers/yield",
   ["ember-metal/core","ember-metal/property_get","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -46442,7 +46448,7 @@ define("ember-handlebars/helpers/yield",
         if (view._contextView) {
           view = view._contextView;
         } else {
-          view = get(view, 'parentView');
+          view = get(view, '_parentView');
         }
       }
 
@@ -46453,7 +46459,7 @@ define("ember-handlebars/helpers/yield",
 
     __exports__["default"] = yieldHelper;
   });
-define("ember-handlebars/loader", 
+define("ember-handlebars/loader",
   ["ember-handlebars/component_lookup","ember-views/system/jquery","ember-metal/error","ember-runtime/system/lazy_load","ember-handlebars-compiler","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -46551,7 +46557,7 @@ define("ember-handlebars/loader",
 
     __exports__["default"] = bootstrap;
   });
-define("ember-handlebars", 
+define("ember-handlebars",
   ["ember-handlebars-compiler","ember-metal/core","ember-runtime/system/lazy_load","ember-handlebars/loader","ember-handlebars/ext","ember-handlebars/string","ember-handlebars/helpers/shared","ember-handlebars/helpers/binding","ember-handlebars/helpers/collection","ember-handlebars/helpers/view","ember-handlebars/helpers/unbound","ember-handlebars/helpers/debug","ember-handlebars/helpers/each","ember-handlebars/helpers/template","ember-handlebars/helpers/partial","ember-handlebars/helpers/yield","ember-handlebars/helpers/loc","ember-handlebars/controls/checkbox","ember-handlebars/controls/select","ember-handlebars/controls/text_area","ember-handlebars/controls/text_field","ember-handlebars/controls/text_support","ember-handlebars/controls","ember-handlebars/component_lookup","ember-handlebars/views/handlebars_bound_view","ember-handlebars/views/metamorph_view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __exports__) {
     "use strict";
@@ -46698,7 +46704,7 @@ define("ember-handlebars",
 
     __exports__["default"] = EmberHandlebars;
   });
-define("ember-handlebars/string", 
+define("ember-handlebars/string",
   ["ember-runtime/system/string","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -46746,7 +46752,7 @@ define("ember-handlebars/string",
 
     __exports__["default"] = htmlSafe;
   });
-define("ember-handlebars/views/handlebars_bound_view", 
+define("ember-handlebars/views/handlebars_bound_view",
   ["ember-handlebars-compiler","ember-metal/core","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-metal/merge","ember-metal/run_loop","ember-views/views/view","ember-views/views/states","ember-handlebars/views/metamorph_view","ember-handlebars/ext","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __exports__) {
     "use strict";
@@ -47107,7 +47113,7 @@ define("ember-handlebars/views/handlebars_bound_view",
     __exports__._HandlebarsBoundView = _HandlebarsBoundView;
     __exports__.SimpleHandlebarsView = SimpleHandlebarsView;
   });
-define("ember-handlebars/views/metamorph_view", 
+define("ember-handlebars/views/metamorph_view",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-views/views/view","ember-metal/mixin","ember-metal/run_loop","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -47256,7 +47262,7 @@ define("ember-handlebars/views/metamorph_view",
 })();
 
 (function() {
-define("ember-routing/ext/controller", 
+define("ember-routing/ext/controller",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/enumerable_utils","ember-runtime/controllers/controller","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -47433,7 +47439,7 @@ define("ember-routing/ext/controller",
 
     __exports__["default"] = ControllerMixin;
   });
-define("ember-routing/ext/run_loop", 
+define("ember-routing/ext/run_loop",
   ["ember-metal/run_loop"],
   function(__dependency1__) {
     "use strict";
@@ -47446,13 +47452,13 @@ define("ember-routing/ext/run_loop",
 
     // Add a new named queue after the 'actions' queue (where RSVP promises
     // resolve), which is used in router transitions to prevent unnecessary
-    // loading state entry if all context promises resolve on the 
+    // loading state entry if all context promises resolve on the
     // 'actions' queue first.
 
     var queues = run.queues;
     run._addQueue('routerTransitions', 'actions');
   });
-define("ember-routing/ext/view", 
+define("ember-routing/ext/view",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/run_loop","ember-views/views/view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -47609,7 +47615,7 @@ define("ember-routing/ext/view",
 
     __exports__["default"] = EmberView;
   });
-define("ember-routing/helpers/action", 
+define("ember-routing/helpers/action",
   ["ember-metal/core","ember-metal/property_get","ember-metal/array","ember-metal/run_loop","ember-views/system/utils","ember-handlebars","ember-routing/system/router","ember-handlebars/ext","ember-handlebars/helpers/view","ember-routing/helpers/shared","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __exports__) {
     "use strict";
@@ -47943,7 +47949,7 @@ define("ember-routing/helpers/action",
     __exports__.ActionHelper = ActionHelper;
     __exports__.actionHelper = actionHelper;
   });
-define("ember-routing/helpers/link_to", 
+define("ember-routing/helpers/link_to",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/merge","ember-metal/run_loop","ember-metal/computed","ember-runtime/system/lazy_load","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/keys","ember-views/system/utils","ember-views/views/view","ember-handlebars","ember-handlebars/helpers/view","ember-routing/system/router","ember-routing/helpers/shared","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __exports__) {
     "use strict";
@@ -48220,7 +48226,7 @@ define("ember-routing/helpers/link_to",
         this._super.apply(this, arguments);
 
         // Map desired event name to invoke function
-        var eventName = get(this, 'eventName'), i;
+        var eventName = get(this, 'eventName');
         this.on(eventName, this, this._invoke);
       },
 
@@ -48882,7 +48888,7 @@ define("ember-routing/helpers/link_to",
     __exports__.deprecatedLinkToHelper = deprecatedLinkToHelper;
     __exports__.linkToHelper = linkToHelper;
   });
-define("ember-routing/helpers/outlet", 
+define("ember-routing/helpers/outlet",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/lazy_load","ember-views/views/container_view","ember-handlebars/views/metamorph_view","ember-handlebars/helpers/view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -49012,7 +49018,7 @@ define("ember-routing/helpers/outlet",
     __exports__.outletHelper = outletHelper;
     __exports__.OutletView = OutletView;
   });
-define("ember-routing/helpers/render", 
+define("ember-routing/helpers/render",
   ["ember-metal/core","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/string","ember-routing/system/controller_for","ember-handlebars/ext","ember-handlebars/helpers/view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -49191,7 +49197,7 @@ define("ember-routing/helpers/render",
 
     __exports__["default"] = renderHelper;
   });
-define("ember-routing/helpers/shared", 
+define("ember-routing/helpers/shared",
   ["ember-metal/property_get","ember-metal/array","ember-runtime/system/lazy_load","ember-runtime/controllers/controller","ember-routing/system/router","ember-handlebars/ext","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -49240,7 +49246,7 @@ define("ember-routing/helpers/shared",
     __exports__.resolveParams = resolveParams;
     __exports__.resolvePaths = resolvePaths;
   });
-define("ember-routing/location/api", 
+define("ember-routing/location/api",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -49431,7 +49437,7 @@ define("ember-routing/location/api",
       /**
         Returns the current `location.hash` by parsing location.href since browsers
         inconsistently URL-decode `location.hash`.
-      
+
         https://bugzilla.mozilla.org/show_bug.cgi?id=483304
 
         @private
@@ -49439,7 +49445,7 @@ define("ember-routing/location/api",
       */
       _getHash: function () {
         // AutoLocation has it at _location, HashLocation at .location.
-        // Being nice and not changing 
+        // Being nice and not changing
         var href = (this._location || this.location).href,
             hashIndex = href.indexOf('#');
 
@@ -49453,7 +49459,7 @@ define("ember-routing/location/api",
 
     __exports__["default"] = EmberLocation;
   });
-define("ember-routing/location/auto_location", 
+define("ember-routing/location/auto_location",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-routing/location/api","ember-routing/location/history_location","ember-routing/location/hash_location","ember-routing/location/none_location","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -49572,7 +49578,7 @@ define("ember-routing/location/auto_location",
         // Older browsers, especially IE, don't have origin
         if (!origin) {
           origin = location.protocol + '//' + location.hostname;
-          
+
           if (location.port) {
             origin += ':' + location.port;
           }
@@ -49694,7 +49700,7 @@ define("ember-routing/location/auto_location",
         @private
 
         Returns the current path as it should appear for HistoryLocation supported
-        browsers. This may very well differ from the real current path (e.g. if it 
+        browsers. This may very well differ from the real current path (e.g. if it
         starts off as a hashed URL)
 
         @method _getHistoryPath
@@ -49767,7 +49773,7 @@ define("ember-routing/location/auto_location",
       /**
         Selects the best location option based off browser support and returns an
         instance of that Location class.
-      
+
         @see Ember.AutoLocation
         @method create
       */
@@ -49784,7 +49790,7 @@ define("ember-routing/location/auto_location",
         if (this._getSupportsHistory()) {
           historyPath = this._getHistoryPath();
 
-          // Since we support history paths, let's be sure we're using them else 
+          // Since we support history paths, let's be sure we're using them else
           // switch the location over to it.
           if (currentPath === historyPath) {
             implementationClass = this._HistoryLocation;
@@ -49821,7 +49827,7 @@ define("ember-routing/location/auto_location",
 
     __exports__["default"] = AutoLocation;
   });
-define("ember-routing/location/hash_location", 
+define("ember-routing/location/hash_location",
   ["ember-metal/property_get","ember-metal/property_set","ember-metal/run_loop","ember-metal/utils","ember-runtime/system/object","ember-routing/location/api","ember-views/system/jquery","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -49956,7 +49962,7 @@ define("ember-routing/location/hash_location",
 
     __exports__["default"] = HashLocation;
   });
-define("ember-routing/location/history_location", 
+define("ember-routing/location/history_location",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/utils","ember-runtime/system/object","ember-views/system/jquery","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
@@ -50185,7 +50191,7 @@ define("ember-routing/location/history_location",
 
     __exports__["default"] = HistoryLocation;
   });
-define("ember-routing/location/none_location", 
+define("ember-routing/location/none_location",
   ["ember-metal/property_get","ember-metal/property_set","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -50282,7 +50288,7 @@ define("ember-routing/location/none_location",
 
     __exports__["default"] = NoneLocation;
   });
-define("ember-routing", 
+define("ember-routing",
   ["ember-handlebars","ember-metal/core","ember-routing/ext/run_loop","ember-routing/ext/controller","ember-routing/ext/view","ember-routing/helpers/shared","ember-routing/helpers/link_to","ember-routing/location/api","ember-routing/location/none_location","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/system/controller_for","ember-routing/system/dsl","ember-routing/system/router","ember-routing/system/route","ember-routing/helpers/outlet","ember-routing/helpers/render","ember-routing/helpers/action","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __exports__) {
     "use strict";
@@ -50358,7 +50364,7 @@ define("ember-routing",
 
     __exports__["default"] = Ember;
   });
-define("ember-routing/system/controller_for", 
+define("ember-routing/system/controller_for",
   ["ember-metal/core","ember-metal/property_get","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -50454,7 +50460,7 @@ define("ember-routing/system/controller_for",
     __exports__.generateControllerFactory = generateControllerFactory;
     __exports__.generateController = generateController;
   });
-define("ember-routing/system/dsl", 
+define("ember-routing/system/dsl",
   ["ember-metal/core","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -50566,7 +50572,7 @@ define("ember-routing/system/dsl",
 
     __exports__["default"] = DSL;
   });
-define("ember-routing/system/route", 
+define("ember-routing/system/route",
   ["ember-metal/core","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-metal/get_properties","ember-metal/enumerable_utils","ember-metal/is_none","ember-metal/computed","ember-metal/utils","ember-metal/run_loop","ember-runtime/keys","ember-runtime/copy","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/mixins/action_handler","ember-routing/system/controller_for","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __exports__) {
     "use strict";
@@ -51924,7 +51930,7 @@ define("ember-routing/system/route",
       render: function(name, options) {
         Ember.assert("The name in the given arguments is undefined", arguments.length > 0 ? !isNone(arguments[0]) : true);
 
-        var namePassed = !!name;
+        var namePassed = typeof name === 'string' && !!name;
 
         if (typeof name === 'object' && !options) {
           options = name;
@@ -51943,7 +51949,7 @@ define("ember-routing/system/route",
           templateName = this.templateName || name;
         }
 
-        var viewName = options.view || this.viewName || name;
+        var viewName = options.view || namePassed && name || this.viewName || name;
 
         var container = this.container,
             view = container.lookup('view:' + viewName),
@@ -51954,7 +51960,7 @@ define("ember-routing/system/route",
         }
 
         if (!view && !template) {
-          Ember.assert("Could not find \"" + name + "\" template or view.", !namePassed);
+          Ember.assert("Could not find \"" + name + "\" template or view.", Ember.isEmpty(arguments[0]));
           if (get(this.router, 'namespace.LOG_VIEW_LOOKUPS')) {
             Ember.Logger.info("Could not find \"" + name + "\" template or view. Nothing will be rendered", { fullName: 'template:' + name });
           }
@@ -52389,7 +52395,7 @@ define("ember-routing/system/route",
 
     __exports__["default"] = Route;
   });
-define("ember-routing/system/router", 
+define("ember-routing/system/router",
   ["ember-metal/core","ember-metal/error","ember-metal/property_get","ember-metal/property_set","ember-metal/array","ember-metal/properties","ember-metal/computed","ember-metal/merge","ember-metal/run_loop","ember-metal/enumerable_utils","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/mixins/evented","ember-routing/system/dsl","ember-views/views/view","ember-routing/location/api","ember-handlebars/views/metamorph_view","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __exports__) {
     "use strict";
@@ -53097,7 +53103,7 @@ define("ember-routing/system/router",
 
     __exports__["default"] = EmberRouter;
   });
-define("route-recognizer", 
+define("route-recognizer",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -53727,7 +53733,7 @@ define("route-recognizer",
     };
   });
 
-define("router/handler-info", 
+define("router/handler-info",
   ["./utils","rsvp/promise","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -53952,7 +53958,7 @@ define("router/handler-info",
     __exports__.UnresolvedHandlerInfoByParam = UnresolvedHandlerInfoByParam;
     __exports__.UnresolvedHandlerInfoByObject = UnresolvedHandlerInfoByObject;
   });
-define("router/router", 
+define("router/router",
   ["route-recognizer","rsvp/promise","./utils","./transition-state","./transition","./transition-intent/named-transition-intent","./transition-intent/url-transition-intent","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -54697,7 +54703,7 @@ define("router/router",
 
     __exports__["default"] = Router;
   });
-define("router/transition-intent", 
+define("router/transition-intent",
   ["./utils","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -54717,7 +54723,7 @@ define("router/transition-intent",
 
     __exports__["default"] = TransitionIntent;
   });
-define("router/transition-intent/named-transition-intent", 
+define("router/transition-intent/named-transition-intent",
   ["../transition-intent","../transition-state","../handler-info","../utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -54909,7 +54915,7 @@ define("router/transition-intent/named-transition-intent",
 
     __exports__["default"] = NamedTransitionIntent;
   });
-define("router/transition-intent/url-transition-intent", 
+define("router/transition-intent/url-transition-intent",
   ["../transition-intent","../transition-state","../handler-info","../utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -54977,7 +54983,7 @@ define("router/transition-intent/url-transition-intent",
 
     __exports__["default"] = URLTransitionIntent;
   });
-define("router/transition-state", 
+define("router/transition-state",
   ["./handler-info","./utils","rsvp/promise","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -55090,7 +55096,7 @@ define("router/transition-state",
 
     __exports__["default"] = TransitionState;
   });
-define("router/transition", 
+define("router/transition",
   ["rsvp/promise","./handler-info","./utils","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -55348,7 +55354,7 @@ define("router/transition",
     __exports__.logAbort = logAbort;
     __exports__.TransitionAborted = TransitionAborted;
   });
-define("router/utils", 
+define("router/utils",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -55572,7 +55578,7 @@ define("router/utils",
     __exports__.isParam = isParam;
     __exports__.coerceQueryParamsToString = coerceQueryParamsToString;
   });
-define("router", 
+define("router",
   ["./router/router","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -55580,10 +55586,11 @@ define("router",
 
     __exports__["default"] = Router;
   });
+
 })();
 
 (function() {
-define("ember-application/ext/controller", 
+define("ember-application/ext/controller",
   ["ember-metal/core","ember-metal/property_get","ember-metal/property_set","ember-metal/error","ember-metal/utils","ember-metal/computed","ember-runtime/controllers/controller","ember-routing/system/controller_for","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -55762,7 +55769,7 @@ define("ember-application/ext/controller",
 
     __exports__["default"] = ControllerMixin;
   });
-define("ember-application", 
+define("ember-application",
   ["ember-metal/core","ember-runtime/system/lazy_load","ember-application/system/dag","ember-application/system/resolver","ember-application/system/application","ember-application/ext/controller"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__) {
     "use strict";
@@ -55789,7 +55796,7 @@ define("ember-application",
 
     runLoadHooks('Ember.Application', Application);
   });
-define("ember-application/system/application", 
+define("ember-application/system/application",
   ["ember-metal","ember-metal/property_get","ember-metal/property_set","ember-runtime/system/lazy_load","ember-application/system/dag","ember-runtime/system/namespace","ember-runtime/mixins/deferred","ember-application/system/resolver","ember-metal/platform","ember-metal/run_loop","ember-metal/utils","container/container","ember-runtime/controllers/controller","ember-runtime/system/native_array","ember-runtime/controllers/object_controller","ember-runtime/controllers/array_controller","ember-views/system/event_dispatcher","ember-extension-support/container_debug_adapter","ember-views/system/jquery","ember-routing/system/route","ember-routing/system/router","ember-routing/location/hash_location","ember-routing/location/history_location","ember-routing/location/auto_location","ember-routing/location/none_location","ember-handlebars-compiler","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __dependency9__, __dependency10__, __dependency11__, __dependency12__, __dependency13__, __dependency14__, __dependency15__, __dependency16__, __dependency17__, __dependency18__, __dependency19__, __dependency20__, __dependency21__, __dependency22__, __dependency23__, __dependency24__, __dependency25__, __dependency26__, __exports__) {
     "use strict";
@@ -56718,7 +56725,7 @@ define("ember-application/system/application",
 
     __exports__["default"] = Application;
   });
-define("ember-application/system/dag", 
+define("ember-application/system/dag",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -56826,9 +56833,9 @@ define("ember-application/system/dag",
 
     __exports__["default"] = DAG;
   });
-define("ember-application/system/resolver", 
-  ["ember-metal/core","ember-metal/property_get","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/system/namespace","ember-handlebars","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
+define("ember-application/system/resolver",
+  ["ember-metal/core","ember-metal/property_get","ember-metal/logger","ember-runtime/system/string","ember-runtime/system/object","ember-runtime/system/namespace","ember-handlebars","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
     /**
     @module ember
@@ -56838,12 +56845,13 @@ define("ember-application/system/resolver",
     var Ember = __dependency1__["default"];
     // Ember.TEMPLATES, Ember.assert
     var get = __dependency2__.get;
-    var classify = __dependency3__.classify;
-    var capitalize = __dependency3__.capitalize;
-    var decamelize = __dependency3__.decamelize;
-    var EmberObject = __dependency4__["default"];
-    var Namespace = __dependency5__["default"];
-    var EmberHandlebars = __dependency6__["default"];
+    var Logger = __dependency3__["default"];
+    var classify = __dependency4__.classify;
+    var capitalize = __dependency4__.capitalize;
+    var decamelize = __dependency4__.decamelize;
+    var EmberObject = __dependency5__["default"];
+    var Namespace = __dependency6__["default"];
+    var EmberHandlebars = __dependency7__["default"];
 
     var Resolver = EmberObject.extend({
       /**
@@ -56870,6 +56878,9 @@ define("ember-application/system/resolver",
       },
       resolveOther: function(parsedName) {
        throw new Error("Invalid call to `resolver.resolveDefault(parsedName)`. Please override the 'resolveDefault' method in subclass of `Ember.AbstractResolver` to prevent falling through to this error.");
+      },
+      _logLookup: function(found, parsedName) {
+       throw new Error("Invalid call to `resolver._logLookup(found, parsedName)`. Please override the '_logLookup' method in subclass of `Ember.AbstractResolver` to prevent falling through to this error.");
       }
     });
 
@@ -56990,17 +57001,26 @@ define("ember-application/system/resolver",
       */
       resolve: function(fullName) {
         var parsedName = this.parseName(fullName),
-            resolveMethodName = parsedName.resolveMethodName;
+            resolveMethodName = parsedName.resolveMethodName,
+            resolved;
 
         if (!(parsedName.name && parsedName.type)) {
           throw new TypeError("Invalid fullName: `" + fullName + "`, must be of the form `type:name` ");
         }
 
         if (this[resolveMethodName]) {
-          var resolved = this[resolveMethodName](parsedName);
-          if (resolved) { return resolved; }
+          resolved = this[resolveMethodName](parsedName);
         }
-        return this.resolveOther(parsedName);
+
+        if (!resolved) {
+          resolved = this.resolveOther(parsedName);
+        }
+
+        if (parsedName.root.LOG_RESOLVER) {
+          this._logLookup(resolved, parsedName);
+        }
+
+        return resolved;
       },
       /**
         Convert the string name of the form "type:name" to
@@ -57174,6 +57194,27 @@ define("ember-application/system/resolver",
         var className = classify(parsedName.name) + classify(parsedName.type),
             factory = get(parsedName.root, className);
         if (factory) { return factory; }
+      },
+
+      /**
+       @method _logLookup
+       @param {Boolean} found
+       @param {Object} parsedName
+       @private
+      */
+      _logLookup: function(found, parsedName) {
+        var symbol, padding;
+
+        if (found) { symbol = '[✓]'; }
+        else          { symbol = '[ ]'; }
+
+        if (parsedName.fullName.length > 60) {
+          padding = '.';
+        } else {
+          padding = new Array(60 - parsedName.fullName.length).join('.');
+        }
+
+        Logger.info(symbol, parsedName.fullName, padding, this.lookupDescription(parsedName.fullName));
       }
     });
 
@@ -57183,7 +57224,7 @@ define("ember-application/system/resolver",
 })();
 
 (function() {
-define("ember-extension-support/container_debug_adapter", 
+define("ember-extension-support/container_debug_adapter",
   ["ember-metal/core","ember-metal/utils","ember-runtime/system/string","ember-runtime/system/namespace","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
@@ -57296,7 +57337,7 @@ define("ember-extension-support/container_debug_adapter",
 
     __exports__["default"] = ContainerDebugAdapter;
   });
-define("ember-extension-support/data_adapter", 
+define("ember-extension-support/data_adapter",
   ["ember-metal/core","ember-metal/property_get","ember-metal/run_loop","ember-runtime/system/string","ember-runtime/system/namespace","ember-runtime/system/object","ember-runtime/system/native_array","ember-application/system/application","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__, __exports__) {
     "use strict";
@@ -57777,13 +57818,13 @@ define("ember-extension-support/data_adapter",
 
     __exports__["default"] = DataAdapter;
   });
-define("ember-extension-support/initializers", 
+define("ember-extension-support/initializers",
   [],
   function() {
     "use strict";
 
   });
-define("ember-extension-support", 
+define("ember-extension-support",
   ["ember-metal/core","ember-extension-support/data_adapter","ember-extension-support/container_debug_adapter"],
   function(__dependency1__, __dependency2__, __dependency3__) {
     "use strict";
@@ -57805,7 +57846,7 @@ define("ember-extension-support",
 })();
 
 (function() {
-define("ember-testing/adapters/adapter", 
+define("ember-testing/adapters/adapter",
   ["ember-metal/core","ember-metal/utils","ember-runtime/system/object","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -57870,7 +57911,7 @@ define("ember-testing/adapters/adapter",
 
     __exports__["default"] = Adapter;
   });
-define("ember-testing/adapters/qunit", 
+define("ember-testing/adapters/qunit",
   ["ember-testing/adapters/adapter","ember-metal/utils","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -57899,7 +57940,7 @@ define("ember-testing/adapters/qunit",
 
     __exports__["default"] = QUnitAdapter;
   });
-define("ember-testing/helpers", 
+define("ember-testing/helpers",
   ["ember-metal/property_get","ember-metal/error","ember-metal/run_loop","ember-views/system/jquery","ember-testing/test"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {
     "use strict";
@@ -58290,7 +58331,7 @@ define("ember-testing/helpers",
     */
     asyncHelper('triggerEvent', triggerEvent);
   });
-define("ember-testing/initializers", 
+define("ember-testing/initializers",
   ["ember-runtime/system/lazy_load"],
   function(__dependency1__) {
     "use strict";
@@ -58312,7 +58353,7 @@ define("ember-testing/initializers",
       }
     });
   });
-define("ember-testing", 
+define("ember-testing",
   ["ember-metal/core","ember-testing/initializers","ember-testing/support","ember-testing/setup_for_testing","ember-testing/test","ember-testing/adapters/adapter","ember-testing/adapters/qunit","ember-testing/helpers"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __dependency8__) {
     "use strict";
@@ -58340,7 +58381,7 @@ define("ember-testing",
     Ember.Test.QUnitAdapter = QUnitAdapter;
     Ember.setupForTesting = setupForTesting;
   });
-define("ember-testing/setup_for_testing", 
+define("ember-testing/setup_for_testing",
   ["ember-metal/core","ember-testing/adapters/qunit","ember-views/system/jquery","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
     "use strict";
@@ -58395,7 +58436,7 @@ define("ember-testing/setup_for_testing",
 
     __exports__["default"] = setupForTesting;
   });
-define("ember-testing/support", 
+define("ember-testing/support",
   ["ember-metal/core","ember-views/system/jquery"],
   function(__dependency1__, __dependency2__) {
     "use strict";
@@ -58455,7 +58496,7 @@ define("ember-testing/support",
       });
     });
   });
-define("ember-testing/test", 
+define("ember-testing/test",
   ["ember-metal/core","ember-metal/run_loop","ember-metal/platform","ember-runtime/compare","ember-runtime/ext/rsvp","ember-testing/setup_for_testing","ember-application/system/application","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
@@ -58966,7 +59007,7 @@ define("ember-testing/test",
   });
 })();
 
-define("container/container", 
+define("container/container",
   ["container/inheriting_dict","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -59384,7 +59425,7 @@ define("container/container",
         validateFullName(fullName);
         if (this.parent) { illegalChildOperation('typeInjection'); }
 
-        var fullNameType = fullName.split(':')[0];        
+        var fullNameType = fullName.split(':')[0];
         if(fullNameType === type) {
           throw new Error('Cannot inject a `' + fullName + '` on other ' + type + '(s). Register the `' + fullName + '` as a different type and perform the typeInjection.');
         }
@@ -59781,7 +59822,7 @@ define("container/container",
     }
 
     __exports__["default"] = Container;
-  });define("ember-runtime/ext/rsvp", 
+  });define("ember-runtime/ext/rsvp",
   ["ember-metal/core","ember-metal/logger","exports"],
   function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
@@ -59814,7 +59855,7 @@ define("container/container",
     RSVP.on('error', RSVP.onerrorDefault);
 
     __exports__["default"] = RSVP;
-  });define("ember-runtime/system/container", 
+  });define("ember-runtime/system/container",
   ["ember-metal/property_set","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -71512,6 +71553,9 @@ define("app/utils",
 
 TB.setLogLevel(1);
 
+Ember.Inflector.inflector.irregular('meta', 'meta');
+Ember.Inflector.inflector.irregular('consultationRequestQueueMeta', 'consultationRequestQueueMeta');
+
 window.App = require('app/app').default.create();
 define("app/adapters/application", 
   ["exports"],
@@ -71531,10 +71575,13 @@ define("app/adapters/application",
     Router.map(function() {
       this.route('dashboard', { path: '/' });
 
-      this.resource('queue');
+      this.resource('queue', function() {
+        this.route('next');
+      });
 
       this.resource('patient', function() {
         this.route('dashboard');
+        this.route('history');
       });
 
       this.resource('doctors', function() {
@@ -71581,6 +71628,7 @@ define("app/adapters/application",
     var Consultation = DS.Model.extend({
       patient: DS.belongsTo('patient'),
       doctor: DS.belongsTo('doctor'),
+      messages: DS.hasMany('message'),
       cause: DS.attr('string'),
       tokboxSession: DS.attr('string'),
       tokboxToken: DS.attr('string'),
@@ -71589,12 +71637,18 @@ define("app/adapters/application",
       status: DS.attr('string'),
       finishedAt: DS.attr('date'),
       finishedBy: DS.attr('string'),
+      extension: DS.attr('boolean'),
 
       isNewConsultation: Ember.computed.equal('status', 'new'),
       isFinished: Ember.computed.equal('status', 'finished'),
 
       finish: function() {
         this.set('status', 'finished');
+        return this.save();
+      },
+
+      requestExtension: function() {
+        this.set('extension', true);
         return this.save();
       }
     });
@@ -71608,11 +71662,21 @@ define("app/adapters/application",
       patient: DS.belongsTo('patient'),
       doctor: DS.belongsTo('doctor'),
       consultation: DS.belongsTo('consultation'),
+      queueMeta: DS.belongsTo('consultation_request_queue_meta'),
+
       cause: DS.attr('string'),
       status: DS.attr('string'),
+      cancelationCause: DS.attr('string'),
       createdAt: DS.attr('date'),
+      canceledAt: DS.attr('date'),
 
       isNewRequest: Ember.computed.equal('status', 'new'),
+      isAccepted: Ember.computed.equal('status', 'accepted'),
+      isDeclined: Ember.computed.equal('status', 'declined'),
+      isCanceled: Ember.computed.equal('status', 'canceled'),
+
+      canceledDoctorOffline: Ember.computed.equal('cancelationCause', 'doctor_offline'),
+      canceledPatientOffline: Ember.computed.equal('cancelationCause', 'patient_offline'),
 
       accept: function() {
         this.set('status', 'accepted');
@@ -71626,6 +71690,19 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = ConsultationRequest;
+  });define("app/models/consultation_request_queue_meta", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var QueueMeta = DS.Model.extend({
+      updatedAt: DS.attr('date'),
+      position: DS.attr('number'),
+      waiting: DS.attr('number'),
+
+      firstInQueue: Ember.computed.equal('position', 0)
+    });
+
+    __exports__["default"] = QueueMeta;
   });define("app/models/doctor", 
   ["exports"],
   function(__exports__) {
@@ -71650,6 +71727,21 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = Doctor;
+  });define("app/models/message", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var Message = DS.Model.extend({
+      consultation: DS.belongsTo('consultation'),
+      senderRole: DS.attr('string'),
+      text: DS.attr('string'),
+      createdAt: DS.attr('date'),
+
+      isSentByDoctor: Ember.computed.equal('senderRole', 'doctor'),
+      isSentByPatient: Ember.computed.equal('senderRole', 'patient')
+    });
+
+    __exports__["default"] = Message;
   });define("app/models/patient", 
   ["exports"],
   function(__exports__) {
@@ -71708,18 +71800,37 @@ define("app/adapters/application",
     var ConsultationController = Ember.ObjectController.extend({
       needs: ['clockService'],
 
+      isOver: Ember.computed.or('isFinished', 'isExpired'),
+      isNotOver: Ember.computed.not('isOver'),
+      isActive: Ember.computed.and('isNewConsultation', 'isNotOver'),
+
+      showVideo: true,
+
       runTime: function() {
         return (new Date) - this.get('createdAt');
       }.property('createdAt', 'controllers.clockService.pulse'),
 
-      isExpired: function() {
-        return (new Date) >= this.get('expiresAt')
+      remainingTime: function() {
+        return this.get('expiresAt') - (new Date);
       }.property('expiresAt', 'controllers.clockService.pulse'),
 
-      isOver: Ember.computed.or('isFinished', 'isExpired'),
-      isNotOver: Ember.computed.not('isOver'),
+      extensionEdge: function() {
+        var finishedAt = this.get('finishedAt');
 
-      isActive: Ember.computed.and('isNewConsultation', 'isNotOver')
+        if (!finishedAt) return;
+
+        return moment(finishedAt).add('m', 1).toDate();
+      }.property('finishedAt'),
+
+      extensionTimeLeft: function() {
+        return this.get('extensionEdge') - (new Date);
+      }.property('extensionEdge', 'controllers.clockService.pulse'),
+
+      canExtend: Ember.computed.gt('extensionTimeLeft', 0),
+
+      isExpired: function() {
+        return (new Date) >= this.get('expiresAt');
+      }.property('expiresAt', 'controllers.clockService.pulse')
     });
 
     __exports__["default"] = ConsultationController;
@@ -71728,13 +71839,17 @@ define("app/adapters/application",
   function(__exports__) {
     "use strict";
     var DoctorCardController = Ember.ObjectController.extend({
-      thing: 'a',
       actions: {
         toggleStar: function() {
           var model = this.get('model');
 
           model.toggleProperty('favorite');
           model.save();
+        },
+
+        showRequestModal: function(doctor) {
+          var requestData = { doctor: doctor, cause: null };
+          this.send('openModal', 'new_consultation_request', requestData);
         }
       }
     });
@@ -71746,7 +71861,7 @@ define("app/adapters/application",
     "use strict";
     var DoctorsController = Ember.ArrayController.extend({
       queryParams: ['practice', 'online'],
-      practice: false,
+      practice: 'all',
       online: false,
 
       filteredContent: function() {
@@ -71754,7 +71869,7 @@ define("app/adapters/application",
         var online = this.get('online');
         var content = this.get('content');
 
-        if (practice) {
+        if (practice !== 'all') {
           content = content.filterProperty('practice', practice);
         }
 
@@ -71767,6 +71882,45 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = DoctorsController;
+  });define("app/controllers/messages", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var MessagesController = Ember.ArrayController.extend({
+      sortProperty: ['createdAt'],
+
+      showForm: true,
+      newMessage: null,
+      cannotSendMessage: Ember.computed.empty('newMessage'),
+
+      actions: {
+        sendMessage: function() {
+          if (this.get('cannotSendMessage')) return;
+
+          var text = this.get('newMessage');
+
+          this.set('newMessage', '');
+
+          this.store.createRecord('message', {
+            consultation: this.get('parentController.model'),
+            text: text
+          }).save();
+        }
+      }
+    });
+
+    __exports__["default"] = MessagesController;
+  });define("app/controllers/nav", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var NavController = Ember.Controller.extend({
+      needs: ['queue'],
+
+      queueBadge: Ember.computed.alias('controllers.queue.length')
+    });
+
+    __exports__["default"] = NavController;
   });define("app/controllers/new_consultation_request", 
   ["exports"],
   function(__exports__) {
@@ -71774,6 +71928,33 @@ define("app/adapters/application",
     var NewConsultationRequestController = Ember.ObjectController.extend();
 
     __exports__["default"] = NewConsultationRequestController;
+  });define("app/controllers/patient/dashboard", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var PatientDashboardController = Ember.ObjectController.extend({
+      sortedConsultationRequests: function() {
+        return this.get('consultationRequests').sortBy('createdAt');
+      }.property('consultationRequests.@each.createdAt'),
+
+      lastConsultationRequest: Ember.computed.alias('sortedConsultationRequests.lastObject'),
+
+      lastRequestNew: Ember.computed.alias('lastConsultationRequest.isNewRequest'),
+      lastRequestCanceled: Ember.computed.alias('lastConsulationRequest.isCanceled'),
+
+      showLastRequest: Ember.computed.or('lastRequestNew', 'lastRequestCanceled')
+    });
+
+    __exports__["default"] = PatientDashboardController;
+  });define("app/controllers/patient/history", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var PatientHistoryController = Ember.ArrayController.extend({
+      sortProperties: ['createdAt']
+    });
+
+    __exports__["default"] = PatientHistoryController;
   });define("app/controllers/queue", 
   ["exports"],
   function(__exports__) {
@@ -71793,7 +71974,10 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = DoctorCardView;
-  });Ember.Handlebars.helper('time', function(diff) {
+  });Ember.Handlebars.helper('formatTime', function(date) {
+  return moment(date).format('h:mm:ss');
+});
+Ember.Handlebars.helper('time', function(diff) {
   return moment(diff).format('mm:ss');
 });
 define("app/components/modal-dialog", 
@@ -71809,6 +71993,16 @@ define("app/components/modal-dialog",
     });
 
     __exports__["default"] = ModalDialogComponent;
+  });define("app/components/online-dot", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var OnlineDotComponent = Ember.Component.extend({
+      tagName: 'span',
+      isOffline: null
+    });
+
+    __exports__["default"] = OnlineDotComponent;
   });define("app/components/tokbox-video", 
   ["app/utils","exports"],
   function(__dependency1__, __exports__) {
@@ -72036,6 +72230,8 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 
 
   data.buffer.push("<div class=\"container\">\n  ");
+  data.buffer.push(escapeExpression((helper = helpers.render || (depth0 && depth0.render),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav", options) : helperMissing.call(depth0, "render", "nav", options))));
+  data.buffer.push("\n\n  ");
   stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n</div>\n\n");
@@ -72059,6 +72255,19 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   stack1 = helpers._triageMustache.call(depth0, "yield", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    </div>\n  </div>\n</div>\n<div class=\"modal-backdrop in\"></div>\n");
+  return buffer;
+  
+}); });define('app/templates/components/online-dot', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', escapeExpression=this.escapeExpression;
+
+
+  data.buffer.push("<span ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': ("isOffline:dot-offline:dot-online")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n  &#9679;\n</span>\n");
   return buffer;
   
 }); });define('app/templates/components/tokbox-video', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
@@ -72091,18 +72300,20 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n  <div class=\"alert alert-info\">\n    <div class=\"row\">\n      <div class=\"col-lg-3\">\n        ");
+  data.buffer.push("\n  <div class=\"alert alert-info\">\n    <div class=\"row\">\n      <div class=\"col-lg-3\">\n        <b>");
   data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "runTime", options) : helperMissing.call(depth0, "time", "runTime", options))));
-  data.buffer.push("\n      </div>\n\n      <div class=\"col-lg-6 text-center\">\n        Live consultation with\n        ");
+  data.buffer.push("</b> (remaining time: ");
+  data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "remainingTime", options) : helperMissing.call(depth0, "time", "remainingTime", options))));
+  data.buffer.push(")\n      </div>\n\n      <div class=\"col-lg-6 text-center\">\n        Live consultation with\n        ");
   stack1 = helpers['if'].call(depth0, "currentUser.isPatient", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      </div>\n\n      <div class=\"col-lg-3 text-right\">\n        <a href=\"#\" class=\"btn btn-default btn-xs\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "finish", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
   data.buffer.push(">End</a>\n      </div>\n    </div>\n  </div>\n\n  ");
-  data.buffer.push(escapeExpression((helper = helpers['tokbox-video'] || (depth0 && depth0['tokbox-video']),options={hash:{
-    'sessionId': ("tokboxSession"),
-    'token': ("tokboxToken")
-  },hashTypes:{'sessionId': "ID",'token': "ID"},hashContexts:{'sessionId': depth0,'token': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "tokbox-video", options))));
+  stack1 = helpers['if'].call(depth0, "showVideo", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n  ");
+  data.buffer.push(escapeExpression((helper = helpers.render || (depth0 && depth0.render),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data},helper ? helper.call(depth0, "messages", "messages", options) : helperMissing.call(depth0, "render", "messages", "messages", options))));
   data.buffer.push("\n");
   return buffer;
   }
@@ -72128,68 +72339,97 @@ function program4(depth0,data) {
 
 function program6(depth0,data) {
   
+  var buffer = '', helper, options;
+  data.buffer.push("\n    ");
+  data.buffer.push(escapeExpression((helper = helpers['tokbox-video'] || (depth0 && depth0['tokbox-video']),options={hash:{
+    'sessionId': ("tokboxSession"),
+    'token': ("tokboxToken")
+  },hashTypes:{'sessionId': "ID",'token': "ID"},hashContexts:{'sessionId': depth0,'token': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "tokbox-video", options))));
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+
+function program8(depth0,data) {
+  
   var buffer = '', stack1;
   data.buffer.push("\n  <h4>The consultation is over</h4>\n\n  ");
-  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(10, program10, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(16, program16, data),fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
   }
-function program7(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = '', stack1, helper, options;
+  data.buffer.push("\n    <a href=\"#\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "requestExtension", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":btn :btn-lg :btn-success :btn-block canExtend::disabled")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n      Extend consultation\n\n      ");
+  stack1 = helpers['if'].call(depth0, "canExtend", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </a>\n\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'class': ("btn btn-lg btn-success btn-block")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(12, program12, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'class': ("btn btn-lg btn-success btn-block")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(14, program14, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.next", options) : helperMissing.call(depth0, "link-to", "queue.next", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
   return buffer;
   }
-function program8(depth0,data) {
+function program10(depth0,data) {
+  
+  var buffer = '', helper, options;
+  data.buffer.push("(");
+  data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "extensionTimeLeft", options) : helperMissing.call(depth0, "time", "extensionTimeLeft", options))));
+  data.buffer.push(")");
+  return buffer;
+  }
+
+function program12(depth0,data) {
   
   
   data.buffer.push("Go to queue");
   }
 
-function program10(depth0,data) {
+function program14(depth0,data) {
+  
+  
+  data.buffer.push("Proceed to next patient");
+  }
+
+function program16(depth0,data) {
   
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'class': ("btn btn-lg btn-success btn-block")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(17, program17, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
   return buffer;
   }
-function program11(depth0,data) {
+function program17(depth0,data) {
   
   
   data.buffer.push("Go to dashboard");
   }
 
-  stack1 = helpers['if'].call(depth0, "isActive", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "isActive", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(8, program8, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
-  return buffer;
-  
-}); });define('app/templates/consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
-this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1;
-
-
-  data.buffer.push("<h4>Connecting...</h4>\n\n<h5>Please wait while we are connecting you to Dr. ");
-  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("...</h5>\n");
   return buffer;
   
 }); });define('app/templates/doctor_card', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -72203,7 +72443,11 @@ function program3(depth0,data) {
   data.buffer.push("\n            &#9734;\n          ");
   }
 
-  data.buffer.push("<div class=\"col-lg-3 text-center\">\n  <div class=\"panel panel-default doctor-card\">\n    <div class=\"panel-body\">\n      <h3>\n        Dr. ");
+  data.buffer.push("<div class=\"col-lg-3 text-center\">\n  <div class=\"panel panel-default doctor-card\">\n    <div class=\"panel-body\">\n      <h4>\n        ");
+  data.buffer.push(escapeExpression((helper = helpers['online-dot'] || (depth0 && depth0['online-dot']),options={hash:{
+    'isOffline': ("isOffline")
+  },hashTypes:{'isOffline': "ID"},hashContexts:{'isOffline': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "online-dot", options))));
+  data.buffer.push("\n\n        Dr. ");
   stack1 = helpers._triageMustache.call(depth0, "fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n        <a href=\"#\" class=\"star\" ");
@@ -72211,19 +72455,16 @@ function program3(depth0,data) {
   data.buffer.push(">\n          ");
   stack1 = helpers['if'].call(depth0, "favorite", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n        </a>\n      </h3>\n\n      <h6>\n        ");
+  data.buffer.push("\n        </a>\n      </h4>\n\n      <h6>\n        ");
   stack1 = helpers._triageMustache.call(depth0, "humanPractice", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" &mdash; ");
-  stack1 = helpers._triageMustache.call(depth0, "status", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </h6>\n\n      <img src=\"/assets/no-avatar.png\" class=\"img-circle\">\n\n      <a href=\"#\" ");
+  data.buffer.push("\n      </h6>\n\n      <img src=\"/assets/no-avatar.png\" class=\"img-circle\">\n\n      <div>\n        <a href=\"#\" ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":btn :btn-success isOffline:disabled")
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "showRequestModal", "", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(">Call now</a>\n    </div>\n  </div>\n</div>\n");
+  data.buffer.push(">Call now</a>\n      </div>\n    </div>\n  </div>\n</div>\n");
   return buffer;
   
 }); });define('app/templates/doctors', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
@@ -72269,8 +72510,8 @@ function program9(depth0,data) {
 
   data.buffer.push("<h2>\n  Doctors\n\n  <small class=\"selector\">\n    ");
   stack1 = (helper = helpers['query-params'] || (depth0 && depth0['query-params']),options={hash:{
-    'practice': (false)
-  },hashTypes:{'practice': "BOOLEAN"},hashContexts:{'practice': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "query-params", options));
+    'practice': ("all")
+  },hashTypes:{'practice': "STRING"},hashContexts:{'practice': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "query-params", options));
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["sexpr"],data:data},helper ? helper.call(depth0, stack1, options) : helperMissing.call(depth0, "link-to", stack1, options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push(" /\n    ");
@@ -72296,15 +72537,189 @@ function program9(depth0,data) {
   data.buffer.push("\n");
   return buffer;
   
-}); });define('app/templates/new_consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+}); });define('app/templates/messages', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
+  var buffer = '', stack1;
+  data.buffer.push("\n    ");
+  stack1 = helpers['if'].call(depth0, "id", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Request a consultation</h4>\n  </div>\n\n  <div class=\"modal-body\">\n    <form class=\"form-horizontal\">\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Provider</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
+  data.buffer.push("\n      <p>\n        ");
+  stack1 = helpers._triageMustache.call(depth0, "senderRole", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(": ");
+  stack1 = helpers._triageMustache.call(depth0, "text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        <span class=\"pull-right\">");
+  data.buffer.push(escapeExpression((helper = helpers.formatTime || (depth0 && depth0.formatTime),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "createdAt", options) : helperMissing.call(depth0, "formatTime", "createdAt", options))));
+  data.buffer.push("</span>\n      </p>\n    ");
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n      <p>\n        ");
+  stack1 = helpers._triageMustache.call(depth0, "text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        <span class=\"pull-right\"><i>Sending...</i></span>\n      </p>\n    ");
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  
+  data.buffer.push("\n    <p>No messages.</p>\n  ");
+  }
+
+  data.buffer.push("<div class=\"messages-area\">\n  ");
+  stack1 = helpers.each.call(depth0, "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</div>\n\n<form ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sendMessage", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(">\n  <div class=\"form-group\">\n    ");
+  data.buffer.push(escapeExpression((helper = helpers.input || (depth0 && depth0.input),options={hash:{
+    'type': ("text"),
+    'value': ("newMessage"),
+    'placeholder': ("Type your message..."),
+    'class': ("form-control")
+  },hashTypes:{'type': "STRING",'value': "ID",'placeholder': "STRING",'class': "STRING"},hashContexts:{'type': depth0,'value': depth0,'placeholder': depth0,'class': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
+  data.buffer.push("\n  </div>\n  <div class=\"form-group\">\n    <button type=\"submit\" class=\"btn btn-primary\" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("cannotSendMessage")
+  },hashTypes:{'disabled': "STRING"},hashContexts:{'disabled': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">Send</button>\n  </div>\n</form>\n");
+  return buffer;
+  
+}); });define('app/templates/nav', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  else { data.buffer.push(''); }
+  }
+function program3(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n      Queue\n      ");
+  stack1 = helpers['if'].call(depth0, "queueBadge", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("<span class=\"badge\">");
+  stack1 = helpers._triageMustache.call(depth0, "queueBadge", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</span>");
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.history", options) : helperMissing.call(depth0, "link-to", "patient.history", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    ");
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
+    'tagName': ("li")
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors", options) : helperMissing.call(depth0, "link-to", "doctors", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+function program7(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(8, program8, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  else { data.buffer.push(''); }
+  }
+function program8(depth0,data) {
+  
+  
+  data.buffer.push("Dashboard");
+  }
+
+function program10(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.history", options) : helperMissing.call(depth0, "link-to", "patient.history", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  else { data.buffer.push(''); }
+  }
+function program11(depth0,data) {
+  
+  
+  data.buffer.push("History");
+  }
+
+function program13(depth0,data) {
+  
+  var stack1, helper, options;
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(14, program14, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors", options) : helperMissing.call(depth0, "link-to", "doctors", options));
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  else { data.buffer.push(''); }
+  }
+function program14(depth0,data) {
+  
+  
+  data.buffer.push("Talk to a doctor");
+  }
+
+  data.buffer.push("<ul class=\"nav nav-pills\">\n  ");
+  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</ul>\n");
+  return buffer;
+  
+}); });define('app/templates/new_consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, helper, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Request a consultation</h4>\n  </div>\n\n  <form class=\"form-horizontal\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createRequest", "model", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
+  data.buffer.push(">\n    <div class=\"modal-body\">\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Provider</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
   stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</p>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Cause</label>\n        <div class=\"col-sm-10\">\n          ");
@@ -72314,9 +72729,7 @@ function program1(depth0,data) {
     'class': ("form-control"),
     'placeholder': ("Reason for your appointment...")
   },hashTypes:{'value': "ID",'type': "STRING",'class': "STRING",'placeholder': "STRING"},hashContexts:{'value': depth0,'type': depth0,'class': depth0,'placeholder': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n        </div>\n      </div>\n    </form>\n  </div>\n\n  <div class=\"modal-footer\">\n    <a href=\"#\" class=\"btn btn-primary\" ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createRequest", "model", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(">Place a request</a>\n  </div>\n");
+  data.buffer.push("\n        </div>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"submit\" class=\"btn btn-primary\"}>Place a request</button>\n    </div>\n  </form>\n");
   return buffer;
   }
 
@@ -72330,21 +72743,186 @@ function program1(depth0,data) {
 }); });define('app/templates/patient/dashboard', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, self=this, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
+  var buffer = '', stack1;
+  data.buffer.push("\n  ");
+  stack1 = helpers['with'].call(depth0, "lastConsultationRequest", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  }
+function program2(depth0,data) {
   
-  data.buffer.push("Talk to a doctor");
+  var buffer = '', stack1;
+  data.buffer.push("\n    <div class=\"media\">\n      <div class=\"pull-left\">\n        <img src=\"/assets/no-avatar.png\" class=\"media-object img-circle\" style=\"height: 64px; width: 64px;\">\n      </div>\n\n      ");
+  stack1 = helpers['if'].call(depth0, "isNewRequest", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n      ");
+  stack1 = helpers['if'].call(depth0, "isCanceled", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </div>\n  ");
+  return buffer;
+  }
+function program3(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">Please wait for your consultation with Dr. ");
+  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" to begin</h4>\n\n          <p>The stated cause for the consultation was: ");
+  stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</p>\n\n          ");
+  stack1 = helpers['if'].call(depth0, "queueMeta.updatedAt", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(9, program9, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n        </div>\n      ");
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n            <p>\n              ");
+  stack1 = helpers['if'].call(depth0, "queueMeta.firstInQueue", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n            </p>\n          ");
+  return buffer;
+  }
+function program5(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n                You are first in the queue. Dr. ");
+  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" will get\n                to you as soon as they finish their current consultation.\n                The waiting time should not be more than\n                ");
+  stack1 = helpers._triageMustache.call(depth0, "queueMeta.waiting", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" minutes.\n              ");
+  return buffer;
   }
 
-  data.buffer.push("<h3>Welcome, ");
-  stack1 = helpers._triageMustache.call(depth0, "currentUser.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+function program7(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n                There are <b>");
+  stack1 = helpers._triageMustache.call(depth0, "queueMeta.position", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</h3>\n\n");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
-    'class': ("btn btn-primary")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors", options) : helperMissing.call(depth0, "link-to", "doctors", options));
+  data.buffer.push("</b> people in the queue before\n                you. The estimated waiting time is\n                <b>");
+  stack1 = helpers._triageMustache.call(depth0, "queueMeta.waiting", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</b> minutes.\n              ");
+  return buffer;
+  }
+
+function program9(depth0,data) {
+  
+  
+  data.buffer.push("\n            <p><i>Updating waiting estimates...</i></p>\n          ");
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">Consultation with Dr. ");
+  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" canceled</h4>\n\n          <p>\n            You have requested a consultation with Dr.\n            ");
+  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" on ");
+  stack1 = helpers._triageMustache.call(depth0, "createdAt", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push(" to talk about\n            \"");
+  stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\".\n\n            ");
+  stack1 = helpers['if'].call(depth0, "canceledDoctorOffline", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n          </p>\n        </div>\n      ");
+  return buffer;
+  }
+function program12(depth0,data) {
+  
+  
+  data.buffer.push("\n              However, the doctor has gone offline, so your request was\n              canceled.\n            ");
+  }
+
+function program14(depth0,data) {
+  
+  
+  data.buffer.push("\n              However, you went offline, and your request was canceled.\n            ");
+  }
+
+function program16(depth0,data) {
+  
+  var buffer = '';
+  data.buffer.push("\n  <h4>Favorite doctors</h4>\n\n  <div class=\"row\">\n    ");
+  data.buffer.push(escapeExpression(helpers.each.call(depth0, "favoriteDoctors", {hash:{
+    'itemController': ("doctor_card"),
+    'itemView': ("doctor_card")
+  },hashTypes:{'itemController': "STRING",'itemView': "STRING"},hashContexts:{'itemController': depth0,'itemView': depth0},contexts:[depth0],types:["ID"],data:data})));
+  data.buffer.push("\n  </div>\n");
+  return buffer;
+  }
+
+  stack1 = helpers['if'].call(depth0, "showLastRequest", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n");
+  stack1 = helpers['if'].call(depth0, "favoriteDoctors", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(16, program16, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+  
+}); });define('app/templates/patient/history', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+  var buffer = '', stack1, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>Date</th>\n        <th>Doctor</th>\n        <th>Status</th>\n    </thead>\n\n    <tbody>\n      ");
+  stack1 = helpers.each.call(depth0, "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n    </tbody>\n  </table>\n");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n        <tr>\n          <td>");
+  stack1 = helpers._triageMustache.call(depth0, "createdAt", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</td>\n          <td>");
+  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</td>\n          <td>");
+  stack1 = helpers['if'].call(depth0, "isAccepted", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("</td>\n        </tr>\n      ");
+  return buffer;
+  }
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("Consulted");
+  }
+
+function program5(depth0,data) {
+  
+  
+  data.buffer.push("Request canceled");
+  }
+
+function program7(depth0,data) {
+  
+  
+  data.buffer.push("\n  <p>Nothing to show.</p>\n");
+  }
+
+  stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(7, program7, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
@@ -72352,7 +72930,7 @@ function program1(depth0,data) {
 }); });define('app/templates/queue', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, self=this, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -72370,14 +72948,15 @@ function program1(depth0,data) {
   }
 function program2(depth0,data) {
   
-  var buffer = '', stack1;
+  var buffer = '', stack1, helper, options;
   data.buffer.push("\n        <tr>\n          <td>\n            ");
   stack1 = helpers._triageMustache.call(depth0, "patient.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n            <small>");
-  stack1 = helpers['if'].call(depth0, "patient.isOnline", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</small>\n          </td>\n\n          <td>");
+  data.buffer.push("\n\n            ");
+  data.buffer.push(escapeExpression((helper = helpers['online-dot'] || (depth0 && depth0['online-dot']),options={hash:{
+    'isOffline': ("patient.isOffline")
+  },hashTypes:{'isOffline': "ID"},hashContexts:{'isOffline': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "online-dot", options))));
+  data.buffer.push("\n          </td>\n\n          <td>");
   stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</td>\n          <td>");
@@ -72386,26 +72965,15 @@ function program2(depth0,data) {
   data.buffer.push("</td>\n        </tr>\n      ");
   return buffer;
   }
-function program3(depth0,data) {
-  
-  
-  data.buffer.push("online");
-  }
 
-function program5(depth0,data) {
-  
-  
-  data.buffer.push("offline");
-  }
-
-function program7(depth0,data) {
+function program4(depth0,data) {
   
   
   data.buffer.push("\n  <p>The queue is empty.</p>\n");
   }
 
   data.buffer.push("<h4>Queue</h4>\n\n");
-  stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(7, program7, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
@@ -72420,8 +72988,10 @@ function program7(depth0,data) {
 
         var load = function(type) { return function(data) { store.pushPayload(type, data); } };
 
-        this.pusher.bindUser('requests', load('consultation_request'));
+        this.pusher.bindUser('consultation_requests', load('consultation_request'));
+        this.pusher.bindUser('consultation_request_queue_meta', load('consultation_request_queue_meta'));
         this.pusher.bindUser('consultations', load('consultation'));
+        this.pusher.bindUser('messages', load('message'));
 
         var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
         var updateDoctor = function(item) { store.update('doctor', item); };
@@ -72441,6 +73011,17 @@ function program7(depth0,data) {
           this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
         },
 
+        createRequest: function(requestData) {
+          var self = this;
+
+          var goToRequest = function(request) {
+            self.transitionTo('patient.dashboard');
+            self.send('closeModal');
+          }
+
+          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
+        },
+
         willTransition: function() {
           this.send('closeModal');
         }
@@ -72456,37 +73037,15 @@ function program7(depth0,data) {
       actions: {
         finish: function() {
           this.currentModel.finish();
+        },
+
+        requestExtension: function() {
+          this.currentModel.requestExtension();
         }
       }
     });
 
     __exports__["default"] = ConsultationRoute;
-  });define("app/routes/consultation_request", 
-  ["exports"],
-  function(__exports__) {
-    "use strict";
-    var ConsultationRequestRoute = Ember.Route.extend({
-      afterModel: function(request) {
-        var self = this;
-
-        var id = request.get('id');
-        var eventName = 'requests:' + id;
-
-        this.pusher.bindUser(eventName, function(d) { self.send('showConsultation', d); });
-      },
-
-      actions: {
-        showConsultation: function(data) {
-          var self = this;
-
-          this.store.find('consultation', data.consultation).then(function(consultation) {
-            self.transitionTo('consultation', consultation);
-          });
-        }
-      }
-    });
-
-    __exports__["default"] = ConsultationRequestRoute;
   });define("app/routes/dashboard", 
   ["exports"],
   function(__exports__) {
@@ -72524,27 +73083,60 @@ function program7(depth0,data) {
     var DoctorsRoute = PatientOnlyRoute.extend({
       model: function() {
         return this.store.find('doctor');
-      },
-
-      actions: {
-        showRequestModal: function(doctor) {
-          var requestData = { doctor: doctor, cause: null };
-          this.send('openModal', 'new_consultation_request', requestData);
-        },
-
-        createRequest: function(requestData) {
-          var self = this;
-
-          var goToRequest = function(request) {
-            self.transitionTo('consultation_request', request);
-          }
-
-          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
-        }
       }
     });
 
     __exports__["default"] = DoctorsRoute;
+  });define("app/routes/patient/dashboard", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var PatientDashboardRoute = PatientOnlyRoute.extend({
+      model: function() {
+        var is = function(property) { return function(record) { return record.get(property) } };
+
+        var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favorite'));
+        var consultationRequests = this.store.find('consultation_request');
+
+        return Ember.RSVP.hash({
+          favoriteDoctors: favoriteDoctors,
+          consultationRequests: consultationRequests
+        });
+      },
+
+      activate: function() {
+        var self = this;
+
+        this.pusher.bindUser('consultation_started', function(d) { self.send('showConsultation', d); });
+      },
+
+      actions: {
+        showConsultation: function(data) {
+          var self = this;
+
+          this.store.find('consultation', data.consultation).then(function(consultation) {
+            self.transitionTo('consultation', consultation);
+          });
+        }
+      }
+    });
+
+    __exports__["default"] = PatientDashboardRoute;
+  });define("app/routes/patient/history", 
+  ["app/routes/patient_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var PatientOnlyRoute = __dependency1__["default"];
+
+    var PatientHistoryRoute = PatientOnlyRoute.extend({
+      model: function() {
+        return this.store.find('consultation_request');
+      }
+    });
+
+    __exports__["default"] = PatientHistoryRoute;
   });define("app/routes/patient_only", 
   ["exports"],
   function(__exports__) {
@@ -72573,17 +73165,35 @@ function program7(depth0,data) {
       actions: {
         acceptNext: function() {
           var self = this;
+          var nextRequest = this.controller.get('nextRequest');
+
+          if (!nextRequest) return;
 
           var goToConsultation = function(request) {
             self.transitionTo('consultation', request.get('consultation'));
           };
 
-          this.controller.get('nextRequest').accept().then(goToConsultation);
+          nextRequest.accept().then(goToConsultation);
         }
       }
     });
 
     __exports__["default"] = QueueRoute;
+  });define("app/routes/queue/next", 
+  ["app/routes/doctor_only","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var DoctorOnlyRoute = __dependency1__["default"];
+
+    var QueueNextRoute = DoctorOnlyRoute.extend({
+      redirect: function() {
+        this.transitionTo('queue').then(function(transition) {
+          transition.send('acceptNext');
+        });
+      }
+    });
+
+    __exports__["default"] = QueueNextRoute;
   });
 
 
