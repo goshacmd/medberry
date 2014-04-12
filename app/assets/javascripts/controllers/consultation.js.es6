@@ -31,7 +31,25 @@ var ConsultationController = Ember.ObjectController.extend({
 
   isExpired: function() {
     return (new Date) >= this.get('expiresAt');
-  }.property('expiresAt', 'controllers.clockService.pulse')
+  }.property('expiresAt', 'controllers.clockService.pulse'),
+
+  newMessage: null,
+  cannotSendMessage: Ember.computed.empty('newMessage'),
+
+  actions: {
+    sendMessage: function() {
+      if (this.get('cannotSendMessage')) return;
+
+      var text = this.get('newMessage');
+
+      this.set('newMessage', '');
+
+      this.store.createRecord('message', {
+        consultation: this.get('model'),
+        text: text
+      }).save();
+    }
+  }
 });
 
 export default ConsultationController;

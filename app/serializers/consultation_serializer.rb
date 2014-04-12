@@ -4,6 +4,7 @@ class ConsultationSerializer < ApplicationSerializer
 
   has_one :doctor
   has_one :patient
+  has_many :messages
 
   def tokbox_token
     object.tokbox_token_for_role(current_user.role)

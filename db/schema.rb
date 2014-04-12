@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410141002) do
+ActiveRecord::Schema.define(version: 20140412075745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,16 @@ ActiveRecord::Schema.define(version: 20140410141002) do
   end
 
   add_index "insurance_policies", ["insurance_company_id"], name: "index_insurance_policies_on_insurance_company_id", using: :btree
+
+  create_table "messages", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid     "consultation_id"
+    t.uuid     "sender_id"
+    t.text     "text"
+    t.datetime "created_at"
+  end
+
+  add_index "messages", ["consultation_id"], name: "index_messages_on_consultation_id", using: :btree
+  add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
 
   create_table "patients", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string "bsn"

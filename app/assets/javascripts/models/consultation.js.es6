@@ -1,6 +1,7 @@
 var Consultation = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
+  messages: DS.hasMany('message'),
   cause: DS.attr('string'),
   tokboxSession: DS.attr('string'),
   tokboxToken: DS.attr('string'),

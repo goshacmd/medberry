@@ -27,7 +27,7 @@ module Medlive
 
     config.autoload_paths += %W(#{config.root}/lib #{config.root}/app/services)
 
-    config.active_record.observers = [:consultation_request_observer, :consultation_observer]
+    config.active_record.observers = [:consultation_request_observer, :consultation_observer, :message_observer]
 
     config.handlebars.output_type = :amd
     config.handlebars.amd_namespace = 'app'

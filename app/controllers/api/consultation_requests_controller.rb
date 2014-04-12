@@ -16,7 +16,7 @@ class Api::ConsultationRequestsController < ApiController
   rescue ConsultationRequestCreator::NotAuthorized
     return not_authorized
   rescue ConsultationRequestCreator::ValidationError => e
-    render json: { errors: e.data.full_error_messages }, status: :unprocessable_entity
+    render json: { errors: e.data.errors }, status: :unprocessable_entity
   end
 
   def show

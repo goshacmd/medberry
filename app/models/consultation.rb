@@ -10,6 +10,7 @@ class Consultation < ActiveRecord::Base
   belongs_to :doctor
   belongs_to :request, class_name: 'ConsultationRequest'
   has_many :sessions, class_name: 'ConsultationSession'
+  has_many :messages
 
   enum :status, STATUSES
   enum :finishing_cause, FINISHING_CAUSES

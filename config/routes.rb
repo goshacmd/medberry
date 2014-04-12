@@ -3,6 +3,7 @@ Medlive::Application.routes.draw do
     resources :doctors
     resources :consultation_requests
     resources :consultations
+    resources :messages
   end
 
   devise_for :users, controllers: {
