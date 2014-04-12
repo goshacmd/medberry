@@ -1,22 +1,4 @@
 var ApplicationRoute = Ember.Route.extend({
-  activate: function() {
-    var store = this.store;
-
-    var load = function(type) { return function(data) { store.pushPayload(type, data); } };
-
-    this.pusher.bindUser('consultation_requests', load('consultation_request'));
-    this.pusher.bindUser('consultation_request_queue_meta', load('consultation_request_queue_meta'));
-    this.pusher.bindUser('consultations', load('consultation'));
-    this.pusher.bindUser('messages', load('message'));
-
-    var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
-    var updateDoctor = function(item) { store.update('doctor', item); };
-
-    this.pusher.bindPulser('pulse', function(data) {
-      data.filter(hasDoctor).forEach(updateDoctor);
-    });
-  },
-
   actions: {
     openModal: function(modalName, model) {
       this.controllerFor(modalName).set('model', model);

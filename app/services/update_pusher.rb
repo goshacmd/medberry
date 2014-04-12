@@ -12,9 +12,19 @@ class UpdatePusher
   # @param model [#active_model_serializer] model to push
   # @param scope [Object] serialization scope (e.g. current user)
   def push(channels, model, scope: nil)
-    serializer = model.active_model_serializer
-    event = model.class.name.underscore.pluralize
+    pusher.trigger channels, event_name(model), serialize(model)
+  end
 
-    pusher.trigger channels, event, serializer.new(model, scope: scope).as_json
+  # @param model [Object]
+  # @return [String]
+  def event_name(model)
+    "data_update:#{model.class.name.underscore.pluralize}"
+  end
+
+  # @param model [#active_model_serializer]
+  # @param scope [Object] serialization scope
+  # @return [Hash]
+  def serialize(model, scope: nil)
+    model.active_model_serializer.new(model, scope: scope).to_json
   end
 end
