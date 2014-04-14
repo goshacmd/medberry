@@ -11,7 +11,7 @@ module Enum
       setter = "#{field_name}="
 
       define_method(getter) { inverted[read_attribute(field_name)].try(:to_sym) }
-      define_method(setter) { |value| write_attribute(field_name, enum_hash[value]) }
+      define_method(setter) { |value| write_attribute(field_name, hash[value]) }
     end
   end
 end
