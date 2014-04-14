@@ -71555,6 +71555,7 @@ TB.setLogLevel(1);
 
 Ember.Inflector.inflector.irregular('meta', 'meta');
 Ember.Inflector.inflector.irregular('consultationRequestQueueMeta', 'consultationRequestQueueMeta');
+Ember.Inflector.inflector.irregular('consultation_request_queue_meta', 'consultation_request_queue_meta');
 
 window.App = require('app/app').default.create();
 define("app/adapters/application", 
@@ -71599,9 +71600,11 @@ define("app/adapters/application",
   function(__exports__) {
     "use strict";
     var PusherService = Ember.Object.extend({
-      key: null,
-      userChannelName: null,
-      pulserChannelName: null,
+      store: null,
+
+      key: pusherKey,
+      userChannelName: userChannelName,
+      pulserChannelName: pulserChannelName,
 
       init: function() {
         this._super();
@@ -71609,6 +71612,36 @@ define("app/adapters/application",
         this.pusher = new Pusher(this.get('key'));
         this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
         this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
+
+        this.bindAllUser(this.allHandler.bind(this));
+        this.bindPulser('pulse', this.pulseHandler.bind(this));
+      },
+
+      allHandler: function(eventName, data) {
+        var parts = eventName.split(':'),
+            type = parts[0],
+            rest = parts[1];
+
+        if (type == 'data_update') {
+          try {
+            var name = Ember.Inflector.inflector.singularize(rest);
+            this.store.pushPayload(name, data);
+          } catch(e) {
+          }
+        }
+      },
+
+      pulseHandler: function(data) {
+        var store = this.store;
+
+        var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
+        var updateDoctor = function(item) { store.update('doctor', item); };
+
+        data.filter(hasDoctor).forEach(updateDoctor);
+      },
+
+      bindAllUser: function(handler) {
+        this.userChannel.bind_all(handler);
       },
 
       bindUser: function(eventName, handler) {
@@ -71639,7 +71672,8 @@ define("app/adapters/application",
       finishedBy: DS.attr('string'),
       extension: DS.attr('boolean'),
 
-      isNewConsultation: Ember.computed.equal('status', 'new'),
+      isInProgress: Ember.computed.equal('status', 'in_progress'),
+      isOver: Ember.computed.equal('status', 'over'),
       isFinished: Ember.computed.equal('status', 'finished'),
 
       finish: function() {
@@ -71800,9 +71834,9 @@ define("app/adapters/application",
     var ConsultationController = Ember.ObjectController.extend({
       needs: ['clockService'],
 
-      isOver: Ember.computed.or('isFinished', 'isExpired'),
-      isNotOver: Ember.computed.not('isOver'),
-      isActive: Ember.computed.and('isNewConsultation', 'isNotOver'),
+      isTimeOver: Ember.computed.or('isFinished', 'isExpired'),
+      isNotTimeOver: Ember.computed.not('isTimeOver'),
+      isActive: Ember.computed.and('isInProgress', 'isNotTimeOver'),
 
       showVideo: true,
 
@@ -71826,7 +71860,8 @@ define("app/adapters/application",
         return this.get('extensionEdge') - (new Date);
       }.property('extensionEdge', 'controllers.clockService.pulse'),
 
-      canExtend: Ember.computed.gt('extensionTimeLeft', 0),
+      positiveExtensionTime: Ember.computed.gt('extensionTimeLeft', 0),
+      canExtend: Ember.computed.and('isOver', 'positiveExtensionTime'),
 
       isExpired: function() {
         return (new Date) >= this.get('expiresAt');
@@ -72353,7 +72388,7 @@ function program8(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("\n  <h4>The consultation is over</h4>\n\n  ");
-  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(16, program16, data),fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(17, program17, data),fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
@@ -72361,29 +72396,38 @@ function program8(depth0,data) {
 function program9(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n    <a href=\"#\" ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "requestExtension", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
-  data.buffer.push(" ");
-  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
-    'class': (":btn :btn-lg :btn-success :btn-block canExtend::disabled")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n      Extend consultation\n\n      ");
-  stack1 = helpers['if'].call(depth0, "canExtend", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],data:data});
+  data.buffer.push("\n    ");
+  stack1 = helpers['if'].call(depth0, "isOver", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n    </a>\n\n    ");
+  data.buffer.push("\n\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'class': ("btn btn-lg btn-success btn-block")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(12, program12, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'class': ("btn btn-lg btn-success btn-block")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(14, program14, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.next", options) : helperMissing.call(depth0, "link-to", "queue.next", options));
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(15, program15, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.next", options) : helperMissing.call(depth0, "link-to", "queue.next", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
   return buffer;
   }
 function program10(depth0,data) {
+  
+  var buffer = '', stack1;
+  data.buffer.push("\n      <a href=\"#\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "requestExtension", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":btn :btn-lg :btn-success :btn-block canExtend::disabled")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n        Extend consultation\n\n        ");
+  stack1 = helpers['if'].call(depth0, "canExtend", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      </a>\n    ");
+  return buffer;
+  }
+function program11(depth0,data) {
   
   var buffer = '', helper, options;
   data.buffer.push("(");
@@ -72392,30 +72436,30 @@ function program10(depth0,data) {
   return buffer;
   }
 
-function program12(depth0,data) {
+function program13(depth0,data) {
   
   
   data.buffer.push("Go to queue");
   }
 
-function program14(depth0,data) {
+function program15(depth0,data) {
   
   
   data.buffer.push("Proceed to next patient");
   }
 
-function program16(depth0,data) {
+function program17(depth0,data) {
   
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'class': ("btn btn-lg btn-success btn-block")
-  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(17, program17, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},inverse:self.noop,fn:self.program(18, program18, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
   return buffer;
   }
-function program17(depth0,data) {
+function program18(depth0,data) {
   
   
   data.buffer.push("Go to dashboard");
@@ -72983,24 +73027,6 @@ function program4(depth0,data) {
   function(__exports__) {
     "use strict";
     var ApplicationRoute = Ember.Route.extend({
-      activate: function() {
-        var store = this.store;
-
-        var load = function(type) { return function(data) { store.pushPayload(type, data); } };
-
-        this.pusher.bindUser('consultation_requests', load('consultation_request'));
-        this.pusher.bindUser('consultation_request_queue_meta', load('consultation_request_queue_meta'));
-        this.pusher.bindUser('consultations', load('consultation'));
-        this.pusher.bindUser('messages', load('message'));
-
-        var hasDoctor = function(item) { return store.hasRecordForId('doctor', item.id); };
-        var updateDoctor = function(item) { store.update('doctor', item); };
-
-        this.pusher.bindPulser('pulse', function(data) {
-          data.filter(hasDoctor).forEach(updateDoctor);
-        });
-      },
-
       actions: {
         openModal: function(modalName, model) {
           this.controllerFor(modalName).set('model', model);
@@ -73219,11 +73245,10 @@ Ember.Application.initializer({
   name: 'pusher',
 
   initialize: function(container, application) {
-    var pusher = require('app/services/pusher').default.create({
-      key: pusherKey, userChannelName: userChannelName, pulserChannelName: pulserChannelName
-    });
+    var pusher = require('app/services/pusher').default;
 
-    container.register('pusher:main', pusher, { instantiate: false });
+    container.register('pusher:main', pusher);
     container.injection('route', 'pusher', 'pusher:main');
+    container.injection('pusher:main', 'store', 'store:main');
   }
 });
