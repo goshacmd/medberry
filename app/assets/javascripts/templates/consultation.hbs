@@ -29,11 +29,13 @@
   <h4>The consultation is over</h4>
 
   {{#if currentUser.isDoctor}}
-    <a href="#" {{action 'requestExtension'}} {{bind-attr class=":btn :btn-lg :btn-success :btn-block canExtend::disabled"}}>
-      Extend consultation
+    {{#if isOver}}
+      <a href="#" {{action 'requestExtension'}} {{bind-attr class=":btn :btn-lg :btn-success :btn-block canExtend::disabled"}}>
+        Extend consultation
 
-      {{#if canExtend}}({{time extensionTimeLeft}}){{/if}}
-    </a>
+        {{#if canExtend}}({{time extensionTimeLeft}}){{/if}}
+      </a>
+    {{/if}}
 
     {{#link-to 'queue' class="btn btn-lg btn-success btn-block"}}Go to queue{{/link-to}}
     {{#link-to 'queue.next' class="btn btn-lg btn-success btn-block"}}Proceed to next patient{{/link-to}}

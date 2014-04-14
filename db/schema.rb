@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140412075745) do
+ActiveRecord::Schema.define(version: 20140414140051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+  enable_extension "hstore"
 
   create_table "consultation_requests", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "patient_id"
@@ -41,6 +42,17 @@ ActiveRecord::Schema.define(version: 20140412075745) do
   end
 
   add_index "consultation_sessions", ["consultation_id"], name: "index_consultation_sessions_on_consultation_id", using: :btree
+
+  create_table "consultation_transitions", force: true do |t|
+    t.string   "to_state"
+    t.hstore   "metadata"
+    t.integer  "sort_key"
+    t.uuid     "consultation_id"
+    t.datetime "created_at"
+  end
+
+  add_index "consultation_transitions", ["consultation_id"], name: "index_consultation_transitions_on_consultation_id", using: :btree
+  add_index "consultation_transitions", ["sort_key", "consultation_id"], name: "index_consultation_transitions_on_sort_key_and_consultation_id", unique: true, using: :btree
 
   create_table "consultations", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "patient_id"

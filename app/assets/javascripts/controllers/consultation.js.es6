@@ -1,9 +1,9 @@
 var ConsultationController = Ember.ObjectController.extend({
   needs: ['clockService'],
 
-  isOver: Ember.computed.or('isFinished', 'isExpired'),
-  isNotOver: Ember.computed.not('isOver'),
-  isActive: Ember.computed.and('isNewConsultation', 'isNotOver'),
+  isTimeOver: Ember.computed.or('isFinished', 'isExpired'),
+  isNotTimeOver: Ember.computed.not('isTimeOver'),
+  isActive: Ember.computed.and('isInProgress', 'isNotTimeOver'),
 
   showVideo: true,
 
@@ -27,7 +27,8 @@ var ConsultationController = Ember.ObjectController.extend({
     return this.get('extensionEdge') - (new Date);
   }.property('extensionEdge', 'controllers.clockService.pulse'),
 
-  canExtend: Ember.computed.gt('extensionTimeLeft', 0),
+  positiveExtensionTime: Ember.computed.gt('extensionTimeLeft', 0),
+  canExtend: Ember.computed.and('isOver', 'positiveExtensionTime'),
 
   isExpired: function() {
     return (new Date) >= this.get('expiresAt');

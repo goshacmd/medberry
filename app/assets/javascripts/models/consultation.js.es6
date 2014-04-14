@@ -12,7 +12,8 @@ var Consultation = DS.Model.extend({
   finishedBy: DS.attr('string'),
   extension: DS.attr('boolean'),
 
-  isNewConsultation: Ember.computed.equal('status', 'new'),
+  isInProgress: Ember.computed.equal('status', 'in_progress'),
+  isOver: Ember.computed.equal('status', 'over'),
   isFinished: Ember.computed.equal('status', 'finished'),
 
   finish: function() {
