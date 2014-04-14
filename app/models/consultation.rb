@@ -21,7 +21,7 @@ class Consultation < ActiveRecord::Base
 
   class << self
     def create_from_request(request)
-      create(patient: request.patient, doctor: request.doctor, request: request, cause: request.cause)
+      create(status: :in_progress, patient: request.patient, doctor: request.doctor, request: request, cause: request.cause)
     end
   end
 

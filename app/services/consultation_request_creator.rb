@@ -35,7 +35,7 @@ class ConsultationRequestCreator
 
   def has_no_active_consultation?(patient)
     last_consultation = patient.consultations.order(created_at: :desc).first
-    last_consultation ? last_consultation.finished? : true
+    last_consultation ? !last_consultation.finished? : true
   end
 
   def has_no_active_request?(patient)
