@@ -5,7 +5,7 @@ module UseCase
   class NotAuthorized < RuntimeError; end
 
   included do
-    attr_reader :model, :params, :current_user
+    attr_reader :params, :current_user
   end
 
   module ClassMethods
