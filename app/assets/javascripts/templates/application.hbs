@@ -1,4 +1,11 @@
 <div class="container">
+  {{#if pusherError}}
+    <div class="alert alert-danger">
+      There was an error establishing real-time connection with the
+      server. Please, try reloading the page.
+    </div>
+  {{/if}}
+
   {{render 'nav'}}
 
   {{outlet}}

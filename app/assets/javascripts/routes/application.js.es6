@@ -11,6 +11,10 @@ var ApplicationRoute = Ember.Route.extend({
 
     willTransition: function() {
       this.send('closeModal');
+    },
+
+    pusherError: function() {
+      this.controller.set('pusherError', true);
     }
   }
 });

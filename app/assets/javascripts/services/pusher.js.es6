@@ -4,16 +4,27 @@ var PusherService = Ember.Object.extend({
   key: pusherKey,
   userChannelName: userChannelName,
   pulserChannelName: pulserChannelName,
+  encrypted: true,
+
+  connectionFailed: false,
 
   init: function() {
     this._super();
 
-    this.pusher = new Pusher(this.get('key'));
+    this.pusher = new Pusher(this.get('key'), { encrypted: this.get('encrypted') });
+    this.pusher.connection.bind('state_change', this.stateChangeHandler.bind(this));
+
     this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
     this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
 
     this.bindAllUser(this.allHandler.bind(this));
     this.bindPulser('pulse', this.pulseHandler.bind(this));
+  },
+
+  stateChangeHandler: function(state) {
+    var current = state.current;
+
+    if (current = 'failed') this.set('connectionFailed', true);
   },
 
   allHandler: function(eventName, data) {
