@@ -16,11 +16,14 @@
   {{/each}}
 </div>
 
-<form {{action 'sendMessage'}}>
+<form>
   <div class="form-group">
     {{input type="text" value=newMessage placeholder="Type your message..." class="form-control"}}
   </div>
+
   <div class="form-group">
-    <button type="submit" class="btn btn-primary" {{bind-attr disabled="cannotSendMessage"}}>Send</button>
+    <button type="submit" {{action 'sendMessage'}} class="btn btn-primary" {{bind-attr disabled="cannotSendMessage"}}>
+      Send
+    </button>
   </div>
 </form>

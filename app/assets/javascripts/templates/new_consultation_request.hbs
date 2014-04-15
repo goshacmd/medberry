@@ -3,7 +3,7 @@
     <h4 class="modal-title">Request a consultation</h4>
   </div>
 
-  <form class="form-horizontal" {{action "createRequest"}}>
+  <form class="form-horizontal">
     <div class="modal-body">
       {{#if hasError}}
         <div class="alert alert-danger">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary" {{bind-attr disabled="isSaving"}}>
+      <button type="submit" {{action 'createRequest'}} class="btn btn-primary" {{bind-attr disabled="isSaving"}}>
         {{#if isSaving}}Placing a request...{{else}}Place a request{{/if}}
       </button>
     </div>
