@@ -1,4 +1,4 @@
-class OnlineStatusPusher
+class PushOnlineStatusProcessor
   attr_reader :status_service, :pusher
 
   def initialize(status_service: OnlineStatusService.new, pusher: Pusher)

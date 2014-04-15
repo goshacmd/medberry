@@ -38,7 +38,7 @@ if the doctor is busy and providing queue stats for specific requests
 (stats like request's position in the queue, estimated waiting time,
 etc).
 
-## Finisher & canceler
+## Processors
 
 These are responsible for closing the consultation request/finishing the
 consultation if specific criteria are met (e.g finish a consult if

@@ -1,4 +1,4 @@
-class OnlineStatusMarker
+class MarkOnlineStatusProcessor
   include BatchProcessor
 
   attr_reader :status_service

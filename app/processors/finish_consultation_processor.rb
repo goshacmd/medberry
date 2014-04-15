@@ -3,7 +3,7 @@
 #
 # 1. it has already expired and already past extension window (1 min)
 # 2. either doctor or patient was offline for more than 2 mins
-class ConsultationFinisher
+class FinishConsultationProcessor
   include BatchProcessor
 
   attr_reader :status_service

@@ -1,4 +1,4 @@
-class QueueStatsPusher
+class PushQueueStatsProcessor
   include BatchProcessor
 
   attr_reader :queue_service, :update_pusher, :pusher

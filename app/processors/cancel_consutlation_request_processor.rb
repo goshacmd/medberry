@@ -3,7 +3,7 @@
 # 1. the doctor has been offline for more than 5 minutes
 # 2. the patient has been offline for more than 5 minutes AND the request is
 #    the first in the queue to that doctor
-class ConsultationRequestCanceler
+class CancelConsultationRequestProcessor
   include BatchProcessor
 
   attr_reader :status_service

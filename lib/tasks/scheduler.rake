@@ -3,11 +3,11 @@ task scheduler: [:environment] do
 
   scheduler = Rufus::Scheduler.new
 
-  marker = OnlineStatusMarker.new
-  status_pusher = OnlineStatusPusher.new
-  queue_pusher = QueueStatsPusher.new
-  finisher = ConsultationFinisher.new
-  canceler = ConsultationRequestCanceler.new
+  marker = MarkOnlineStatusProcessor.new
+  status_pusher = PushOnlineStatusProcessor.new
+  queue_pusher = PushQueueStatsProcessor.new
+  finisher = FinishConsultationProcessor.new
+  canceler = CancelConsultationRequestProcessor.new
 
   scheduler.every '10s' do
     marker.perform
