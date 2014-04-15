@@ -3,8 +3,14 @@
     <h4 class="modal-title">Request a consultation</h4>
   </div>
 
-  <form class="form-horizontal" {{action 'createRequest' model}}>
+  <form class="form-horizontal" {{action 'createRequest'}}>
     <div class="modal-body">
+      {{#if hasError}}
+        <div class="alert alert-danger">
+          <p>You already have an active request or are in the middle of consultation.</p>
+        </div>
+      {{/if}}
+
       <div class="form-group">
         <label class="col-sm-2 control-label">Provider</label>
         <div class="col-sm-10">
@@ -20,7 +26,9 @@
     </div>
 
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary"}>Place a request</button>
+      <button type="submit" class="btn btn-primary" {{bind-attr disabled="isSaving"}}>
+        {{#if isSaving}}Placing a request...{{else}}Place a request{{/if}}
+      </button>
     </div>
   </form>
 {{/modal-dialog}}

@@ -9,17 +9,6 @@ var ApplicationRoute = Ember.Route.extend({
       this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
     },
 
-    createRequest: function(requestData) {
-      var self = this;
-
-      var goToRequest = function(request) {
-        self.transitionTo('patient.dashboard');
-        self.send('closeModal');
-      }
-
-      this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
-    },
-
     willTransition: function() {
       this.send('closeModal');
     }
