@@ -24,14 +24,22 @@ class User < ActiveRecord::Base
   end
 
   def id_string
-    "#{role}-#{identity.id}"
+    self.class.id_string role, identity.id
   end
 
   def pusher_channel_name
-    "private-#{id_string}"
+    self.class.pusher_channel_name role, identity_id
   end
 
   def pulser_channel_name
     "private-#{role}-online-pulser"
+  end
+
+  def self.id_string(role, identity_id)
+    "#{role}-#{identity_id}"
+  end
+
+  def self.pusher_channel_name(role, identity_id)
+    "private-#{id_string(role, identity_id)}"
   end
 end

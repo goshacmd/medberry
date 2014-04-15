@@ -8,10 +8,12 @@ class PushOnlineStatusProcessor
 
   # Push the online statuses of all doctors.
   def perform
-    mapper = -> i { { id: i.id, status: status_service.status(i.user) } }
+    make_mapper = -> role {
+      -> id { { id: id, status: status_service.status(User.id_string(role, id)) } }
+    }
 
-    doctors_data = Doctor.all.map(&mapper)
-    patients_data = Patient.all.map(&mapper)
+    doctors_data = Doctor.pluck(:id).map(&make_mapper.call(:doctor))
+    patients_data = Patient.pluck(:id).map(&make_mapper.call(:patient))
 
     pusher.trigger 'private-patient-online-pulser', 'pulse', doctors_data
     pusher.trigger 'private-doctor-online-pulser', 'pulse', patients_data

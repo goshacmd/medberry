@@ -23,15 +23,16 @@ class OnlineStatusService
 
   # Check if the user is online.
   #
-  # @param user [User]
+  # @param user [User, String]
   def online?(user)
     # user is online if they have a pusher connection to their private channel
-    occupied?(user.pusher_channel_name)
+    channel = User === user ? user.pusher_channel_name : "private-#{user}"
+    occupied?(channel)
   end
 
   # Check the status of the user.
   #
-  # @param user [User]
+  # @param user [User, String] user object or user identity string
   # @return [:online, :offline]
   def status(user)
     online?(user) ? :online : :offline
