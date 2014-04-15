@@ -40,7 +40,7 @@ class OnlineStatusService
 
   # Record current timestamp as the last time seen online for user.
   #
-  # @param user [User]
+  # @param user [User, String]
   def mark(user)
     redis.set last_seen_key_for(user), Time.now.to_i if online?(user)
   end
@@ -65,6 +65,7 @@ class OnlineStatusService
 
   # Get a redis key to store last seen timestamp.
   def last_seen_key_for(user)
-    "last_seen:#{user.id_string}"
+    id_string = User === user ? user.id_string : user
+    "last_seen:#{id_string}"
   end
 end

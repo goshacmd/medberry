@@ -8,10 +8,12 @@ class MarkOnlineStatusProcessor
   end
 
   def selector
-    User.all
+    User.pluck(:identity_id, :identity_type)
   end
 
   def process(user)
-    status_service.mark(user)
+    id, role = user
+    id_string = User.id_string(role.downcase, id)
+    status_service.mark(id_string)
   end
 end
