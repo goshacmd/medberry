@@ -8,14 +8,6 @@ class Api::DoctorsController < ApiController
   end
 
   def update
-    @doctor = Doctor.find(params[:id])
-
-    if params[:doctor][:favorite]
-      current_user.identity.fav_doctors << @doctor
-    else
-      current_user.identity.fav_doctors.delete @doctor
-    end
-
-    render json: @doctor
+    use_case DoctorUpdater
   end
 end

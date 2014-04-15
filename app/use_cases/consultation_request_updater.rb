@@ -1,13 +1,14 @@
 class ConsultationRequestUpdater
-  attr_reader :request, :status, :current_user
+  include UseCase
 
-  # @param request [ConsultationRequest]
-  # @param new_status [String]
-  # @param current_user [User]
-  def initialize(request, new_status, current_user)
-    @request = request
-    @status = new_status
-    @current_user = current_user
+  model ConsultationRequest
+
+  def request
+    model
+  end
+
+  def status
+    attrs[:status]
   end
 
   # Change the status of a request.
@@ -18,6 +19,8 @@ class ConsultationRequestUpdater
   end
 
   def can_update?
+    return false unless can?(:update)
+
     last_request = request.doctor.consultations.order(created_at: :desc).first
     last_request ? last_request.finished? : true
   end

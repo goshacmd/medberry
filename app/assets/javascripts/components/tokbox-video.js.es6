@@ -89,7 +89,7 @@ var TokboxVideoComponent = Ember.Component.extend({
 
   computeOptimalMateVideoSize: function() {
     var vpWidth = this.$().width();
-    var vpHeight = $(window).height() - this.$().offset().top - 100;
+    var vpHeight = $(window).height() - this.$().offset().top - 100 - 300;
 
     var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
     var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };

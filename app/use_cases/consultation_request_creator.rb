@@ -1,30 +1,24 @@
 class ConsultationRequestCreator
-  class ValidationError < ErrorWithData; end
-  class NotAuthorized < RuntimeError; end
+  include UseCase
 
-  attr_reader :params, :current_user
+  model ConsultationRequest
 
-  # @param params [Hash]
-  # @param current_user [User]
-  def initialize(params, current_user)
-    @params = params
-    @current_user = current_user
+  def attrs
+    params.require(:consultation_request).permit(:doctor_id, :cause)
   end
 
   # Create a consultation request, checking the online status of the doctor.
   def perform
-    unless can_create?
-      raise NotAuthorized
-    end
+    not_authorized unless can_create?
 
-    consultation_request = ConsultationRequest.new params
+    @model = consultation_request = ConsultationRequest.new attrs
     consultation_request.patient = current_user.identity
     online = OnlineStatusService.new.online?(consultation_request.doctor.user)
 
     if online && consultation_request.save
       consultation_request
     else
-      raise ValidationError.new(nil, consultation_request)
+      validation_error
     end
   end
 

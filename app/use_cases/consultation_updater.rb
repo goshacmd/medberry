@@ -1,18 +1,24 @@
 class ConsultationUpdater
-  attr_reader :consultation, :status, :extension, :current_user
+  include UseCase
 
-  # @param consultation [Consultation]
-  # @param params [Hash]
-  # @param current_user [User]
-  def initialize(consultation, params, current_user)
-    @consultation = consultation
-    @status = params[:status]
-    @extension = params[:extension]
-    @current_user = current_user
+  model Consultation
+
+  def consultation
+    model
+  end
+
+  def status
+    attrs[:status]
+  end
+
+  def extension
+    attrs[:extension]
   end
 
   # Change the status of a consultation.
   def perform
+    return unless can?(:update)
+
     if can_finish?
       finish
     elsif can_extend?

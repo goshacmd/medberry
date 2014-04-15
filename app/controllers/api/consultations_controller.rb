@@ -8,12 +8,6 @@ class Api::ConsultationsController < ApiController
   end
 
   def update
-    @consultation = Consultation.find(params[:id])
-
-    authorize! :update, @consultation
-
-    ConsultationUpdater.new(@consultation, params[:consultation], current_user).perform
-
-    render json: @consultation
+    use_case ConsultationUpdater
   end
 end
