@@ -1,24 +1,24 @@
 {{#modal-dialog action="closeModal"}}
   <div class="modal-header">
-    <h4 class="modal-title">Request a consultation</h4>
+    <h4 class="modal-title">{{t 'new_request.header'}}</h4>
   </div>
 
   <form class="form-horizontal">
     <div class="modal-body">
       {{#if hasError}}
         <div class="alert alert-danger">
-          <p>You already have an active request or are in the middle of consultation.</p>
+          <p>{{t 'new_request.error_p'}}</p>
         </div>
       {{/if}}
 
       <div class="form-group">
-        <label class="col-sm-2 control-label">Provider</label>
+        <label class="col-sm-2 control-label">{{t 'new_request.provider_label'}}</label>
         <div class="col-sm-10">
           <p class="form-control-static">Dr. {{doctor.fullName}}</p>
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">Cause</label>
+        <label class="col-sm-2 control-label">{{t 'new_request.cause_label'}}</label>
         <div class="col-sm-10">
           {{input value=cause type="text" class="form-control" placeholder="Reason for your appointment..."}}
         </div>
@@ -27,7 +27,11 @@
 
     <div class="modal-footer">
       <button type="submit" {{action 'createRequest'}} class="btn btn-primary" {{bind-attr disabled="isSaving"}}>
-        {{#if isSaving}}Placing a request...{{else}}Place a request{{/if}}
+        {{#if isSaving}}
+          {{t 'new_request.place_button_progress'}}
+        {{else}}
+          {{t 'new_request.place_button'}}
+        {{/if}}
       </button>
     </div>
   </form>

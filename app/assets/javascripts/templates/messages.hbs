@@ -8,11 +8,11 @@
     {{else}}
       <p>
         {{text}}
-        <span class="pull-right"><i>Sending...</i></span>
+        <span class="pull-right"><i>{{t 'messages.sending'}}</i></span>
       </p>
     {{/if}}
   {{else}}
-    <p>No messages.</p>
+    <p>{{t 'messages.nothing'}}</p>
   {{/each}}
 </div>
 
@@ -23,7 +23,7 @@
 
   <div class="form-group">
     <button type="submit" {{action 'sendMessage'}} class="btn btn-primary" {{bind-attr disabled="cannotSendMessage"}}>
-      Send
+      {{t 'messages.send_button'}}
     </button>
   </div>
 </form>

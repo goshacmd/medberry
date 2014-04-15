@@ -1,16 +1,16 @@
-<h4>Queue</h4>
+<h4>{{t 'queue.header'}}</h4>
 
 {{#if content}}
   <a href="#" class="btn btn-success" {{action 'acceptNext'}}>
-    Talk to next patient ({{nextRequest.patient.fullName}})
+    {{t 'queue.next_button' name=nextRequest.patient.fullName}}
   </a>
 
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Patient</th>
-        <th>Cause</th>
-        <th>Placed at</th>
+        <th>{{t 'queue.patient'}}</th>
+        <th>{{t 'queue.cause'}}</th>
+        <th>{{t 'queue.placed_at'}}</th>
       </tr>
     </thead>
 
@@ -30,5 +30,5 @@
     </tbody>
   </table>
 {{else}}
-  <p>The queue is empty.</p>
+  <p>{{t 'queue.nothing'}}</p>
 {{/if}}

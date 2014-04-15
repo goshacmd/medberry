@@ -22,7 +22,9 @@
       <img src="/assets/no-avatar.png" class="img-circle">
 
       <div>
-        <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>Call now</a>
+        <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>
+          {{t 'doctor_card.call'}}
+        </a>
       </div>
     </div>
   </div>

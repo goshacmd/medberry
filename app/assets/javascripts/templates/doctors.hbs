@@ -1,14 +1,14 @@
 <h2>
-  Doctors
+  {{t 'doctors.header'}}
 
   <small class="selector">
-    {{#link-to (query-params practice="all")}}All{{/link-to}} /
-    {{#link-to (query-params practice="family")}}family doctors{{/link-to}} /
-    {{#link-to (query-params practice="pharmacist")}}pharmacists{{/link-to}}
+    {{#link-to (query-params practice="all")}}{{t 'doctors.sel_all'}}{{/link-to}} /
+    {{#link-to (query-params practice="family")}}{{t 'doctors.sel_gp'}}{{/link-to}} /
+    {{#link-to (query-params practice="pharmacist")}}{{t 'doctors.sel_ph'}}{{/link-to}}
 
     <label>
       {{input type="checkbox" checked=online}}
-      only show available doctors
+      {{t 'doctors.check_online'}}
     </label>
   </small>
 </h2>
@@ -18,5 +18,5 @@
     {{each filteredContent itemController='doctor_card' itemView='doctor_card'}}
   </div>
 {{else}}
-  <p>There are no doctors matching the specified criteria.</p>
+  <p>{{t 'doctors.nothing'}}</p>
 {{/if}}

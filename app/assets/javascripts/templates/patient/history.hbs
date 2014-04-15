@@ -2,9 +2,9 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Doctor</th>
-        <th>Status</th>
+        <th>{{t 'patient_history.date'}}</th>
+        <th>{{t 'patient_history.doctor'}}</th>
+        <th>{{t 'patient_history.status'}}</th>
     </thead>
 
     <tbody>
@@ -12,11 +12,17 @@
         <tr>
           <td>{{createdAt}}</td>
           <td>{{doctor.fullName}}</td>
-          <td>{{#if isAccepted}}Consulted{{else}}Request canceled{{/if}}</td>
+          <td>
+            {{#if isAccepted}}
+              {{t 'patient_history.consulted'}}
+            {{else}}
+              {{t 'patient_history.canceled'}}
+            {{/if}}
+          </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
 {{else}}
-  <p>Nothing to show.</p>
+  <p>{{t 'patient_history.nothing'}}</p>
 {{/if}}

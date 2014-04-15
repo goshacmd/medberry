@@ -29,6 +29,8 @@ module Medlive
 
     config.active_record.observers = [:consultation_request_observer, :consultation_observer, :message_observer]
 
+    config.assets.initialize_on_precompile = true
+
     config.handlebars.output_type = :amd
     config.handlebars.amd_namespace = 'app'
 

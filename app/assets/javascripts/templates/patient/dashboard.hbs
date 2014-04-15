@@ -7,43 +7,35 @@
 
       {{#if isNewRequest}}
         <div class="media-body">
-          <h4 class="media-heading">Please wait for your consultation with Dr. {{doctor.fullName}} to begin</h4>
+          <h4 class="media-heading">{{t 'patient_dashboard.wait_header' name=doctor.fullName}}</h4>
 
-          <p>The stated cause for the consultation was: {{cause}}</p>
+          <p>{{t 'patient_dashboard.cause_p' cause=cause}}</p>
 
           {{#if queueMeta.updatedAt}}
             <p>
               {{#if queueMeta.firstInQueue}}
-                You are first in the queue. Dr. {{doctor.fullName}} will get
-                to you as soon as they finish their current consultation.
-                The waiting time should not be more than
-                {{queueMeta.waiting}} minutes.
+                {{t 'patient_dashboard.queue_first' name=doctor.fullName}}
               {{else}}
-                There are <b>{{queueMeta.position}}</b> people in the queue before
-                you. The estimated waiting time is
-                <b>{{queueMeta.waiting}}</b> minutes.
+                {{t 'patient_dashboard.queue_other' people=queueMeta.position waiting=queueMeta.waiting}}
               {{/if}}
             </p>
           {{else}}
-            <p><i>Updating waiting estimates...</i></p>
+            <p><i>{{t 'patient_dashboard.updating_estimates'}}</i></p>
           {{/if}}
         </div>
       {{/if}}
 
       {{#if isCanceled}}
         <div class="media-body">
-          <h4 class="media-heading">Consultation with Dr. {{doctor.fullName}} canceled</h4>
+          <h4 class="media-heading">{{t 'patient_dashboard.canceled_header' name=doctor.fullName}}</h4>
 
           <p>
-            You have requested a consultation with Dr.
-            {{doctor.fullName}} on {{createdAt}} to talk about
-            "{{cause}}".
+            {{t 'patient_dashboard.canceled_p' name=doctor.fullName time=createdAt cause=cause}}
 
             {{#if canceledDoctorOffline}}
-              However, the doctor has gone offline, so your request was
-              canceled.
+              {{t 'patient_dashboard.canceled_doctor_offline'}}
             {{else}}
-              However, you went offline, and your request was canceled.
+              {{t 'patient_dashboard.canceled_patient_offline'}}
             {{/if}}
           </p>
         </div>
@@ -53,7 +45,7 @@
 {{/if}}
 
 {{#if favoriteDoctors}}
-  <h4>Favorite doctors</h4>
+  <h4>{{t 'patient_dashboard.favorite_doctors'}}</h4>
 
   <div class="row">
     {{each favoriteDoctors itemController='doctor_card' itemView='doctor_card'}}

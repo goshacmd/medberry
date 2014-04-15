@@ -18,6 +18,7 @@ gem 'statesman'
 gem 'opentok'
 gem 'pusher'
 
+gem 'i18n-js', '~> 3.0.0.rc5'
 gem 'sass-rails', '~> 4.0.0'
 gem 'bootstrap-sass', '~> 3.1.0'
 gem 'uglifier', '>= 1.3.0'

@@ -22,6 +22,7 @@
 
 <% if user_signed_in? %>
   <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'translations' %>
 <% else %>
   <%= javascript_include_tag 'simple' %>
 <% end %>

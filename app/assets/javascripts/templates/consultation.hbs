@@ -2,11 +2,13 @@
   <div class="alert alert-info">
     <div class="row">
       <div class="col-lg-3">
-        <b>{{time runTime}}</b> (remaining time: {{time remainingTime}})
+        <b>{{time runTime}}</b>
+        ({{t 'consultation.remaining'}} {{time remainingTime}})
       </div>
 
       <div class="col-lg-6 text-center">
-        Live consultation with
+        {{t 'consultation.top_p'}}
+
         {{#if currentUser.isPatient}}
           <b>Dr. {{doctor.fullName}}</b>
         {{else}}
@@ -15,7 +17,9 @@
       </div>
 
       <div class="col-lg-3 text-right">
-        <a href="#" class="btn btn-default btn-xs" {{action 'finish'}}>End</a>
+        <a href="#" class="btn btn-default btn-xs" {{action 'finish'}}>
+          {{t 'consultation.end'}}
+        </a>
       </div>
     </div>
   </div>
@@ -26,20 +30,20 @@
 
   {{render 'messages' messages}}
 {{else}}
-  <h4>The consultation is over</h4>
+  <h4>{{t 'consultation.over_header'}}</h4>
 
   {{#if currentUser.isDoctor}}
     {{#if isOver}}
       <a href="#" {{action 'requestExtension'}} {{bind-attr class=":btn :btn-lg :btn-success :btn-block canExtend::disabled"}}>
-        Extend consultation
+        {{t 'consultation.extend_button'}}
 
         {{#if canExtend}}({{time extensionTimeLeft}}){{/if}}
       </a>
     {{/if}}
 
-    {{#link-to 'queue' class="btn btn-lg btn-success btn-block"}}Go to queue{{/link-to}}
-    {{#link-to 'queue.next' class="btn btn-lg btn-success btn-block"}}Proceed to next patient{{/link-to}}
+    {{#link-to 'queue' class="btn btn-lg btn-success btn-block"}}{{t 'consultation.queue_button'}}{{/link-to}}
+    {{#link-to 'queue.next' class="btn btn-lg btn-success btn-block"}}{{t 'consultation.next_button'}}{{/link-to}}
   {{else}}
-    {{#link-to 'patient.dashboard' class="btn btn-lg btn-success btn-block"}}Go to dashboard{{/link-to}}
+    {{#link-to 'patient.dashboard' class="btn btn-lg btn-success btn-block"}}{{t 'consultation.dashboard_button'}}{{/link-to}}
   {{/if}}
 {{/if}}

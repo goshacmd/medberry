@@ -1,0 +1,73 @@
+en:
+  js:
+    camera:
+      denied_header: "Access to camera denied"
+      denied_body: "It looks like you have denied medberry access to your camera. If you denied access to camera accidentaly, try reloading the page."
+
+    nav:
+      queue: "Queue"
+      dashboard: "Dashboard"
+      history: "History"
+      doctors: "Talk to a doctor"
+
+    patient_dashboard:
+      wait_header: "Please wait for your consultation with Dr. {{name}} to begin"
+      cause_p: "The stated cause for the consultation was: {{cause}}"
+      queue_first: "You are first in the queue. Dr. {{name}} will get to you as soon as they finish their current consultation"
+      queue_other: "There are <b>{{people}}</b> people in the queue before you. The estimated waiting time is <b>{{waiting}}</b> minutes."
+      updating_estimates: "Updating waiting estimates..."
+      canceled_header: "Consultation with Dr. {{name}} canceled"
+      canceled_p: "You have requested a consultation with Dr. {{name}} on {{time}} to talk about '{{cause}}'."
+      canceled_doctor_offline: "However, the doctor has gone offline, so your request was canceled."
+      canceled_patient_offline: "However, you went offline, and your request was canceled."
+      favorite_doctors: "Favorite doctors"
+
+    patient_history:
+      date: "Date"
+      doctor: "Doctor"
+      status: "Status"
+      consulted: "Consulted"
+      canceled: "Request canceled"
+      nothing: "Nothing to show."
+
+    consultation:
+      remaining: "remaining time:"
+      top_p: "Live consultation with"
+      end: "End"
+      over_header: "The consultation is over"
+      extend_button: "Extend consultation"
+      queue_button: "Go to queue"
+      next_button: "Proceed to the next patient"
+      dashboard_button: "Go to dashboard"
+
+    doctor_card:
+      call: "Call now"
+
+    doctors:
+      header: "Doctors"
+      sel_all: "All"
+      sel_gp: "family doctors"
+      sel_ph: "pharmacists"
+      check_online: "only show available doctors"
+      nothing: "There are no doctors matching the specified criteria."
+
+    messages:
+      sending: "Sending..."
+      nothing: "No messages."
+      send_button: "Send"
+
+    new_request:
+      header: "Request a consultation"
+      provider_label: "Provider"
+      cause_label: "Cause"
+      place_button: "Place a request"
+      place_button_progress: "Placing a request..."
+      error_p: "You already have an active request or are in the middle of a consultation."
+
+    queue:
+      header: "Queue"
+      next_button: "Talk to next patient ({{name}})"
+      patient: "Patient"
+      cause: "Cause"
+      placed_at: "Placed at"
+      nothing: "The queue is empty."
