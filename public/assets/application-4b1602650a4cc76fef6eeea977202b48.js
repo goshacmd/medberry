@@ -71605,16 +71605,27 @@ define("app/adapters/application",
       key: pusherKey,
       userChannelName: userChannelName,
       pulserChannelName: pulserChannelName,
+      encrypted: true,
+
+      connectionFailed: false,
 
       init: function() {
         this._super();
 
-        this.pusher = new Pusher(this.get('key'));
+        this.pusher = new Pusher(this.get('key'), { encrypted: this.get('encrypted') });
+        this.pusher.connection.bind('state_change', this.stateChangeHandler.bind(this));
+
         this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
         this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
 
         this.bindAllUser(this.allHandler.bind(this));
         this.bindPulser('pulse', this.pulseHandler.bind(this));
+      },
+
+      stateChangeHandler: function(state) {
+        var current = state.current;
+
+        if (current = 'failed') this.set('connectionFailed', true);
       },
 
       allHandler: function(eventName, data) {
@@ -71807,6 +71818,15 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = User;
+  });define("app/controllers/application", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ApplicationController = Ember.Controller.extend({
+      pusherError: false
+    });
+
+    __exports__["default"] = ApplicationController;
   });define("app/controllers/clock_service", 
   ["exports"],
   function(__exports__) {
@@ -71960,7 +71980,43 @@ define("app/adapters/application",
   ["exports"],
   function(__exports__) {
     "use strict";
-    var NewConsultationRequestController = Ember.ObjectController.extend();
+    var NewConsultationRequestController = Ember.ObjectController.extend({
+      isSaving: false,
+      hasError: false,
+
+      resetState: function() {
+        this.set('isSaving', false);
+        this.set('hasError', false);
+      },
+
+      setError: function() {
+        this.set('isSaving', false);
+        this.set('hasError', true);
+      },
+
+      actions: {
+        createRequest: function() {
+          var self = this;
+
+          var goToRequest = function(request) {
+            self.resetState();
+
+            self.transitionToRoute('patient.dashboard');
+            self.send('closeModal');
+          }
+
+          var handleError = function() {
+            self.setError();
+          }
+
+          this.resetState();
+          this.set('isSaving', true);
+
+          var request = this.store.createRecord('consultation_request', this.get('model'));
+          request.save().then(goToRequest, handleError);
+        }
+      }
+    });
 
     __exports__["default"] = NewConsultationRequestController;
   });define("app/controllers/patient/dashboard", 
@@ -72134,7 +72190,7 @@ define("app/components/modal-dialog",
 
       computeOptimalMateVideoSize: function() {
         var vpWidth = this.$().width();
-        var vpHeight = $(window).height() - this.$().offset().top - 100;
+        var vpHeight = $(window).height() - this.$().offset().top - 100 - 300;
 
         var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
         var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
@@ -72261,10 +72317,18 @@ define("app/components/modal-dialog",
   });define('app/templates/application', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
+function program1(depth0,data) {
+  
+  
+  data.buffer.push("\n    <div class=\"alert alert-danger\">\n      There was an error establishing real-time connection with the\n      server. Please, try reloading the page.\n    </div>\n  ");
+  }
 
   data.buffer.push("<div class=\"container\">\n  ");
+  stack1 = helpers['if'].call(depth0, "pusherError", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n  ");
   data.buffer.push(escapeExpression((helper = helpers.render || (depth0 && depth0.render),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav", options) : helperMissing.call(depth0, "render", "nav", options))));
   data.buffer.push("\n\n  ");
   stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
@@ -72629,20 +72693,20 @@ function program6(depth0,data) {
   data.buffer.push("<div class=\"messages-area\">\n  ");
   stack1 = helpers.each.call(depth0, "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n</div>\n\n<form ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sendMessage", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
-  data.buffer.push(">\n  <div class=\"form-group\">\n    ");
+  data.buffer.push("\n</div>\n\n<form>\n  <div class=\"form-group\">\n    ");
   data.buffer.push(escapeExpression((helper = helpers.input || (depth0 && depth0.input),options={hash:{
     'type': ("text"),
     'value': ("newMessage"),
     'placeholder': ("Type your message..."),
     'class': ("form-control")
   },hashTypes:{'type': "STRING",'value': "ID",'placeholder': "STRING",'class': "STRING"},hashContexts:{'type': depth0,'value': depth0,'placeholder': depth0,'class': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n  </div>\n  <div class=\"form-group\">\n    <button type=\"submit\" class=\"btn btn-primary\" ");
+  data.buffer.push("\n  </div>\n\n  <div class=\"form-group\">\n    <button type=\"submit\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "sendMessage", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(" class=\"btn btn-primary\" ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("cannotSendMessage")
   },hashTypes:{'disabled': "STRING"},hashContexts:{'disabled': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">Send</button>\n  </div>\n</form>\n");
+  data.buffer.push(">\n      Send\n    </button>\n  </div>\n</form>\n");
   return buffer;
   
 }); });define('app/templates/nav', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
@@ -72756,14 +72820,15 @@ function program14(depth0,data) {
 }); });define('app/templates/new_consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 function program1(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Request a consultation</h4>\n  </div>\n\n  <form class=\"form-horizontal\" ");
-  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createRequest", "model", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(">\n    <div class=\"modal-body\">\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Provider</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
+  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Request a consultation</h4>\n  </div>\n\n  <form class=\"form-horizontal\">\n    <div class=\"modal-body\">\n      ");
+  stack1 = helpers['if'].call(depth0, "hasError", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Provider</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
   stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</p>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Cause</label>\n        <div class=\"col-sm-10\">\n          ");
@@ -72773,8 +72838,34 @@ function program1(depth0,data) {
     'class': ("form-control"),
     'placeholder': ("Reason for your appointment...")
   },hashTypes:{'value': "ID",'type': "STRING",'class': "STRING",'placeholder': "STRING"},hashContexts:{'value': depth0,'type': depth0,'class': depth0,'placeholder': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n        </div>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"submit\" class=\"btn btn-primary\"}>Place a request</button>\n    </div>\n  </form>\n");
+  data.buffer.push("\n        </div>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"submit\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "createRequest", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(" class=\"btn btn-primary\" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'disabled': ("isSaving")
+  },hashTypes:{'disabled': "STRING"},hashContexts:{'disabled': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(">\n        ");
+  stack1 = helpers['if'].call(depth0, "isSaving", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n      </button>\n    </div>\n  </form>\n");
   return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  data.buffer.push("\n        <div class=\"alert alert-danger\">\n          <p>You already have an active request or are in the middle of consultation.</p>\n        </div>\n      ");
+  }
+
+function program4(depth0,data) {
+  
+  
+  data.buffer.push("Placing a request...");
+  }
+
+function program6(depth0,data) {
+  
+  
+  data.buffer.push("Place a request");
   }
 
   stack1 = (helper = helpers['modal-dialog'] || (depth0 && depth0['modal-dialog']),options={hash:{
@@ -73037,19 +73128,12 @@ function program4(depth0,data) {
           this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
         },
 
-        createRequest: function(requestData) {
-          var self = this;
-
-          var goToRequest = function(request) {
-            self.transitionTo('patient.dashboard');
-            self.send('closeModal');
-          }
-
-          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
-        },
-
         willTransition: function() {
           this.send('closeModal');
+        },
+
+        pusherError: function() {
+          this.controller.set('pusherError', true);
         }
       }
     });

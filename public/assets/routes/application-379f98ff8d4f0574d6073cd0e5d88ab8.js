@@ -13,19 +13,12 @@ define("app/routes/application",
           this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
         },
 
-        createRequest: function(requestData) {
-          var self = this;
-
-          var goToRequest = function(request) {
-            self.transitionTo('patient.dashboard');
-            self.send('closeModal');
-          }
-
-          this.store.createRecord('consultation_request', requestData).save().then(goToRequest);
-        },
-
         willTransition: function() {
           this.send('closeModal');
+        },
+
+        pusherError: function() {
+          this.controller.set('pusherError', true);
         }
       }
     });
