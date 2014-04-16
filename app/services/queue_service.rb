@@ -11,7 +11,7 @@ class QueueService
 
   # Get a set of consultation requests.
   def unfilled_requests
-    doctor.consultation_requests.unfilled.order(created_at: :asc)
+    doctor.consultation_requests.in_status(:new).order(created_at: :asc)
   end
 
   # @return [ConsultationRequest, nil]
