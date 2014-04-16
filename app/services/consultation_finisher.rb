@@ -19,9 +19,12 @@ class ConsultationFinisher
   def perform
     return unless can_finish?
 
+    finishing_time = Time.now
+    duration = finishing_time - consultation.created_at
+
     consultation.transition_to(:finished)
     consultation.update finished_at: Time.now, finished_by: role,
-      finishing_cause: cause
+      finishing_cause: cause, duration: duration
   end
 
   def can_finish?
