@@ -24,9 +24,7 @@ class FinishConsultationProcessor
     if over?(consultation)
       consultation.transition_to :over
     elsif cause = finishing_cause(consultation)
-      consultation.transition_to :finished
-      consultation.update finished_at: Time.now, finished_by: :system,
-        finishing_cause: cause
+      ConsutlationFinisher.new(consultation, :system, cause).perform
     end
   end
 

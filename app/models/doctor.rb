@@ -11,4 +11,8 @@ class Doctor < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+
+  def consultation_policy
+    DoctorConsultationPolicy.for_practice(practice)
+  end
 end

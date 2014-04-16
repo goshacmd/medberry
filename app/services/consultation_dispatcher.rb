@@ -19,6 +19,7 @@ class ConsultationDispatcher
 
     ConsultationRequestStatusChanger.new(request).accept
 
-    SessionCreator.new(consultation).perform
+    initial_span = consultation.doctor.consultation_policy.initial_span
+    SessionCreator.new(consultation).perform duration: initial_span
   end
 end
