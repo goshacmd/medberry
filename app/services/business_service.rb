@@ -22,7 +22,7 @@ class BusinessService
     #
     # @param identity [Patient]
     def nothing_active?(identity)
-      no_active_consultation?(identity) && no_active_request(identity)
+      no_active_consultation?(identity) && no_active_request?(identity)
     end
   end
 end
