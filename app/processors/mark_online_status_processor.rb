@@ -13,7 +13,6 @@ class MarkOnlineStatusProcessor
 
   def process(user)
     id, role = user
-    id_string = User.id_string(role.downcase, id)
-    status_service.mark(id_string)
+    status_service.mark([role.downcase, id])
   end
 end
