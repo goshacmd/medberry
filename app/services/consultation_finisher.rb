@@ -1,13 +1,13 @@
 class ConsultationFinisher
   attr_reader :consultation, :actor, :cause
 
-  # Initialize a +ConsutlationFinisher+.
+  # Initialize a +ConsultationFinisher+.
   #
   # @param consultation [Consultation]
   # @param actor [User, Symbol] user object or +:system+
   # @param cause [Symbol]
   def initialize(consultation, actor, cause)
-    @consutlation = consultation
+    @consultation = consultation
     @actor = actor
     @cause = cause
   end

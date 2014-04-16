@@ -1,5 +1,5 @@
 # A service to extend consultations.
-class ConsutlationExtender
+class ConsultationExtender
   EXTENSION_WINDOW = 1.5.minutes
 
   attr_reader :consultation

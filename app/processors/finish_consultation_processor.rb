@@ -20,7 +20,7 @@ class FinishConsultationProcessor
     if over?(consultation)
       consultation.transition_to :over
     elsif cause = finishing_cause(consultation)
-      ConsutlationFinisher.new(consultation, :system, cause).perform
+      ConsultationFinisher.new(consultation, :system, cause).perform
     end
   end
 
@@ -30,7 +30,7 @@ class FinishConsultationProcessor
 
   def finishing_cause(consultation)
     return false if consultation.finished_at || consultation.expires_at == nil
-    return :out_of_time if Time.now > (consultation.expires_at + ConsutlationExtender::EXTENSION_WINDOW)
+    return :out_of_time if Time.now > (consultation.expires_at + ConsultationExtender::EXTENSION_WINDOW)
     return :doctor_offline if not_recently_online?(consultation.doctor)
     return :patient_offline if not_recently_online?(consultation.patient)
   end
