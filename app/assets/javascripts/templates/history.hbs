@@ -1,0 +1,61 @@
+{{#if content}}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>{{t 'history.date'}}</th>
+        <th>
+          {{#if currentUser.isDoctor}}
+            {{t 'history.patient' }}
+          {{else}}
+            {{t 'history.doctor' }}
+          {{/if}}
+        </th>
+
+        <th>{{t 'history.status'}}</th>
+        <th>{{t 'history.duration'}}</th>
+        <th></th>
+    </thead>
+
+    <tbody>
+      {{#each controller}}
+        <tr>
+          <td>{{createdAt}}</td>
+
+          <td>
+            {{#if currentUser.isDoctor}}
+              {{patient.fullName}}
+            {{else}}
+              {{doctor.fullName}}
+            {{/if}}
+          </td>
+
+          <td>
+            {{#if isAccepted}}
+              {{t 'history.consulted'}}
+            {{else}}
+              {{t 'history.canceled'}}
+            {{/if}}
+          </td>
+
+          <td>
+            {{#if consultation}}
+              {{time consultation.durationMs}}
+            {{else}}
+              &mdash;
+            {{/if}}
+          </td>
+
+          <td>
+            {{#if consultation}}
+              {{#link-to 'consultation' consultation class="btn btn-default btn-sm"}}
+                {{t 'history.archive_button'}}
+              {{/link-to}}
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>{{t 'history.nothing'}}</p>
+{{/if}}

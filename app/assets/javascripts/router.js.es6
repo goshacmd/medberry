@@ -2,6 +2,7 @@ var Router = Ember.Router.extend();
 
 Router.map(function() {
   this.route('dashboard', { path: '/' });
+  this.route('history');
 
   this.resource('queue', function() {
     this.route('next');
@@ -9,7 +10,6 @@ Router.map(function() {
 
   this.resource('patient', function() {
     this.route('dashboard');
-    this.route('history');
   });
 
   this.resource('doctors', function() {

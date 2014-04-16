@@ -1,12 +1,34 @@
 <ul class="nav nav-pills">
   {{#if currentUser.isDoctor}}
-    {{#link-to 'queue' tagName='li'}}{{#link-to 'queue'}}
-      {{t 'nav.queue'}}
-      {{#if queueBadge}}<span class="badge">{{queueBadge}}</span>{{/if}}
-    {{/link-to}}{{/link-to}}
+    {{#link-to 'queue' tagName='li'}}
+      {{#link-to 'queue'}}
+        {{t 'nav.queue'}}
+        {{#if queueBadge}}<span class="badge">{{queueBadge}}</span>{{/if}}
+      {{/link-to}}
+    {{/link-to}}
+
+    {{#link-to 'history' tagName='li'}}
+      {{#link-to 'history'}}
+        {{t 'nav.history'}}
+      {{/link-to}}
+    {{/link-to}}
   {{else}}
-    {{#link-to 'patient.dashboard' tagName='li'}}{{#link-to 'patient.dashboard'}}{{t 'nav.dashboard'}}{{/link-to}}{{/link-to}}
-    {{#link-to 'patient.history' tagName='li'}}{{#link-to 'patient.history'}}{{t 'nav.history'}}{{/link-to}}{{/link-to}}
-    {{#link-to 'doctors' tagName='li'}}{{#link-to 'doctors'}}{{t 'nav.doctors'}}{{/link-to}}{{/link-to}}
+    {{#link-to 'patient.dashboard' tagName='li'}}
+      {{#link-to 'patient.dashboard'}}
+        {{t 'nav.dashboard'}}
+      {{/link-to}}
+    {{/link-to}}
+
+    {{#link-to 'history' tagName='li'}}
+      {{#link-to 'history'}}
+        {{t 'nav.history'}}
+      {{/link-to}}
+    {{/link-to}}
+
+    {{#link-to 'doctors' tagName='li'}}
+      {{#link-to 'doctors'}}
+        {{t 'nav.doctors'}}
+      {{/link-to}}
+    {{/link-to}}
   {{/if}}
 </ul>

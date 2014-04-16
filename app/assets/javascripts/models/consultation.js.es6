@@ -11,7 +11,7 @@ var Consultation = DS.Model.extend({
   mode: DS.attr('string'),
   finishedAt: DS.attr('date'),
   finishedBy: DS.attr('string'),
-  duration: DS.attr('integer'),
+  duration: DS.attr('number'),
   extension: DS.attr('boolean'),
 
   isInProgress: Ember.computed.equal('status', 'in_progress'),

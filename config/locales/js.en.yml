@@ -22,12 +22,15 @@ en:
       canceled_patient_offline: "However, you went offline, and your request was canceled."
       favorite_doctors: "Favorite doctors"
 
-    patient_history:
+    history:
       date: "Date"
       doctor: "Doctor"
+      patient: "Patient"
       status: "Status"
+      duration: "Duration"
       consulted: "Consulted"
       canceled: "Request canceled"
+      archive_button: "View archive"
       nothing: "Nothing to show."
 
     consultation:
@@ -36,11 +39,12 @@ en:
       end_button: "End"
       video_button: "Video"
       over_header: "The consultation is over"
-      over_p: "The consutlation has laster for"
+      over_p: "The consutlation has lasted for"
       extend_button: "Extend consultation"
       queue_button: "Go to queue"
       next_button: "Proceed to the next patient"
       dashboard_button: "Go to dashboard"
+      history_button: "Go to history"
 
     doctor_card:
       call: "Call now"
