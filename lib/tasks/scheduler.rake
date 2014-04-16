@@ -9,11 +9,11 @@ task scheduler: [:environment] do
   finisher = FinishConsultationProcessor.new
   canceler = CancelConsultationRequestProcessor.new
 
-  scheduler.every '10s' do
+  scheduler.every '20s' do
     marker.perform
   end
 
-  scheduler.every '10s' do
+  scheduler.every '20s' do
     status_pusher.perform
   end
 
