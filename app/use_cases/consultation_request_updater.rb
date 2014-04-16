@@ -23,7 +23,6 @@ class ConsultationRequestUpdater
     return false unless request.new_request?
     return false unless status == 'accepted'
 
-    last_request = request.doctor.consultations.order(created_at: :desc).first
-    last_request ? last_request.finished? : true
+    BusinessService.no_active_consultation?(request.doctor)
   end
 end

@@ -23,17 +23,6 @@ class ConsultationRequestCreator
   end
 
   def can_create?
-    has_no_active_consultation?(current_user.identity) &&
-      has_no_active_request?(current_user.identity)
-  end
-
-  def has_no_active_consultation?(patient)
-    last_consultation = patient.consultations.order(created_at: :desc).first
-    last_consultation ? last_consultation.finished? : true
-  end
-
-  def has_no_active_request?(patient)
-    last_request = patient.consultation_requests.order(created_at: :desc).first
-    last_request ? !last_request.new_request? : true
+    BusinessService.nothing_active?(current_user.identity)
   end
 end

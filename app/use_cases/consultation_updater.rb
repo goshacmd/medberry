@@ -27,8 +27,7 @@ class ConsultationUpdater
   end
 
   def can_finish?
-    status == 'finished' && consultation.can_transition_to?(:finished) &&
-      consultation.role_of(current_user)
+    status == 'finished' && consultation.can_transition_to?(:finished)
   end
 
   def finish
