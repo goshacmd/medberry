@@ -13,11 +13,7 @@ class FinishConsultationProcessor
   end
 
   def selector
-    in_progress = Consultation::STATUSES[:in_progress]
-    over = Consultation::STATUSES[:over]
-
-    Consultation.where('created_at <= :now', now: Time.now).
-      where('status in (:in_progress, :over)', in_progress: in_progress, over: over)
+    Consultation.created_before(Time.now).in_status(:in_progress, :over)
   end
 
   def process(consultation)
@@ -34,7 +30,7 @@ class FinishConsultationProcessor
 
   def finishing_cause(consultation)
     return false if consultation.finished_at || consultation.expires_at == nil
-    return :out_of_time if Time.now > (consultation.expires_at + 1.minute)
+    return :out_of_time if Time.now > (consultation.expires_at + ConsutlationExtender::EXTENSION_WINDOW)
     return :doctor_offline if not_recently_online?(consultation.doctor)
     return :patient_offline if not_recently_online?(consultation.patient)
   end

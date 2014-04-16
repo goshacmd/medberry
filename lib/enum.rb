@@ -12,6 +12,8 @@ module Enum
 
       define_method(getter) { inverted[read_attribute(field_name)].try(:to_sym) }
       define_method(setter) { |value| write_attribute(field_name, hash[value]) }
+
+      scope "in_#{field_name}", lambda { |*values| where(field_name => values.map { |v| hash[v] }) }
     end
   end
 end

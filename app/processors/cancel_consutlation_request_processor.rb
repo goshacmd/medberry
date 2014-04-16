@@ -13,7 +13,7 @@ class CancelConsultationRequestProcessor
   end
 
   def selector
-    ConsultationRequest.unfilled
+    ConsultationRequest.in_status(:new)
   end
 
   def process(request)

@@ -15,8 +15,6 @@ class ConsultationRequest < ActiveRecord::Base
   enum :status, STATUSES
   enum :cancelation_cause, CANCELATION_CAUSES
 
-  scope :unfilled, -> { where(status: STATUSES[:new]) }
-
   def new_request?
     status == :new
   end

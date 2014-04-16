@@ -19,6 +19,8 @@ class Consultation < ActiveRecord::Base
   enum :finishing_cause, FINISHING_CAUSES
   enum :finished_by, FINISHERS
 
+  scope :created_before, -> time { where('created_at <= :time', time: time) }
+
   class << self
     def create_from_request(request)
       create(status: :in_progress, patient: request.patient, doctor: request.doctor, request: request, cause: request.cause)
