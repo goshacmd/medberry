@@ -5,7 +5,7 @@ var ConsultationController = Ember.ObjectController.extend({
   isNotTimeOver: Ember.computed.not('isTimeOver'),
   isActive: Ember.computed.and('isInProgress', 'isNotTimeOver'),
 
-  showVideo: true,
+  showVideo: Ember.computed.alias('isModeVideo'),
 
   runTime: function() {
     return (new Date) - this.get('createdAt');

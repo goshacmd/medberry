@@ -8,6 +8,7 @@ var Consultation = DS.Model.extend({
   createdAt: DS.attr('date'),
   expiresAt: DS.attr('date'),
   status: DS.attr('string'),
+  mode: DS.attr('string'),
   finishedAt: DS.attr('date'),
   finishedBy: DS.attr('string'),
   extension: DS.attr('boolean'),
@@ -15,6 +16,8 @@ var Consultation = DS.Model.extend({
   isInProgress: Ember.computed.equal('status', 'in_progress'),
   isOver: Ember.computed.equal('status', 'over'),
   isFinished: Ember.computed.equal('status', 'finished'),
+
+  isModeVideo: Ember.computed.equal('mode', 'video'),
 
   finish: function() {
     this.set('status', 'finished');

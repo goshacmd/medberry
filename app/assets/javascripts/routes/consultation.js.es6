@@ -4,6 +4,12 @@ var ConsultationRoute = Ember.Route.extend({
       this.currentModel.finish();
     },
 
+    toggleVideoMode: function() {
+      var current = this.currentModel.get('mode');
+      var next = current == 'video' ? 'text' : 'video';
+      this.currentModel.set('mode', next).save();
+    },
+
     requestExtension: function() {
       this.currentModel.requestExtension();
     }

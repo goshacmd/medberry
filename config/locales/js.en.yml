@@ -33,7 +33,8 @@ en:
     consultation:
       remaining: "remaining time:"
       top_p: "Live consultation with"
-      end: "End"
+      end_button: "End"
+      video_button: "Video"
       over_header: "The consultation is over"
       extend_button: "Extend consultation"
       queue_button: "Go to queue"

@@ -18,11 +18,15 @@
 
       <div class="col-lg-3 text-right">
         <a href="#" class="btn btn-default btn-xs" {{action 'finish'}}>
-          {{t 'consultation.end'}}
+          {{t 'consultation.end_button'}}
         </a>
       </div>
     </div>
   </div>
+
+  <a href="#" {{bind-attr class=":btn :btn-default isModeVideo:active"}} {{action 'toggleVideoMode'}}>
+    {{t 'consultation.video_button'}}
+  </a>
 
   {{#if showVideo}}
     {{tokbox-video sessionId=tokboxSession token=tokboxToken}}

@@ -1,3 +1,785 @@
+// I18n.js
+// =======
+//
+// This small library provides the Rails I18n API on the Javascript.
+// You don't actually have to use Rails (or even Ruby) to use I18n.js.
+// Just make sure you export all translations in an object like this:
+//
+//     I18n.translations.en = {
+//       hello: "Hello World"
+//     };
+//
+// See tests for specific formatting like numbers and dates.
+//
+;(function(I18n){
+  "use strict";
+
+  // Just cache the Array#slice function.
+  var slice = Array.prototype.slice;
+
+  // Apply number padding.
+  var padding = function(number) {
+    return ("0" + number.toString()).substr(-2);
+  };
+
+  // Set default days/months translations.
+  var DAYS_AND_MONTHS = {
+      day_names: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    , abbr_day_names: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    , month_names: [null, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    , abbr_month_names: [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  };
+
+  // Set default number format.
+  var NUMBER_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ","
+    , strip_insignificant_zeros: false
+  };
+
+  // Set default currency format.
+  var CURRENCY_FORMAT = {
+      unit: "$"
+    , precision: 2
+    , format: "%u%n"
+    , delimiter: ","
+    , separator: "."
+  };
+
+  // Set default percentage format.
+  var PERCENTAGE_FORMAT = {
+      precision: 3
+    , separator: "."
+    , delimiter: ""
+  };
+
+  // Set default size units.
+  var SIZE_UNITS = [null, "kb", "mb", "gb", "tb"];
+
+  // Set meridian.
+  var MERIDIAN = ["AM", "PM"];
+
+  I18n.reset = function() {
+    // Set default locale. This locale will be used when fallback is enabled and
+    // the translation doesn't exist in a particular locale.
+    this.defaultLocale = "en";
+
+    // Set the current locale to `en`.
+    this.locale = "en";
+
+    // Set the translation key separator.
+    this.defaultSeparator = ".";
+
+    // Set the placeholder format. Accepts `{{placeholder}}` and `%{placeholder}`.
+    this.placeholder = /(?:\{\{|%\{)(.*?)(?:\}\}?)/gm;
+
+    // Set if engine should fallback to the default locale when a translation
+    // is missing.
+    this.fallbacks = false;
+
+    // Set the default translation object.
+    this.translations = {};
+  };
+
+  // Return a list of all locales that must be tried before returning the
+  // missing translation message. By default, this will consider the inline option,
+  // current locale and fallback locale.
+  //
+  //     I18n.locales.get("de-DE");
+  //     // ["de-DE", "de", "en"]
+  //
+  // You can define custom rules for any locale. Just make sure you return a array
+  // containing all locales.
+  //
+  //     // Default the Wookie locale to English.
+  //     I18n.locales["wk"] = function(locale) {
+  //       return ["en"];
+  //     };
+  //
+  I18n.locales = {};
+
+  // Retrieve locales based on inline locale, current locale or default to
+  // I18n's detection.
+  I18n.locales.get = function(locale) {
+    var result = this[locale] || this[I18n.locale] || this["default"];
+
+    if (typeof(result) === "function") {
+      result = result(locale);
+    }
+
+    if (result instanceof Array === false) {
+      result = [result];
+    }
+
+    return result;
+  };
+
+  // The default locale list.
+  I18n.locales["default"] = function(locale) {
+    var locales = []
+      , list = []
+      , countryCode
+      , count
+    ;
+
+    // Handle the inline locale option that can be provided to
+    // the `I18n.t` options.
+    if (locale) {
+      locales.push(locale);
+    }
+
+    // Add the current locale to the list.
+    if (!locale && I18n.locale) {
+      locales.push(I18n.locale);
+    }
+
+    // Add the default locale if fallback strategy is enabled.
+    if (I18n.fallbacks && I18n.defaultLocale) {
+      locales.push(I18n.defaultLocale);
+    }
+
+    // Compute each locale with its country code.
+    // So this will return an array containing both
+    // `de-DE` and `de` locales.
+    locales.forEach(function(locale){
+      countryCode = locale.split("-")[0];
+
+      if (!~list.indexOf(locale)) {
+        list.push(locale);
+      }
+
+      if (I18n.fallbacks && countryCode && countryCode !== locale && !~list.indexOf(countryCode)) {
+        list.push(countryCode);
+      }
+    });
+
+    // No locales set? English it is.
+    if (!locales.length) {
+      locales.push("en");
+    }
+
+    return list;
+  };
+
+  // Hold pluralization rules.
+  I18n.pluralization = {};
+
+  // Return the pluralizer for a specific locale.
+  // If no specify locale is found, then I18n's default will be used.
+  I18n.pluralization.get = function(locale) {
+    return this[locale] || this[I18n.locale] || this["default"];
+  };
+
+  // The default pluralizer rule.
+  // It detects the `zero`, `one`, and `other` scopes.
+  I18n.pluralization["default"] = function(count) {
+    switch (count) {
+      case 0: return ["zero", "other"];
+      case 1: return ["one"];
+      default: return ["other"];
+    }
+  };
+
+  // Reset all default attributes. This is specially useful
+  // while running tests.
+  I18n.reset();
+
+  // Return current locale. If no locale has been set, then
+  // the current locale will be the default locale.
+  I18n.currentLocale = function() {
+    return this.locale || this.defaultLocale;
+  };
+
+  // Check if value is different than undefined and null;
+  I18n.isSet = function(value) {
+    return value !== undefined && value !== null;
+  };
+
+  // Find and process the translation using the provided scope and options.
+  // This is used internally by some functions and should not be used as an
+  // public API.
+  I18n.lookup = function(scope, options) {
+    options = this.prepareOptions(options);
+
+    var locales = this.locales.get(options.locale)
+      , requestedLocale = locales[0]
+      , locale
+      , scopes
+      , translations
+    ;
+
+    while (locales.length) {
+      locale = locales.shift();
+      scopes = scope.split(this.defaultSeparator);
+      translations = this.translations[locale];
+
+      if (!translations) {
+        continue;
+      }
+
+      while (scopes.length) {
+        translations = translations[scopes.shift()];
+
+        if (translations === undefined || translations === null) {
+          break;
+        }
+      }
+
+      if (translations !== undefined && translations !== null) {
+        return translations;
+      }
+    }
+
+    if (this.isSet(options.defaultValue)) {
+      return options.defaultValue;
+    }
+  };
+
+  // Merge serveral hash options, checking if value is set before
+  // overwriting any value. The precedence is from left to right.
+  //
+  //     I18n.prepareOptions({name: "John Doe"}, {name: "Mary Doe", role: "user"});
+  //     #=> {name: "John Doe", role: "user"}
+  //
+  I18n.prepareOptions = function() {
+    var args = slice.call(arguments)
+      , options = {}
+      , subject
+    ;
+
+    while (args.length) {
+      subject = args.shift();
+
+      if (typeof(subject) != "object") {
+        continue;
+      }
+
+      for (var attr in subject) {
+        if (!subject.hasOwnProperty(attr)) {
+          continue;
+        }
+
+        if (this.isSet(options[attr])) {
+          continue;
+        }
+
+        options[attr] = subject[attr];
+      }
+    }
+
+    return options;
+  };
+
+  // Translate the given scope with the provided options.
+  I18n.translate = function(scope, options) {
+    options = this.prepareOptions(options);
+    var translation = this.lookup(scope, options);
+
+    if (translation === undefined || translation === null) {
+      return this.missingTranslation(scope);
+    }
+
+    if (typeof(translation) === "string") {
+      translation = this.interpolate(translation, options);
+    } else if (translation instanceof Object && this.isSet(options.count)) {
+      translation = this.pluralize(options.count, translation, options);
+    }
+
+    return translation;
+  };
+
+  // This function interpolates the all variables in the given message.
+  I18n.interpolate = function(message, options) {
+    options = this.prepareOptions(options);
+    var matches = message.match(this.placeholder)
+      , placeholder
+      , value
+      , name
+      , regex
+    ;
+
+    if (!matches) {
+      return message;
+    }
+
+    while (matches.length) {
+      placeholder = matches.shift();
+      name = placeholder.replace(this.placeholder, "$1");
+      value = options[name];
+
+      if (!this.isSet(options[name])) {
+        value = "[missing " + placeholder + " value]";
+      }
+
+      regex = new RegExp(placeholder.replace(/\{/gm, "\\{").replace(/\}/gm, "\\}"));
+      message = message.replace(regex, value);
+    }
+
+    return message;
+  };
+
+  // Pluralize the given scope using the `count` value.
+  // The pluralized translation may have other placeholders,
+  // which will be retrieved from `options`.
+  I18n.pluralize = function(count, scope, options) {
+    options = this.prepareOptions(options);
+    var translations, pluralizer, keys, key, message;
+
+    if (scope instanceof Object) {
+      translations = scope;
+    } else {
+      translations = this.lookup(scope, options);
+    }
+
+    if (!translations) {
+      return this.missingTranslation(scope);
+    }
+
+    pluralizer = this.pluralization.get(options.locale);
+    keys = pluralizer(Math.abs(count));
+
+    while (keys.length) {
+      key = keys.shift();
+
+      if (this.isSet(translations[key])) {
+        message = translations[key];
+        break;
+      }
+    }
+
+    options.count = String(count);
+    return this.interpolate(message, options);
+  };
+
+  // Return a missing translation message for the given parameters.
+  I18n.missingTranslation = function(scope) {
+    var message = '[missing "';
+
+    message += this.currentLocale() + ".";
+    message += slice.call(arguments).join(".");
+    message += '" translation]';
+
+    return message;
+  };
+
+  // Format number using localization rules.
+  // The options will be retrieved from the `number.format` scope.
+  // If this isn't present, then the following options will be used:
+  //
+  // - `precision`: `3`
+  // - `separator`: `"."`
+  // - `delimiter`: `","`
+  // - `strip_insignificant_zeros`: `false`
+  //
+  // You can also override these options by providing the `options` argument.
+  //
+  I18n.toNumber = function(number, options) {
+    options = this.prepareOptions(
+        options
+      , this.lookup("number.format")
+      , NUMBER_FORMAT
+    );
+
+    var negative = number < 0
+      , string = Math.abs(number).toFixed(options.precision).toString()
+      , parts = string.split(".")
+      , precision
+      , buffer = []
+      , formattedNumber
+    ;
+
+    number = parts[0];
+    precision = parts[1];
+
+    while (number.length > 0) {
+      buffer.unshift(number.substr(Math.max(0, number.length - 3), 3));
+      number = number.substr(0, number.length -3);
+    }
+
+    formattedNumber = buffer.join(options.delimiter);
+
+    if (options.strip_insignificant_zeros && precision) {
+      precision = precision.replace(/0+$/, "");
+    }
+
+    if (options.precision > 0 && precision) {
+      formattedNumber += options.separator + precision;
+    }
+
+    if (negative) {
+      formattedNumber = "-" + formattedNumber;
+    }
+
+    return formattedNumber;
+  };
+
+  // Format currency with localization rules.
+  // The options will be retrieved from the `number.currency.format` and
+  // `number.format` scopes, in that order.
+  //
+  // Any missing option will be retrieved from the `I18n.toNumber` defaults and
+  // the following options:
+  //
+  // - `unit`: `"$"`
+  // - `precision`: `2`
+  // - `format`: `"%u%n"`
+  // - `delimiter`: `","`
+  // - `separator`: `"."`
+  //
+  // You can also override these options by providing the `options` argument.
+  //
+  I18n.toCurrency = function(number, options) {
+    options = this.prepareOptions(
+        options
+      , this.lookup("number.currency.format")
+      , this.lookup("number.format")
+      , CURRENCY_FORMAT
+    );
+
+    number = this.toNumber(number, options);
+    number = options.format
+      .replace("%u", options.unit)
+      .replace("%n", number)
+    ;
+
+    return number;
+  };
+
+  // Localize several values.
+  // You can provide the following scopes: `currency`, `number`, or `percentage`.
+  // If you provide a scope that matches the `/^(date|time)/` regular expression
+  // then the `value` will be converted by using the `I18n.toTime` function.
+  //
+  // It will default to the value's `toString` function.
+  //
+  I18n.localize = function(scope, value) {
+    switch (scope) {
+      case "currency":
+        return this.toCurrency(value);
+      case "number":
+        scope = this.lookup("number.format");
+        return this.toNumber(value, scope);
+      case "percentage":
+        return this.toPercentage(value);
+      default:
+        if (scope.match(/^(date|time)/)) {
+          return this.toTime(scope, value);
+        } else {
+          return value.toString();
+        }
+    }
+  };
+
+  // Parse a given `date` string into a JavaScript Date object.
+  // This function is time zone aware.
+  //
+  // The following string formats are recognized:
+  //
+  //    yyyy-mm-dd
+  //    yyyy-mm-dd[ T]hh:mm::ss
+  //    yyyy-mm-dd[ T]hh:mm::ss
+  //    yyyy-mm-dd[ T]hh:mm::ssZ
+  //    yyyy-mm-dd[ T]hh:mm::ss+0000
+  //
+  I18n.parseDate = function(date) {
+    var matches, convertedDate;
+
+    // we have a date, so just return it.
+    if (typeof(date) == "object") {
+      return date;
+    };
+
+    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2}))?(Z|\+0000)?/);
+
+    if (matches) {
+      for (var i = 1; i <= 6; i++) {
+        matches[i] = parseInt(matches[i], 10) || 0;
+      }
+
+      // month starts on 0
+      matches[2] -= 1;
+
+      if (matches[7]) {
+        convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]));
+      } else {
+        convertedDate = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6]);
+      }
+    } else if (typeof(date) == "number") {
+      // UNIX timestamp
+      convertedDate = new Date();
+      convertedDate.setTime(date);
+    } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
+      // a valid javascript format with timezone info
+      convertedDate = new Date();
+      convertedDate.setTime(Date.parse(date))
+    } else {
+      // an arbitrary javascript string
+      convertedDate = new Date();
+      convertedDate.setTime(Date.parse(date));
+    }
+
+    return convertedDate;
+  };
+
+  // Formats time according to the directives in the given format string.
+  // The directives begins with a percent (%) character. Any text not listed as a
+  // directive will be passed through to the output string.
+  //
+  // The accepted formats are:
+  //
+  //     %a  - The abbreviated weekday name (Sun)
+  //     %A  - The full weekday name (Sunday)
+  //     %b  - The abbreviated month name (Jan)
+  //     %B  - The full month name (January)
+  //     %c  - The preferred local date and time representation
+  //     %d  - Day of the month (01..31)
+  //     %-d - Day of the month (1..31)
+  //     %H  - Hour of the day, 24-hour clock (00..23)
+  //     %-H - Hour of the day, 24-hour clock (0..23)
+  //     %I  - Hour of the day, 12-hour clock (01..12)
+  //     %-I - Hour of the day, 12-hour clock (1..12)
+  //     %m  - Month of the year (01..12)
+  //     %-m - Month of the year (1..12)
+  //     %M  - Minute of the hour (00..59)
+  //     %-M - Minute of the hour (0..59)
+  //     %p  - Meridian indicator (AM  or  PM)
+  //     %S  - Second of the minute (00..60)
+  //     %-S - Second of the minute (0..60)
+  //     %w  - Day of the week (Sunday is 0, 0..6)
+  //     %y  - Year without a century (00..99)
+  //     %-y - Year without a century (0..99)
+  //     %Y  - Year with century
+  //     %z  - Timezone offset (+0545)
+  //
+  I18n.strftime = function(date, format) {
+    var options = this.lookup("date");
+
+    if (!options) {
+      options = DAYS_AND_MONTHS;
+    }
+
+    if (!options.meridian) {
+      options.meridian = MERIDIAN;
+    }
+
+    var weekDay = date.getDay()
+      , day = date.getDate()
+      , year = date.getFullYear()
+      , month = date.getMonth() + 1
+      , hour = date.getHours()
+      , hour12 = hour
+      , meridian = hour > 11 ? 1 : 0
+      , secs = date.getSeconds()
+      , mins = date.getMinutes()
+      , offset = date.getTimezoneOffset()
+      , absOffsetHours = Math.floor(Math.abs(offset / 60))
+      , absOffsetMinutes = Math.abs(offset) - (absOffsetHours * 60)
+      , timezoneoffset = (offset > 0 ? "-" : "+") + (absOffsetHours.toString().length < 2 ? "0" + absOffsetHours : absOffsetHours) + (absOffsetMinutes.toString().length < 2 ? "0" + absOffsetMinutes : absOffsetMinutes)
+    ;
+
+    if (hour12 > 12) {
+      hour12 = hour12 - 12;
+    } else if (hour12 === 0) {
+      hour12 = 12;
+    }
+
+    format = format.replace("%a", options.abbr_day_names[weekDay]);
+    format = format.replace("%A", options.day_names[weekDay]);
+    format = format.replace("%b", options.abbr_month_names[month]);
+    format = format.replace("%B", options.month_names[month]);
+    format = format.replace("%d", padding(day));
+    format = format.replace("%e", day);
+    format = format.replace("%-d", day);
+    format = format.replace("%H", padding(hour));
+    format = format.replace("%-H", hour);
+    format = format.replace("%I", padding(hour12));
+    format = format.replace("%-I", hour12);
+    format = format.replace("%m", padding(month));
+    format = format.replace("%-m", month);
+    format = format.replace("%M", padding(mins));
+    format = format.replace("%-M", mins);
+    format = format.replace("%p", options.meridian[meridian]);
+    format = format.replace("%S", padding(secs));
+    format = format.replace("%-S", secs);
+    format = format.replace("%w", weekDay);
+    format = format.replace("%y", padding(year));
+    format = format.replace("%-y", padding(year).replace(/^0+/, ""));
+    format = format.replace("%Y", year);
+    format = format.replace("%z", timezoneoffset);
+
+    return format;
+  };
+
+  // Convert the given dateString into a formatted date.
+  I18n.toTime = function(scope, dateString) {
+    var date = this.parseDate(dateString)
+      , format = this.lookup(scope)
+    ;
+
+    if (date.toString().match(/invalid/i)) {
+      return date.toString();
+    }
+
+    if (!format) {
+      return date.toString();
+    }
+
+    return this.strftime(date, format);
+  };
+
+  // Convert a number into a formatted percentage value.
+  I18n.toPercentage = function(number, options) {
+    options = this.prepareOptions(
+        options
+      , this.lookup("number.percentage.format")
+      , this.lookup("number.format")
+      , PERCENTAGE_FORMAT
+    );
+
+    number = this.toNumber(number, options);
+    return number + "%";
+  };
+
+  // Convert a number into a readable size representation.
+  I18n.toHumanSize = function(number, options) {
+    var kb = 1024
+      , size = number
+      , iterations = 0
+      , unit
+      , precision
+    ;
+
+    while (size >= kb && iterations < 4) {
+      size = size / kb;
+      iterations += 1;
+    }
+
+    if (iterations === 0) {
+      unit = this.t("number.human.storage_units.units.byte", {count: size});
+      precision = 0;
+    } else {
+      unit = this.t("number.human.storage_units.units." + SIZE_UNITS[iterations]);
+      precision = (size - Math.floor(size) === 0) ? 0 : 1;
+    }
+
+    options = this.prepareOptions(
+        options
+      , {precision: precision, format: "%n%u", delimiter: ""}
+    );
+
+    number = this.toNumber(size, options);
+    number = options.format
+      .replace("%u", unit)
+      .replace("%n", number)
+    ;
+
+    return number;
+  };
+
+  // Set aliases, so we can save some typing.
+  I18n.t = I18n.translate;
+  I18n.l = I18n.localize;
+  I18n.p = I18n.pluralize;
+})(typeof(exports) === "undefined" ? (this.I18n = {}) : exports);
+// https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+        "use strict";
+        if (this == null) {
+            throw new TypeError();
+        }
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (len === 0) {
+            return -1;
+        }
+        var n = 0;
+        if (arguments.length > 1) {
+            n = Number(arguments[1]);
+            if (n != n) { // shortcut for verifying if it's NaN
+                n = 0;
+            } else if (n != 0 && n != Infinity && n != -Infinity) {
+                n = (n > 0 || -1) * Math.floor(Math.abs(n));
+            }
+        }
+        if (n >= len) {
+            return -1;
+        }
+        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+        for (; k < len; k++) {
+            if (k in t && t[k] === searchElement) {
+                return k;
+            }
+        }
+        return -1;
+    }
+}
+
+// Production steps of ECMA-262, Edition 5, 15.4.4.18
+// Reference: http://es5.github.com/#x15.4.4.18
+// https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach
+if ( !Array.prototype.forEach ) {
+
+  Array.prototype.forEach = function forEach( callback, thisArg ) {
+
+    var T, k;
+
+    if ( this == null ) {
+      throw new TypeError( "this is null or not defined" );
+    }
+
+    // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length >>> 0; // Hack to convert O.length to a UInt32
+
+    // 4. If IsCallable(callback) is false, throw a TypeError exception.
+    // See: http://es5.github.com/#x9.11
+    if ( {}.toString.call(callback) !== "[object Function]" ) {
+      throw new TypeError( callback + " is not a function" );
+    }
+
+    // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    if ( thisArg ) {
+      T = thisArg;
+    }
+
+    // 6. Let k be 0
+    k = 0;
+
+    // 7. Repeat, while k < len
+    while( k < len ) {
+
+      var kValue;
+
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      if ( Object.prototype.hasOwnProperty.call(O, k) ) {
+
+        // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
+        kValue = O[ k ];
+
+        // ii. Call the Call internal method of callback with T as the this value and
+        // argument list containing kValue, k, and O.
+        callback.call( T, kValue, k, O );
+      }
+      // d. Increase k by 1.
+      k++;
+    }
+    // 8. return undefined
+  };
+}
+;
+
+
+
+;I18n.translations = {"en":{"date":{"formats":{"default":"%Y-%m-%d","short":"%b %d","long":"%B %d, %Y"},"day_names":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"abbr_day_names":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"month_names":[null,"January","February","March","April","May","June","July","August","September","October","November","December"],"abbr_month_names":[null,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"order":["year","month","day"]},"time":{"formats":{"default":"%a, %d %b %Y %H:%M:%S %z","short":"%d %b %H:%M","long":"%B %d, %Y %H:%M"},"am":"am","pm":"pm"},"support":{"array":{"words_connector":", ","two_words_connector":" and ","last_word_connector":", and "}},"number":{"format":{"separator":".","delimiter":",","precision":3,"significant":false,"strip_insignificant_zeros":false},"currency":{"format":{"format":"%u%n","unit":"$","separator":".","delimiter":",","precision":2,"significant":false,"strip_insignificant_zeros":false}},"percentage":{"format":{"delimiter":"","format":"%n%"}},"precision":{"format":{"delimiter":""}},"human":{"format":{"delimiter":"","precision":3,"significant":true,"strip_insignificant_zeros":true},"storage_units":{"format":"%n %u","units":{"byte":{"one":"Byte","other":"Bytes"},"kb":"KB","mb":"MB","gb":"GB","tb":"TB"}},"decimal_units":{"format":"%n %u","units":{"unit":"","thousand":"Thousand","million":"Million","billion":"Billion","trillion":"Trillion","quadrillion":"Quadrillion"}}}},"errors":{"format":"%{attribute} %{message}","messages":{"inclusion":"is not included in the list","exclusion":"is reserved","invalid":"is invalid","confirmation":"doesn't match %{attribute}","accepted":"must be accepted","empty":"can't be empty","blank":"can't be blank","present":"must be blank","too_long":"is too long (maximum is %{count} characters)","too_short":"is too short (minimum is %{count} characters)","wrong_length":"is the wrong length (should be %{count} characters)","not_a_number":"is not a number","not_an_integer":"must be an integer","greater_than":"must be greater than %{count}","greater_than_or_equal_to":"must be greater than or equal to %{count}","equal_to":"must be equal to %{count}","less_than":"must be less than %{count}","less_than_or_equal_to":"must be less than or equal to %{count}","other_than":"must be other than %{count}","odd":"must be odd","even":"must be even","taken":"has already been taken","already_confirmed":"was already confirmed, please try signing in","confirmation_period_expired":"needs to be confirmed within %{period}, please request a new one","expired":"has expired, please request a new one","not_found":"not found","not_locked":"was not locked","not_saved":{"one":"1 error prohibited this %{resource} from being saved:","other":"%{count} errors prohibited this %{resource} from being saved:"}}},"activerecord":{"errors":{"messages":{"record_invalid":"Validation failed: %{errors}","restrict_dependent_destroy":{"one":"Cannot delete record because a dependent %{record} exists","many":"Cannot delete record because dependent %{record} exist"}}}},"datetime":{"distance_in_words":{"half_a_minute":"half a minute","less_than_x_seconds":{"one":"less than 1 second","other":"less than %{count} seconds"},"x_seconds":{"one":"1 second","other":"%{count} seconds"},"less_than_x_minutes":{"one":"less than a minute","other":"less than %{count} minutes"},"x_minutes":{"one":"1 minute","other":"%{count} minutes"},"about_x_hours":{"one":"about 1 hour","other":"about %{count} hours"},"x_days":{"one":"1 day","other":"%{count} days"},"about_x_months":{"one":"about 1 month","other":"about %{count} months"},"x_months":{"one":"1 month","other":"%{count} months"},"about_x_years":{"one":"about 1 year","other":"about %{count} years"},"over_x_years":{"one":"over 1 year","other":"over %{count} years"},"almost_x_years":{"one":"almost 1 year","other":"almost %{count} years"}},"prompts":{"year":"Year","month":"Month","day":"Day","hour":"Hour","minute":"Minute","second":"Seconds"}},"helpers":{"select":{"prompt":"Please select"},"submit":{"create":"Create %{model}","update":"Update %{model}","submit":"Save %{model}"}},"devise":{"confirmations":{"confirmed":"Your account was successfully confirmed.","send_instructions":"You will receive an email with instructions about how to confirm your account in a few minutes.","send_paranoid_instructions":"If your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes."},"failure":{"already_authenticated":"You are already signed in.","inactive":"Your account is not activated yet.","invalid":"Invalid email or password.","locked":"Your account is locked.","last_attempt":"You have one more attempt before your account will be locked.","not_found_in_database":"Invalid email or password.","timeout":"Your session expired. Please sign in again to continue.","unauthenticated":"You need to sign in or sign up before continuing.","unconfirmed":"You have to confirm your account before continuing."},"mailer":{"confirmation_instructions":{"subject":"Confirmation instructions"},"reset_password_instructions":{"subject":"Reset password instructions"},"unlock_instructions":{"subject":"Unlock Instructions"}},"omniauth_callbacks":{"failure":"Could not authenticate you from %{kind} because \"%{reason}\".","success":"Successfully authenticated from %{kind} account."},"passwords":{"no_token":"You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.","send_instructions":"You will receive an email with instructions about how to reset your password in a few minutes.","send_paranoid_instructions":"If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.","updated":"Your password was changed successfully. You are now signed in.","updated_not_active":"Your password was changed successfully."},"registrations":{"destroyed":"Bye! Your account was successfully cancelled. We hope to see you again soon.","signed_up":"Welcome! You have signed up successfully.","signed_up_but_inactive":"You have signed up successfully. However, we could not sign you in because your account is not yet activated.","signed_up_but_locked":"You have signed up successfully. However, we could not sign you in because your account is locked.","signed_up_but_unconfirmed":"A message with a confirmation link has been sent to your email address. Please open the link to activate your account.","update_needs_confirmation":"You updated your account successfully, but we need to verify your new email address. Please check your email and click on the confirm link to finalize confirming your new email address.","updated":"You updated your account successfully."},"sessions":{"signed_in":"Signed in successfully.","signed_out":"Signed out successfully."},"unlocks":{"send_instructions":"You will receive an email with instructions about how to unlock your account in a few minutes.","send_paranoid_instructions":"If your account exists, you will receive an email with instructions about how to unlock it in a few minutes.","unlocked":"Your account has been unlocked successfully. Please sign in to continue."}},"hello":"Hello world","js":{"camera":{"denied_header":"Access to camera denied","denied_body":"It looks like you have denied medberry access to your camera. If you denied access to camera accidentaly, try reloading the page."},"nav":{"queue":"Queue","dashboard":"Dashboard","history":"History","doctors":"Talk to a doctor"},"patient_dashboard":{"wait_header":"Please wait for your consultation with Dr. {{name}} to begin","cause_p":"The stated cause for the consultation was: {{cause}}","queue_first":"You are first in the queue. Dr. {{name}} will get to you as soon as they finish their current consultation","queue_other":"There are \u003Cb\u003E{{people}}\u003C/b\u003E people in the queue before you. The estimated waiting time is \u003Cb\u003E{{waiting}}\u003C/b\u003E minutes.","updating_estimates":"Updating waiting estimates...","canceled_header":"Consultation with Dr. {{name}} canceled","canceled_p":"You have requested a consultation with Dr. {{name}} on {{time}} to talk about '{{cause}}'.","canceled_doctor_offline":"However, the doctor has gone offline, so your request was canceled.","canceled_patient_offline":"However, you went offline, and your request was canceled.","favorite_doctors":"Favorite doctors"},"patient_history":{"date":"Date","doctor":"Doctor","status":"Status","consulted":"Consulted","canceled":"Request canceled","nothing":"Nothing to show."},"consultation":{"remaining":"remaining time:","top_p":"Live consultation with","end_button":"End","video_button":"Video","over_header":"The consultation is over","extend_button":"Extend consultation","queue_button":"Go to queue","next_button":"Proceed to the next patient","dashboard_button":"Go to dashboard"},"doctor_card":{"call":"Call now"},"doctors":{"header":"Doctors","sel_all":"All","sel_gp":"family doctors","sel_ph":"pharmacists","check_online":"only show available doctors","nothing":"There are no doctors matching the specified criteria."},"messages":{"sending":"Sending...","nothing":"No messages.","send_button":"Send"},"new_request":{"header":"Request a consultation","provider_label":"Provider","cause_label":"Cause","place_button":"Place a request","place_button_progress":"Placing a request...","error_p":"You already have an active request or are in the middle of a consultation."},"queue":{"header":"Queue","next_button":"Talk to next patient ({{name}})","patient":"Patient","cause":"Cause","placed_at":"Placed at","nothing":"The queue is empty."}},"simple_form":{"yes":"Yes","no":"No","required":{"text":"required","mark":"*"},"error_notification":{"default_message":"Please review the problems below:"}}}};
 //! moment.js
 //! version : 2.5.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -71551,6 +72333,8 @@ define("app/utils",
 
 
 
+
+
 TB.setLogLevel(1);
 
 Ember.Inflector.inflector.irregular('meta', 'meta');
@@ -71679,6 +72463,7 @@ define("app/adapters/application",
       createdAt: DS.attr('date'),
       expiresAt: DS.attr('date'),
       status: DS.attr('string'),
+      mode: DS.attr('string'),
       finishedAt: DS.attr('date'),
       finishedBy: DS.attr('string'),
       extension: DS.attr('boolean'),
@@ -71686,6 +72471,8 @@ define("app/adapters/application",
       isInProgress: Ember.computed.equal('status', 'in_progress'),
       isOver: Ember.computed.equal('status', 'over'),
       isFinished: Ember.computed.equal('status', 'finished'),
+
+      isModeVideo: Ember.computed.equal('mode', 'video'),
 
       finish: function() {
         this.set('status', 'finished');
@@ -71858,7 +72645,7 @@ define("app/adapters/application",
       isNotTimeOver: Ember.computed.not('isTimeOver'),
       isActive: Ember.computed.and('isInProgress', 'isNotTimeOver'),
 
-      showVideo: true,
+      showVideo: Ember.computed.alias('isModeVideo'),
 
       runTime: function() {
         return (new Date) - this.get('createdAt');
@@ -72067,6 +72854,16 @@ define("app/adapters/application",
     __exports__["default"] = DoctorCardView;
   });Ember.Handlebars.helper('formatTime', function(date) {
   return moment(date).format('h:mm:ss');
+});
+Ember.Handlebars.registerHelper('t', function(property, options) {
+  var self = this;
+  var params = options.hash;
+
+  Object.keys(params).forEach(function (key) {
+    params[key] = Em.Handlebars.get(self, params[key], options);
+  });
+
+  return I18n.t('js.' + property, params);
 });
 Ember.Handlebars.helper('time', function(diff) {
   return moment(diff).format('mm:ss');
@@ -72372,7 +73169,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 }); });define('app/templates/components/tokbox-video', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, self=this;
+  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -72382,8 +73179,13 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  
-  data.buffer.push("\n  <h3>Access to camera denied</h3>\n\n  <p>\n    It looks like you have denied medberry access to your camera.\n    If you denied access to camera accidentaly, try reloading the page.\n  </p>\n");
+  var buffer = '', helper, options;
+  data.buffer.push("\n  <h3>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "camera.denied_header", options) : helperMissing.call(depth0, "t", "camera.denied_header", options))));
+  data.buffer.push("</h3>\n\n  <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "camera.denied_body", options) : helperMissing.call(depth0, "t", "camera.denied_body", options))));
+  data.buffer.push("</p>\n");
+  return buffer;
   }
 
   stack1 = helpers.unless.call(depth0, "cameraAccessError", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
@@ -72401,14 +73203,28 @@ function program1(depth0,data) {
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n  <div class=\"alert alert-info\">\n    <div class=\"row\">\n      <div class=\"col-lg-3\">\n        <b>");
   data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "runTime", options) : helperMissing.call(depth0, "time", "runTime", options))));
-  data.buffer.push("</b> (remaining time: ");
+  data.buffer.push("</b>\n        (");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.remaining", options) : helperMissing.call(depth0, "t", "consultation.remaining", options))));
+  data.buffer.push(" ");
   data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "remainingTime", options) : helperMissing.call(depth0, "time", "remainingTime", options))));
-  data.buffer.push(")\n      </div>\n\n      <div class=\"col-lg-6 text-center\">\n        Live consultation with\n        ");
+  data.buffer.push(")\n      </div>\n\n      <div class=\"col-lg-6 text-center\">\n        ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.top_p", options) : helperMissing.call(depth0, "t", "consultation.top_p", options))));
+  data.buffer.push("\n\n        ");
   stack1 = helpers['if'].call(depth0, "currentUser.isPatient", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      </div>\n\n      <div class=\"col-lg-3 text-right\">\n        <a href=\"#\" class=\"btn btn-default btn-xs\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "finish", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
-  data.buffer.push(">End</a>\n      </div>\n    </div>\n  </div>\n\n  ");
+  data.buffer.push(">\n          ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.end_button", options) : helperMissing.call(depth0, "t", "consultation.end_button", options))));
+  data.buffer.push("\n        </a>\n      </div>\n    </div>\n  </div>\n\n  <a href=\"#\" ");
+  data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
+    'class': (":btn :btn-default isModeVideo:active")
+  },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
+  data.buffer.push(" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "toggleVideoMode", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(">\n    ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.video_button", options) : helperMissing.call(depth0, "t", "consultation.video_button", options))));
+  data.buffer.push("\n  </a>\n\n  ");
   stack1 = helpers['if'].call(depth0, "showVideo", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n  ");
@@ -72450,8 +73266,10 @@ function program6(depth0,data) {
 
 function program8(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n  <h4>The consultation is over</h4>\n\n  ");
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n  <h4>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.over_header", options) : helperMissing.call(depth0, "t", "consultation.over_header", options))));
+  data.buffer.push("</h4>\n\n  ");
   stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(17, program17, data),fn:self.program(9, program9, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
@@ -72478,14 +73296,16 @@ function program9(depth0,data) {
   }
 function program10(depth0,data) {
   
-  var buffer = '', stack1;
+  var buffer = '', stack1, helper, options;
   data.buffer.push("\n      <a href=\"#\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "requestExtension", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
   data.buffer.push(" ");
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'class': (":btn :btn-lg :btn-success :btn-block canExtend::disabled")
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n        Extend consultation\n\n        ");
+  data.buffer.push(">\n        ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.extend_button", options) : helperMissing.call(depth0, "t", "consultation.extend_button", options))));
+  data.buffer.push("\n\n        ");
   stack1 = helpers['if'].call(depth0, "canExtend", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      </a>\n    ");
@@ -72502,14 +73322,14 @@ function program11(depth0,data) {
 
 function program13(depth0,data) {
   
-  
-  data.buffer.push("Go to queue");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.queue_button", options) : helperMissing.call(depth0, "t", "consultation.queue_button", options))));
   }
 
 function program15(depth0,data) {
   
-  
-  data.buffer.push("Proceed to next patient");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.next_button", options) : helperMissing.call(depth0, "t", "consultation.next_button", options))));
   }
 
 function program17(depth0,data) {
@@ -72525,8 +73345,8 @@ function program17(depth0,data) {
   }
 function program18(depth0,data) {
   
-  
-  data.buffer.push("Go to dashboard");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.dashboard_button", options) : helperMissing.call(depth0, "t", "consultation.dashboard_button", options))));
   }
 
   stack1 = helpers['if'].call(depth0, "isActive", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(8, program8, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
@@ -72572,30 +73392,32 @@ function program3(depth0,data) {
   },hashTypes:{'class': "STRING"},hashContexts:{'class': depth0},contexts:[],types:[],data:data})));
   data.buffer.push(" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "showRequestModal", "", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["STRING","ID"],data:data})));
-  data.buffer.push(">Call now</a>\n      </div>\n    </div>\n  </div>\n</div>\n");
+  data.buffer.push(">\n          ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctor_card.call", options) : helperMissing.call(depth0, "t", "doctor_card.call", options))));
+  data.buffer.push("\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n");
   return buffer;
   
 }); });define('app/templates/doctors', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  
-  data.buffer.push("All");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.sel_all", options) : helperMissing.call(depth0, "t", "doctors.sel_all", options))));
   }
 
 function program3(depth0,data) {
   
-  
-  data.buffer.push("family doctors");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.sel_gp", options) : helperMissing.call(depth0, "t", "doctors.sel_gp", options))));
   }
 
 function program5(depth0,data) {
   
-  
-  data.buffer.push("pharmacists");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.sel_ph", options) : helperMissing.call(depth0, "t", "doctors.sel_ph", options))));
   }
 
 function program7(depth0,data) {
@@ -72612,11 +73434,16 @@ function program7(depth0,data) {
 
 function program9(depth0,data) {
   
-  
-  data.buffer.push("\n  <p>There are no doctors matching the specified criteria.</p>\n");
+  var buffer = '', helper, options;
+  data.buffer.push("\n  <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.nothing", options) : helperMissing.call(depth0, "t", "doctors.nothing", options))));
+  data.buffer.push("</p>\n");
+  return buffer;
   }
 
-  data.buffer.push("<h2>\n  Doctors\n\n  <small class=\"selector\">\n    ");
+  data.buffer.push("<h2>\n  ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.header", options) : helperMissing.call(depth0, "t", "doctors.header", options))));
+  data.buffer.push("\n\n  <small class=\"selector\">\n    ");
   stack1 = (helper = helpers['query-params'] || (depth0 && depth0['query-params']),options={hash:{
     'practice': ("all")
   },hashTypes:{'practice': "STRING"},hashContexts:{'practice': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "query-params", options));
@@ -72639,7 +73466,9 @@ function program9(depth0,data) {
     'type': ("checkbox"),
     'checked': ("online")
   },hashTypes:{'type': "STRING",'checked': "ID"},hashContexts:{'type': depth0,'checked': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "input", options))));
-  data.buffer.push("\n      only show available doctors\n    </label>\n  </small>\n</h2>\n\n");
+  data.buffer.push("\n      ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors.check_online", options) : helperMissing.call(depth0, "t", "doctors.check_online", options))));
+  data.buffer.push("\n    </label>\n  </small>\n</h2>\n\n");
   stack1 = helpers['if'].call(depth0, "filteredContent", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
@@ -72676,18 +73505,23 @@ function program2(depth0,data) {
 
 function program4(depth0,data) {
   
-  var buffer = '', stack1;
+  var buffer = '', stack1, helper, options;
   data.buffer.push("\n      <p>\n        ");
   stack1 = helpers._triageMustache.call(depth0, "text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n        <span class=\"pull-right\"><i>Sending...</i></span>\n      </p>\n    ");
+  data.buffer.push("\n        <span class=\"pull-right\"><i>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "messages.sending", options) : helperMissing.call(depth0, "t", "messages.sending", options))));
+  data.buffer.push("</i></span>\n      </p>\n    ");
   return buffer;
   }
 
 function program6(depth0,data) {
   
-  
-  data.buffer.push("\n    <p>No messages.</p>\n  ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n    <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "messages.nothing", options) : helperMissing.call(depth0, "t", "messages.nothing", options))));
+  data.buffer.push("</p>\n  ");
+  return buffer;
   }
 
   data.buffer.push("<div class=\"messages-area\">\n  ");
@@ -72706,13 +73540,15 @@ function program6(depth0,data) {
   data.buffer.push(escapeExpression(helpers['bind-attr'].call(depth0, {hash:{
     'disabled': ("cannotSendMessage")
   },hashTypes:{'disabled': "STRING"},hashContexts:{'disabled': depth0},contexts:[],types:[],data:data})));
-  data.buffer.push(">\n      Send\n    </button>\n  </div>\n</form>\n");
+  data.buffer.push(">\n      ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "messages.send_button", options) : helperMissing.call(depth0, "t", "messages.send_button", options))));
+  data.buffer.push("\n    </button>\n  </div>\n</form>\n");
   return buffer;
   
 }); });define('app/templates/nav', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, self=this, helperMissing=helpers.helperMissing;
+  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -72734,8 +73570,10 @@ function program2(depth0,data) {
   }
 function program3(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n      Queue\n      ");
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n      ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.queue", options) : helperMissing.call(depth0, "t", "nav.queue", options))));
+  data.buffer.push("\n      ");
   stack1 = helpers['if'].call(depth0, "queueBadge", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
@@ -72781,8 +73619,8 @@ function program7(depth0,data) {
   }
 function program8(depth0,data) {
   
-  
-  data.buffer.push("Dashboard");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.dashboard", options) : helperMissing.call(depth0, "t", "nav.dashboard", options))));
   }
 
 function program10(depth0,data) {
@@ -72794,8 +73632,8 @@ function program10(depth0,data) {
   }
 function program11(depth0,data) {
   
-  
-  data.buffer.push("History");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.history", options) : helperMissing.call(depth0, "t", "nav.history", options))));
   }
 
 function program13(depth0,data) {
@@ -72807,8 +73645,8 @@ function program13(depth0,data) {
   }
 function program14(depth0,data) {
   
-  
-  data.buffer.push("Talk to a doctor");
+  var helper, options;
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.doctors", options) : helperMissing.call(depth0, "t", "nav.doctors", options))));
   }
 
   data.buffer.push("<ul class=\"nav nav-pills\">\n  ");
@@ -72820,18 +73658,24 @@ function program14(depth0,data) {
 }); });define('app/templates/new_consultation_request', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">Request a consultation</h4>\n  </div>\n\n  <form class=\"form-horizontal\">\n    <div class=\"modal-body\">\n      ");
+  data.buffer.push("\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\">");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.header", options) : helperMissing.call(depth0, "t", "new_request.header", options))));
+  data.buffer.push("</h4>\n  </div>\n\n  <form class=\"form-horizontal\">\n    <div class=\"modal-body\">\n      ");
   stack1 = helpers['if'].call(depth0, "hasError", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Provider</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
+  data.buffer.push("\n\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.provider_label", options) : helperMissing.call(depth0, "t", "new_request.provider_label", options))));
+  data.buffer.push("</label>\n        <div class=\"col-sm-10\">\n          <p class=\"form-control-static\">Dr. ");
   stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</p>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">Cause</label>\n        <div class=\"col-sm-10\">\n          ");
+  data.buffer.push("</p>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-sm-2 control-label\">");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.cause_label", options) : helperMissing.call(depth0, "t", "new_request.cause_label", options))));
+  data.buffer.push("</label>\n        <div class=\"col-sm-10\">\n          ");
   data.buffer.push(escapeExpression((helper = helpers.input || (depth0 && depth0.input),options={hash:{
     'value': ("cause"),
     'type': ("text"),
@@ -72852,20 +73696,29 @@ function program1(depth0,data) {
   }
 function program2(depth0,data) {
   
-  
-  data.buffer.push("\n        <div class=\"alert alert-danger\">\n          <p>You already have an active request or are in the middle of consultation.</p>\n        </div>\n      ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n        <div class=\"alert alert-danger\">\n          <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.error_p", options) : helperMissing.call(depth0, "t", "new_request.error_p", options))));
+  data.buffer.push("</p>\n        </div>\n      ");
+  return buffer;
   }
 
 function program4(depth0,data) {
   
-  
-  data.buffer.push("Placing a request...");
+  var buffer = '', helper, options;
+  data.buffer.push("\n          ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.place_button_progress", options) : helperMissing.call(depth0, "t", "new_request.place_button_progress", options))));
+  data.buffer.push("\n        ");
+  return buffer;
   }
 
 function program6(depth0,data) {
   
-  
-  data.buffer.push("Place a request");
+  var buffer = '', helper, options;
+  data.buffer.push("\n          ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "new_request.place_button", options) : helperMissing.call(depth0, "t", "new_request.place_button", options))));
+  data.buffer.push("\n        ");
+  return buffer;
   }
 
   stack1 = (helper = helpers['modal-dialog'] || (depth0 && depth0['modal-dialog']),options={hash:{
@@ -72878,7 +73731,7 @@ function program6(depth0,data) {
 }); });define('app/templates/patient/dashboard', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, self=this, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -72903,13 +73756,15 @@ function program2(depth0,data) {
   }
 function program3(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">Please wait for your consultation with Dr. ");
-  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" to begin</h4>\n\n          <p>The stated cause for the consultation was: ");
-  stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'name': ("doctor.fullName")
+  },hashTypes:{'name': "ID"},hashContexts:{'name': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.wait_header", options) : helperMissing.call(depth0, "t", "patient_dashboard.wait_header", options))));
+  data.buffer.push("</h4>\n\n          <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'cause': ("cause")
+  },hashTypes:{'cause': "ID"},hashContexts:{'cause': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.cause_p", options) : helperMissing.call(depth0, "t", "patient_dashboard.cause_p", options))));
   data.buffer.push("</p>\n\n          ");
   stack1 = helpers['if'].call(depth0, "queueMeta.updatedAt", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(9, program9, data),fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
@@ -72927,52 +73782,50 @@ function program4(depth0,data) {
   }
 function program5(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n                You are first in the queue. Dr. ");
-  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" will get\n                to you as soon as they finish their current consultation.\n                The waiting time should not be more than\n                ");
-  stack1 = helpers._triageMustache.call(depth0, "queueMeta.waiting", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" minutes.\n              ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n                ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'name': ("doctor.fullName")
+  },hashTypes:{'name': "ID"},hashContexts:{'name': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.queue_first", options) : helperMissing.call(depth0, "t", "patient_dashboard.queue_first", options))));
+  data.buffer.push("\n              ");
   return buffer;
   }
 
 function program7(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n                There are <b>");
-  stack1 = helpers._triageMustache.call(depth0, "queueMeta.position", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</b> people in the queue before\n                you. The estimated waiting time is\n                <b>");
-  stack1 = helpers._triageMustache.call(depth0, "queueMeta.waiting", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</b> minutes.\n              ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n                ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'people': ("queueMeta.position"),
+    'waiting': ("queueMeta.waiting")
+  },hashTypes:{'people': "ID",'waiting': "ID"},hashContexts:{'people': depth0,'waiting': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.queue_other", options) : helperMissing.call(depth0, "t", "patient_dashboard.queue_other", options))));
+  data.buffer.push("\n              ");
   return buffer;
   }
 
 function program9(depth0,data) {
   
-  
-  data.buffer.push("\n            <p><i>Updating waiting estimates...</i></p>\n          ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n            <p><i>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.updating_estimates", options) : helperMissing.call(depth0, "t", "patient_dashboard.updating_estimates", options))));
+  data.buffer.push("</i></p>\n          ");
+  return buffer;
   }
 
 function program11(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">Consultation with Dr. ");
-  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" canceled</h4>\n\n          <p>\n            You have requested a consultation with Dr.\n            ");
-  stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" on ");
-  stack1 = helpers._triageMustache.call(depth0, "createdAt", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(" to talk about\n            \"");
-  stack1 = helpers._triageMustache.call(depth0, "cause", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\".\n\n            ");
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n        <div class=\"media-body\">\n          <h4 class=\"media-heading\">");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'name': ("doctor.fullName")
+  },hashTypes:{'name': "ID"},hashContexts:{'name': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.canceled_header", options) : helperMissing.call(depth0, "t", "patient_dashboard.canceled_header", options))));
+  data.buffer.push("</h4>\n\n          <p>\n            ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'name': ("doctor.fullName"),
+    'time': ("createdAt"),
+    'cause': ("cause")
+  },hashTypes:{'name': "ID",'time': "ID",'cause': "ID"},hashContexts:{'name': depth0,'time': depth0,'cause': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.canceled_p", options) : helperMissing.call(depth0, "t", "patient_dashboard.canceled_p", options))));
+  data.buffer.push("\n\n            ");
   stack1 = helpers['if'].call(depth0, "canceledDoctorOffline", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n          </p>\n        </div>\n      ");
@@ -72980,20 +73833,28 @@ function program11(depth0,data) {
   }
 function program12(depth0,data) {
   
-  
-  data.buffer.push("\n              However, the doctor has gone offline, so your request was\n              canceled.\n            ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n              ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.canceled_doctor_offline", options) : helperMissing.call(depth0, "t", "patient_dashboard.canceled_doctor_offline", options))));
+  data.buffer.push("\n            ");
+  return buffer;
   }
 
 function program14(depth0,data) {
   
-  
-  data.buffer.push("\n              However, you went offline, and your request was canceled.\n            ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n              ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.canceled_patient_offline", options) : helperMissing.call(depth0, "t", "patient_dashboard.canceled_patient_offline", options))));
+  data.buffer.push("\n            ");
+  return buffer;
   }
 
 function program16(depth0,data) {
   
-  var buffer = '';
-  data.buffer.push("\n  <h4>Favorite doctors</h4>\n\n  <div class=\"row\">\n    ");
+  var buffer = '', helper, options;
+  data.buffer.push("\n  <h4>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_dashboard.favorite_doctors", options) : helperMissing.call(depth0, "t", "patient_dashboard.favorite_doctors", options))));
+  data.buffer.push("</h4>\n\n  <div class=\"row\">\n    ");
   data.buffer.push(escapeExpression(helpers.each.call(depth0, "favoriteDoctors", {hash:{
     'itemController': ("doctor_card"),
     'itemView': ("doctor_card")
@@ -73013,12 +73874,18 @@ function program16(depth0,data) {
 }); });define('app/templates/patient/history', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, self=this;
+  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1;
-  data.buffer.push("\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>Date</th>\n        <th>Doctor</th>\n        <th>Status</th>\n    </thead>\n\n    <tbody>\n      ");
+  var buffer = '', stack1, helper, options;
+  data.buffer.push("\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.date", options) : helperMissing.call(depth0, "t", "patient_history.date", options))));
+  data.buffer.push("</th>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.doctor", options) : helperMissing.call(depth0, "t", "patient_history.doctor", options))));
+  data.buffer.push("</th>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.status", options) : helperMissing.call(depth0, "t", "patient_history.status", options))));
+  data.buffer.push("</th>\n    </thead>\n\n    <tbody>\n      ");
   stack1 = helpers.each.call(depth0, "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    </tbody>\n  </table>\n");
@@ -73033,28 +73900,37 @@ function program2(depth0,data) {
   data.buffer.push("</td>\n          <td>");
   stack1 = helpers._triageMustache.call(depth0, "doctor.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</td>\n          <td>");
+  data.buffer.push("</td>\n          <td>\n            ");
   stack1 = helpers['if'].call(depth0, "isAccepted", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(5, program5, data),fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("</td>\n        </tr>\n      ");
+  data.buffer.push("\n          </td>\n        </tr>\n      ");
   return buffer;
   }
 function program3(depth0,data) {
   
-  
-  data.buffer.push("Consulted");
+  var buffer = '', helper, options;
+  data.buffer.push("\n              ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.consulted", options) : helperMissing.call(depth0, "t", "patient_history.consulted", options))));
+  data.buffer.push("\n            ");
+  return buffer;
   }
 
 function program5(depth0,data) {
   
-  
-  data.buffer.push("Request canceled");
+  var buffer = '', helper, options;
+  data.buffer.push("\n              ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.canceled", options) : helperMissing.call(depth0, "t", "patient_history.canceled", options))));
+  data.buffer.push("\n            ");
+  return buffer;
   }
 
 function program7(depth0,data) {
   
-  
-  data.buffer.push("\n  <p>Nothing to show.</p>\n");
+  var buffer = '', helper, options;
+  data.buffer.push("\n  <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient_history.nothing", options) : helperMissing.call(depth0, "t", "patient_history.nothing", options))));
+  data.buffer.push("</p>\n");
+  return buffer;
   }
 
   stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(7, program7, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
@@ -73065,17 +73941,24 @@ function program7(depth0,data) {
 }); });define('app/templates/queue', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = '', stack1;
+  var buffer = '', stack1, helper, options;
   data.buffer.push("\n  <a href=\"#\" class=\"btn btn-success\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "acceptNext", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
-  data.buffer.push(">\n    Talk to next patient (");
-  stack1 = helpers._triageMustache.call(depth0, "nextRequest.patient.fullName", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push(")\n  </a>\n\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>Patient</th>\n        <th>Cause</th>\n        <th>Placed at</th>\n      </tr>\n    </thead>\n\n    <tbody>\n      ");
+  data.buffer.push(">\n    ");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{
+    'name': ("nextRequest.patient.fullName")
+  },hashTypes:{'name': "ID"},hashContexts:{'name': depth0},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.next_button", options) : helperMissing.call(depth0, "t", "queue.next_button", options))));
+  data.buffer.push("\n  </a>\n\n  <table class=\"table table-striped\">\n    <thead>\n      <tr>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.patient", options) : helperMissing.call(depth0, "t", "queue.patient", options))));
+  data.buffer.push("</th>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.cause", options) : helperMissing.call(depth0, "t", "queue.cause", options))));
+  data.buffer.push("</th>\n        <th>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.placed_at", options) : helperMissing.call(depth0, "t", "queue.placed_at", options))));
+  data.buffer.push("</th>\n      </tr>\n    </thead>\n\n    <tbody>\n      ");
   stack1 = helpers.each.call(depth0, "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    </tbody>\n  </table>\n");
@@ -73103,11 +73986,16 @@ function program2(depth0,data) {
 
 function program4(depth0,data) {
   
-  
-  data.buffer.push("\n  <p>The queue is empty.</p>\n");
+  var buffer = '', helper, options;
+  data.buffer.push("\n  <p>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.nothing", options) : helperMissing.call(depth0, "t", "queue.nothing", options))));
+  data.buffer.push("</p>\n");
+  return buffer;
   }
 
-  data.buffer.push("<h4>Queue</h4>\n\n");
+  data.buffer.push("<h4>");
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue.header", options) : helperMissing.call(depth0, "t", "queue.header", options))));
+  data.buffer.push("</h4>\n\n");
   stack1 = helpers['if'].call(depth0, "content", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
@@ -73147,6 +74035,12 @@ function program4(depth0,data) {
       actions: {
         finish: function() {
           this.currentModel.finish();
+        },
+
+        toggleVideoMode: function() {
+          var current = this.currentModel.get('mode');
+          var next = current == 'video' ? 'text' : 'video';
+          this.currentModel.set('mode', next).save();
         },
 
         requestExtension: function() {

@@ -4,6 +4,7 @@ class Consultation < ActiveRecord::Base
   include Enum
 
   STATUSES = { in_progress: 0, over: 1, finished: 2 }
+  MODES = { text: 0, audio: 1, video: 2 }
   FINISHING_CAUSES = { manual: 0, out_of_time: 1, doctor_offline: 2, patient_offline: 3 }
   FINISHERS = { system: 0, patient: 1, doctor: 2 }
 
@@ -16,6 +17,7 @@ class Consultation < ActiveRecord::Base
   has_many :messages
 
   enum :status, STATUSES
+  enum :mode, MODES
   enum :finishing_cause, FINISHING_CAUSES
   enum :finished_by, FINISHERS
 
