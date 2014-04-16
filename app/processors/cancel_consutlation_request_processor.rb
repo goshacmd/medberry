@@ -20,7 +20,7 @@ class CancelConsultationRequestProcessor
     cause = cancelation_cause(request)
     return unless cause
 
-    request.update(status: :canceled, cancelation_cause: cause, canceled_at: Time.now)
+    ConsultationRequestStatusChanger.new(request).cancel(cause)
   end
 
   def cancelation_cause(request)

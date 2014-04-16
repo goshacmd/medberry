@@ -17,7 +17,8 @@ class ConsultationDispatcher
     consultation = Consultation.create_from_request(request)
     consultation.update(tokbox_session: open_tok.create_session.session_id)
 
-    request.update(status: :accepted)
+    ConsultationRequestStatusChanger.new(request).accept
+
     SessionCreator.new(consultation).perform
   end
 end
