@@ -1,4 +1,5 @@
 var ApplicationController = Ember.Controller.extend({
+  showNav: true,
   pusherError: false
 });
 
