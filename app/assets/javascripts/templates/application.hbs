@@ -6,7 +6,9 @@
     </div>
   {{/if}}
 
-  {{render 'nav'}}
+  {{#if showNav}}
+    {{render 'nav'}}
+  {{/if}}
 
   {{outlet}}
 </div>

@@ -1,4 +1,12 @@
 var ConsultationRoute = Ember.Route.extend({
+  activate: function() {
+    this.send('hideNav');
+  },
+
+  deactivate: function() {
+    this.send('showNav');
+  },
+
   actions: {
     finish: function() {
       this.currentModel.finish();

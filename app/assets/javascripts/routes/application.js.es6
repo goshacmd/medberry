@@ -9,6 +9,14 @@ var ApplicationRoute = Ember.Route.extend({
       this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
     },
 
+    hideNav: function() {
+      this.controller.set('showNav', false);
+    },
+
+    showNav: function() {
+      this.controller.set('showNav', true);
+    },
+
     willTransition: function() {
       this.send('closeModal');
     },
