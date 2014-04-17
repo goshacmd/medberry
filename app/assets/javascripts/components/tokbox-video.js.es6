@@ -20,7 +20,11 @@ var listenTo = function(object, self, events) {
 
 var getSize = function(el$) {
   return { width: el$.width(), height: el$.height() };
-}
+};
+
+var multiplySize = function(size, mul) {
+  return { width: size.width * mul, height: size.height * mul };
+};
 
 var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
 var sessionEvents = ['connectionCreated', 'connectionDestroyed', 'sessionConnected', 'sessionDisconnected', 'signal', 'streamCreated', 'streamDestroyed', 'streamPropertyChanged'];
@@ -36,6 +40,7 @@ var TokboxVideoComponent = Ember.Component.extend({
   publisher: null, // TB.Publisher
   session: null, // TB.Session
   cameraAccessError: null, // was there an error?
+  size: null, // video size ({ width: X, height: Y })
   selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
 
   mateStreamId: null, // id of mate stream
@@ -57,26 +62,11 @@ var TokboxVideoComponent = Ember.Component.extend({
     listenTo(this.session, this, sessionEvents);
   },
 
-  bindResize: function() {
-    var self = this;
-
-    this.resizeHandler = function() {
-      Ember.run(function() { self.setAndPositionVideos(); });
-    };
-
-    $(window).bind('resize', this.resizeHandler);
-  },
-
-  unbindResize: function() {
-    $(window).unbind('resize', this.resizeHandler);
-  },
-
   setupTokbox: function() {
     var apiKey = tokboxApiKey,
         sessionId = this.get('sessionId'),
         token = this.get('token');
 
-    this.bindResize();
     this.setAndPositionVideos();
 
     this.publisher = TB.initPublisher(apiKey, selfId);
@@ -87,71 +77,49 @@ var TokboxVideoComponent = Ember.Component.extend({
     this.session.connect(apiKey, token);
   }.on('didInsertElement'),
 
-  computeOptimalMateVideoSize: function() {
-    var vpWidth = this.$().width();
-    var vpHeight = $(window).height() - this.$().offset().top - 100 - 300;
+  mateVideoSize: Ember.computed.alias('size'),
 
-    var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
-    var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
-
-    return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
-  },
-
-  computeOptimalSelfVideoSize: function() {
-    var mateSize = this.computeOptimalMateVideoSize();
-    var mWidth = mateSize.width,
-        mHeight = mateSize.height;
-
-    return { width: mWidth / 3, height: mHeight / 3 };
-  },
-
-  setMateSize: function(size) {
-    this.mate$().css(size);
-  },
-
-  setSelfSize: function(size) {
-    this.self$().css(size);
-  },
-
-  getMateSize: function() {
-    return getSize(this.mate$());
-  },
+  selfVideoSize: function() {
+    return multiplySize(this.get('mateVideoSize'), 1/3);
+  }.property('mateVideoSize'),
 
   setVideoSizes: function() {
-    var mateSize = this.computeOptimalMateVideoSize();
-    this.setMateSize(mateSize);
-
-    var selfSize = this.computeOptimalSelfVideoSize();
-    this.setSelfSize(selfSize);
+    var mateSize = this.get('mateVideoSize'),
+        selfSize = this.get('selfVideoSize');
 
     this.v$().css(mateSize);
-  },
 
-  computeSelfVideoPosition: function() {
-    var pos = parseInt(this.get('selfPosition'));
+    this.mate$().css(mateSize);
+    this.self$().css(selfSize);
+  }.observes('mateVideoSize', 'selfVideoSize'),
 
-    var mate$ = this.mate$();
-    var self$ = this.self$();
+  selfVideoPosition: function() {
+    var pos = parseInt(this.get('selfPosition')),
+        mateSize = this.get('mateVideoSize'),
+        selfSize = this.get('selfVideoSize');
+
     var k = 20;
 
-    var left = pos == 1 || pos == 3 ? k : mate$.width() - self$.width() - k;
-    var top = pos == 1 || pos == 2 ? k : mate$.height() - self$.height() - k;
+    var left = pos == 1 || pos == 3 ? k : mateSize.width - selfSize.width - k;
+    var top = pos == 1 || pos == 2 ? k : mateSize.height - selfSize.height - k;
 
     return { left: left, top: top };
-  },
+  }.property('selfPosition', 'mateVideoSize', 'selfVideoSize'),
 
-  computeMateVideoPosition: function() {
-    return { top: -this.self$().height() };
-  },
+  mateVideoPosition: function() {
+    var selfSize = this.get('selfVideoSize');
+    return { top: -selfSize.height };
+  }.property('selfVideoSize'),
 
   positionVideoContainer: function() {
     var v$ = this.v$();
+    var size = this.get('size');
 
     v$.css({ position: 'relative' });
 
     var vPosition = { left: (this.$().width() - v$.width()) / 2 };
     v$.css(vPosition);
-  },
+  }.observes('size'),
 
   positionVideoElements: function() {
     var mate$ = this.mate$();
@@ -160,12 +128,12 @@ var TokboxVideoComponent = Ember.Component.extend({
     mate$.css({ position: 'relative' });
     self$.css({ position: 'relative', 'z-index': 100 });
 
-    var matePosition = this.computeMateVideoPosition();
-    var selfPosition = this.computeSelfVideoPosition();
+    var matePosition = this.get('mateVideoPosition');
+    var selfPosition = this.get('selfVideoPosition');
 
     mate$.css(matePosition);
     self$.css(selfPosition);
-  },
+  }.observes('mateVideoPosition', 'selfVideoPosition'),
 
   setAndPositionVideos: function() {
     this.setVideoSizes();
@@ -174,7 +142,6 @@ var TokboxVideoComponent = Ember.Component.extend({
   },
 
   unsubscribeTokbox: function() {
-    this.unbindResize();
     this.session.disconnect();
   }.on('willDestroyElement'),
 
@@ -188,7 +155,8 @@ var TokboxVideoComponent = Ember.Component.extend({
     var mateStream = this.session.streams.find(notOwnStream);
 
     if (mateStream && this.mateStreamId != mateStream.streamId) {
-      this.session.subscribe(mateStream, mateId, this.getMateSize());
+      var mateSize = getSize(this.mate$());
+      this.session.subscribe(mateStream, mateId, mateSize);
     }
   },
 
