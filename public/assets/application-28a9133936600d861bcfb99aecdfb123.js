@@ -72648,6 +72648,47 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = PusherService;
+  });define("app/mixins/identity", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var IdentityMixin = Ember.Mixin.create({
+      firstName: DS.attr('string'),
+      lastName: DS.attr('string'),
+      status: DS.attr('string'),
+
+      isOnline: Ember.computed.equal('status', 'online'),
+      isOffline: Ember.computed.equal('status', 'offline'),
+
+      fullName: function() {
+        return [this.get('firstName'), this.get('lastName')].join(' ')
+      }.property('firstName', 'lastName')
+    });
+
+    __exports__["default"] = IdentityMixin;
+  });define("app/mixins/resize_handler", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    var ResizeHandlerMixin = Ember.Mixin.create({
+      _resizeHandler: null,
+
+      _bindResize: function() {
+        var self = this;
+
+        this._resizeHandler = function() {
+          Ember.run(function() { self.send('resize') })
+        };
+
+        $(window).bind('resize', this._resizeHandler);
+      }.on('didInsertElement'),
+
+      _unbindResize: function() {
+        $(window).unbind('resize', this._resizeHandler);
+      }.on('willDestroyElement')
+    });
+
+    __exports__["default"] = ResizeHandlerMixin;
   });define("app/models/consultation", 
   ["exports"],
   function(__exports__) {
@@ -72740,22 +72781,14 @@ define("app/adapters/application",
 
     __exports__["default"] = QueueMeta;
   });define("app/models/doctor", 
-  ["exports"],
-  function(__exports__) {
+  ["app/mixins/identity","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
-    var Doctor = DS.Model.extend({
-      firstName: DS.attr('string'),
-      lastName: DS.attr('string'),
-      status: DS.attr('string'),
+    var Identity = __dependency1__["default"];
+
+    var Doctor = DS.Model.extend(Identity, {
       practice: DS.attr('string'),
       favorite: DS.attr('boolean'),
-
-      isOnline: Ember.computed.equal('status', 'online'),
-      isOffline: Ember.computed.equal('status', 'offline'),
-
-      fullName: function() {
-        return [this.get('firstName'), this.get('lastName')].join(' ')
-      }.property('firstName', 'lastName'),
 
       humanPractice: function() {
         return this.get('practice') == 'family' ? 'Family doctor' : 'Pharmacist';
@@ -72779,20 +72812,12 @@ define("app/adapters/application",
 
     __exports__["default"] = Message;
   });define("app/models/patient", 
-  ["exports"],
-  function(__exports__) {
+  ["app/mixins/identity","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
-    var Patient = DS.Model.extend({
-      firstName: DS.attr('string'),
-      lastName: DS.attr('string'),
-      status: DS.attr('string'),
+    var Identity = __dependency1__["default"];
 
-      isOnline: Ember.computed.equal('status', 'online'),
-      isOffline: Ember.computed.equal('status', 'offline'),
-
-      fullName: function() {
-        return [this.get('firstName'), this.get('lastName')].join(' ')
-      }.property('firstName', 'lastName')
+    var Patient = DS.Model.extend(Identity, {
     });
 
     __exports__["default"] = Patient;
@@ -72814,6 +72839,7 @@ define("app/adapters/application",
   function(__exports__) {
     "use strict";
     var ApplicationController = Ember.Controller.extend({
+      showNav: true,
       pusherError: false
     });
 
@@ -72969,10 +72995,32 @@ define("app/adapters/application",
   ["exports"],
   function(__exports__) {
     "use strict";
+    var items = function(self, list) {
+      return list.map(function(item) {
+        return self.get(item + 'Item');
+      });
+    };
+
     var NavController = Ember.Controller.extend({
       needs: ['queue'],
 
-      queueBadge: Ember.computed.alias('controllers.queue.length')
+      queueBadge: Ember.computed.alias('controllers.queue.length'),
+
+      queueItem: function() {
+        return { route: 'queue', title: 'nav.queue', badge: this.get('queueBadge') };
+      }.property('queueBadge'),
+
+      historyItem: { route: 'history', title: 'nav.history' },
+      doctorsItem: { route: 'doctors', title: 'nav.doctors' },
+      patientDashboardItem: { route: 'patient.dashboard', title: 'nav.dashboard' },
+
+      items: function() {
+        if (this.get('currentUser.isDoctor')) {
+          return items(this, ['queue', 'history']);
+        } else {
+          return items(this, ['patientDashboard', 'history', 'doctors']);
+        }
+      }.property('currentUser.isDoctor', 'queueItem', 'historyItem', 'doctorsItem', 'patientDashboardItem')
     });
 
     __exports__["default"] = NavController;
@@ -73047,6 +73095,43 @@ define("app/adapters/application",
     });
 
     __exports__["default"] = QueueController;
+  });define("app/views/consultation", 
+  ["app/mixins/resize_handler","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var ResizeHandlerMixin = __dependency1__["default"];
+
+    var optimalSize = function(width, height, aspectRatio) {
+      var candidate1 = { width: width, height: width * aspectRatio };
+      var candidate2 = { width: height / aspectRatio, height: height };
+
+      return candidate1.height > height ? candidate2 : candidate1;
+    }
+
+    var ConsultationView = Ember.View.extend(ResizeHandlerMixin, {
+      width: null,
+      height: null,
+
+      videoSize: function() {
+        var width = this.get('width'),
+            height = this.get('height');
+
+        return optimalSize(width - 300, height, 3/4);
+      }.property('width', 'height'),
+
+      setSize: function() {
+        this.set('width', this.$().width());
+        this.set('height', $(window).height() - this.$().offset().top - 100);
+      }.on('didInsertElement'),
+
+      actions: {
+        resize: function() {
+          this.setSize();
+        }
+      }
+    });
+
+    __exports__["default"] = ConsultationView;
   });define("app/views/doctor_card", 
   ["exports"],
   function(__exports__) {
@@ -73059,13 +73144,9 @@ define("app/adapters/application",
   });Ember.Handlebars.helper('formatTime', function(date) {
   return moment(date).format('h:mm:ss');
 });
-Ember.Handlebars.registerHelper('t', function(property, options) {
+Ember.Handlebars.helper('t', function(property, options) {
   var self = this;
   var params = options.hash;
-
-  Object.keys(params).forEach(function (key) {
-    params[key] = Em.Handlebars.get(self, params[key], options);
-  });
 
   return I18n.t('js.' + property, params);
 });
@@ -73122,7 +73203,11 @@ define("app/components/modal-dialog",
 
     var getSize = function(el$) {
       return { width: el$.width(), height: el$.height() };
-    }
+    };
+
+    var multiplySize = function(size, mul) {
+      return { width: size.width * mul, height: size.height * mul };
+    };
 
     var publisherEvents = ['accessAllowed', 'accessDenied', 'accessDialogOpened', 'accessDialogClosed'];
     var sessionEvents = ['connectionCreated', 'connectionDestroyed', 'sessionConnected', 'sessionDisconnected', 'signal', 'streamCreated', 'streamDestroyed', 'streamPropertyChanged'];
@@ -73138,6 +73223,7 @@ define("app/components/modal-dialog",
       publisher: null, // TB.Publisher
       session: null, // TB.Session
       cameraAccessError: null, // was there an error?
+      size: null, // video size ({ width: X, height: Y })
       selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
 
       mateStreamId: null, // id of mate stream
@@ -73159,26 +73245,11 @@ define("app/components/modal-dialog",
         listenTo(this.session, this, sessionEvents);
       },
 
-      bindResize: function() {
-        var self = this;
-
-        this.resizeHandler = function() {
-          Ember.run(function() { self.setAndPositionVideos(); });
-        };
-
-        $(window).bind('resize', this.resizeHandler);
-      },
-
-      unbindResize: function() {
-        $(window).unbind('resize', this.resizeHandler);
-      },
-
       setupTokbox: function() {
         var apiKey = tokboxApiKey,
             sessionId = this.get('sessionId'),
             token = this.get('token');
 
-        this.bindResize();
         this.setAndPositionVideos();
 
         this.publisher = TB.initPublisher(apiKey, selfId);
@@ -73189,71 +73260,49 @@ define("app/components/modal-dialog",
         this.session.connect(apiKey, token);
       }.on('didInsertElement'),
 
-      computeOptimalMateVideoSize: function() {
-        var vpWidth = this.$().width();
-        var vpHeight = $(window).height() - this.$().offset().top - 100 - 300;
+      mateVideoSize: Ember.computed.alias('size'),
 
-        var vpCandidate1 = { width: vpWidth, height: vpWidth * 3 / 4 };
-        var vpCandidate2 = { height: vpHeight, width: vpHeight * 4 / 3 };
-
-        return vpCandidate1.height > vpHeight ? vpCandidate2 : vpCandidate1;
-      },
-
-      computeOptimalSelfVideoSize: function() {
-        var mateSize = this.computeOptimalMateVideoSize();
-        var mWidth = mateSize.width,
-            mHeight = mateSize.height;
-
-        return { width: mWidth / 3, height: mHeight / 3 };
-      },
-
-      setMateSize: function(size) {
-        this.mate$().css(size);
-      },
-
-      setSelfSize: function(size) {
-        this.self$().css(size);
-      },
-
-      getMateSize: function() {
-        return getSize(this.mate$());
-      },
+      selfVideoSize: function() {
+        return multiplySize(this.get('mateVideoSize'), 1/3);
+      }.property('mateVideoSize'),
 
       setVideoSizes: function() {
-        var mateSize = this.computeOptimalMateVideoSize();
-        this.setMateSize(mateSize);
-
-        var selfSize = this.computeOptimalSelfVideoSize();
-        this.setSelfSize(selfSize);
+        var mateSize = this.get('mateVideoSize'),
+            selfSize = this.get('selfVideoSize');
 
         this.v$().css(mateSize);
-      },
 
-      computeSelfVideoPosition: function() {
-        var pos = parseInt(this.get('selfPosition'));
+        this.mate$().css(mateSize);
+        this.self$().css(selfSize);
+      }.observes('mateVideoSize', 'selfVideoSize'),
 
-        var mate$ = this.mate$();
-        var self$ = this.self$();
+      selfVideoPosition: function() {
+        var pos = parseInt(this.get('selfPosition')),
+            mateSize = this.get('mateVideoSize'),
+            selfSize = this.get('selfVideoSize');
+
         var k = 20;
 
-        var left = pos == 1 || pos == 3 ? k : mate$.width() - self$.width() - k;
-        var top = pos == 1 || pos == 2 ? k : mate$.height() - self$.height() - k;
+        var left = pos == 1 || pos == 3 ? k : mateSize.width - selfSize.width - k;
+        var top = pos == 1 || pos == 2 ? k : mateSize.height - selfSize.height - k;
 
         return { left: left, top: top };
-      },
+      }.property('selfPosition', 'mateVideoSize', 'selfVideoSize'),
 
-      computeMateVideoPosition: function() {
-        return { top: -this.self$().height() };
-      },
+      mateVideoPosition: function() {
+        var selfSize = this.get('selfVideoSize');
+        return { top: -selfSize.height };
+      }.property('selfVideoSize'),
 
       positionVideoContainer: function() {
         var v$ = this.v$();
+        var size = this.get('size');
 
         v$.css({ position: 'relative' });
 
         var vPosition = { left: (this.$().width() - v$.width()) / 2 };
         v$.css(vPosition);
-      },
+      }.observes('size'),
 
       positionVideoElements: function() {
         var mate$ = this.mate$();
@@ -73262,12 +73311,12 @@ define("app/components/modal-dialog",
         mate$.css({ position: 'relative' });
         self$.css({ position: 'relative', 'z-index': 100 });
 
-        var matePosition = this.computeMateVideoPosition();
-        var selfPosition = this.computeSelfVideoPosition();
+        var matePosition = this.get('mateVideoPosition');
+        var selfPosition = this.get('selfVideoPosition');
 
         mate$.css(matePosition);
         self$.css(selfPosition);
-      },
+      }.observes('mateVideoPosition', 'selfVideoPosition'),
 
       setAndPositionVideos: function() {
         this.setVideoSizes();
@@ -73276,7 +73325,6 @@ define("app/components/modal-dialog",
       },
 
       unsubscribeTokbox: function() {
-        this.unbindResize();
         this.session.disconnect();
       }.on('willDestroyElement'),
 
@@ -73290,7 +73338,8 @@ define("app/components/modal-dialog",
         var mateStream = this.session.streams.find(notOwnStream);
 
         if (mateStream && this.mateStreamId != mateStream.streamId) {
-          this.session.subscribe(mateStream, mateId, this.getMateSize());
+          var mateSize = getSize(this.mate$());
+          this.session.subscribe(mateStream, mateId, mateSize);
         }
       },
 
@@ -73318,7 +73367,7 @@ define("app/components/modal-dialog",
   });define('app/templates/application', ['exports'], function(__exports__){ __exports__.default = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -73326,11 +73375,21 @@ function program1(depth0,data) {
   data.buffer.push("\n    <div class=\"alert alert-danger\">\n      There was an error establishing real-time connection with the\n      server. Please, try reloading the page.\n    </div>\n  ");
   }
 
+function program3(depth0,data) {
+  
+  var buffer = '', helper, options;
+  data.buffer.push("\n    ");
+  data.buffer.push(escapeExpression((helper = helpers.render || (depth0 && depth0.render),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav", options) : helperMissing.call(depth0, "render", "nav", options))));
+  data.buffer.push("\n  ");
+  return buffer;
+  }
+
   data.buffer.push("<div class=\"container\">\n  ");
   stack1 = helpers['if'].call(depth0, "pusherError", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n  ");
-  data.buffer.push(escapeExpression((helper = helpers.render || (depth0 && depth0.render),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav", options) : helperMissing.call(depth0, "render", "nav", options))));
+  stack1 = helpers['if'].call(depth0, "showNav", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n\n  ");
   stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
@@ -73462,8 +73521,9 @@ function program6(depth0,data) {
   data.buffer.push("\n    ");
   data.buffer.push(escapeExpression((helper = helpers['tokbox-video'] || (depth0 && depth0['tokbox-video']),options={hash:{
     'sessionId': ("tokboxSession"),
-    'token': ("tokboxToken")
-  },hashTypes:{'sessionId': "ID",'token': "ID"},hashContexts:{'sessionId': depth0,'token': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "tokbox-video", options))));
+    'token': ("tokboxToken"),
+    'size': ("view.videoSize")
+  },hashTypes:{'sessionId': "ID",'token': "ID",'size': "ID"},hashContexts:{'sessionId': depth0,'token': depth0,'size': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "tokbox-video", options))));
   data.buffer.push("\n  ");
   return buffer;
   }
@@ -73947,12 +74007,7 @@ function program1(depth0,data) {
   data.buffer.push("\n    ");
   stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
     'tagName': ("li")
-  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n    ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
-    'tagName': ("li")
-  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "history", options) : helperMissing.call(depth0, "link-to", "history", options));
+  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "route", options) : helperMissing.call(depth0, "link-to", "route", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n  ");
   return buffer;
@@ -73961,7 +74016,7 @@ function program2(depth0,data) {
   
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n      ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "queue", options) : helperMissing.call(depth0, "link-to", "queue", options));
+  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "route", options) : helperMissing.call(depth0, "link-to", "route", options));
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n    ");
   return buffer;
@@ -73970,9 +74025,9 @@ function program3(depth0,data) {
   
   var buffer = '', stack1, helper, options;
   data.buffer.push("\n        ");
-  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.queue", options) : helperMissing.call(depth0, "t", "nav.queue", options))));
+  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "title", options) : helperMissing.call(depth0, "t", "title", options))));
   data.buffer.push("\n        ");
-  stack1 = helpers['if'].call(depth0, "queueBadge", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers['if'].call(depth0, "badge", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n      ");
   return buffer;
@@ -73981,89 +74036,14 @@ function program4(depth0,data) {
   
   var buffer = '', stack1;
   data.buffer.push("<span class=\"badge\">");
-  stack1 = helpers._triageMustache.call(depth0, "queueBadge", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers._triageMustache.call(depth0, "badge", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</span>");
   return buffer;
   }
 
-function program6(depth0,data) {
-  
-  var buffer = '', stack1, helper, options;
-  data.buffer.push("\n      ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "history", options) : helperMissing.call(depth0, "link-to", "history", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n    ");
-  return buffer;
-  }
-function program7(depth0,data) {
-  
-  var buffer = '', helper, options;
-  data.buffer.push("\n        ");
-  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.history", options) : helperMissing.call(depth0, "t", "nav.history", options))));
-  data.buffer.push("\n      ");
-  return buffer;
-  }
-
-function program9(depth0,data) {
-  
-  var buffer = '', stack1, helper, options;
-  data.buffer.push("\n    ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
-    'tagName': ("li")
-  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(10, program10, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n    ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
-    'tagName': ("li")
-  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "history", options) : helperMissing.call(depth0, "link-to", "history", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n\n    ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{
-    'tagName': ("li")
-  },hashTypes:{'tagName': "STRING"},hashContexts:{'tagName': depth0},inverse:self.noop,fn:self.program(13, program13, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors", options) : helperMissing.call(depth0, "link-to", "doctors", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n  ");
-  return buffer;
-  }
-function program10(depth0,data) {
-  
-  var buffer = '', stack1, helper, options;
-  data.buffer.push("\n      ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(11, program11, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "patient.dashboard", options) : helperMissing.call(depth0, "link-to", "patient.dashboard", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n    ");
-  return buffer;
-  }
-function program11(depth0,data) {
-  
-  var buffer = '', helper, options;
-  data.buffer.push("\n        ");
-  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.dashboard", options) : helperMissing.call(depth0, "t", "nav.dashboard", options))));
-  data.buffer.push("\n      ");
-  return buffer;
-  }
-
-function program13(depth0,data) {
-  
-  var buffer = '', stack1, helper, options;
-  data.buffer.push("\n      ");
-  stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(14, program14, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "doctors", options) : helperMissing.call(depth0, "link-to", "doctors", options));
-  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n    ");
-  return buffer;
-  }
-function program14(depth0,data) {
-  
-  var buffer = '', helper, options;
-  data.buffer.push("\n        ");
-  data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "nav.doctors", options) : helperMissing.call(depth0, "t", "nav.doctors", options))));
-  data.buffer.push("\n      ");
-  return buffer;
-  }
-
   data.buffer.push("<ul class=\"nav nav-pills\">\n  ");
-  stack1 = helpers['if'].call(depth0, "currentUser.isDoctor", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(9, program9, data),fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
+  stack1 = helpers.each.call(depth0, "items", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n</ul>\n");
   return buffer;
@@ -74362,6 +74342,14 @@ function program4(depth0,data) {
           this.disconnectOutlet({ outlet: 'modal', parentView: 'application' });
         },
 
+        hideNav: function() {
+          this.controller.set('showNav', false);
+        },
+
+        showNav: function() {
+          this.controller.set('showNav', true);
+        },
+
         willTransition: function() {
           this.send('closeModal');
         },
@@ -74378,6 +74366,14 @@ function program4(depth0,data) {
   function(__exports__) {
     "use strict";
     var ConsultationRoute = Ember.Route.extend({
+      activate: function() {
+        this.send('hideNav');
+      },
+
+      deactivate: function() {
+        this.send('showNav');
+      },
+
       actions: {
         finish: function() {
           this.currentModel.finish();
@@ -74543,6 +74539,7 @@ function program4(depth0,data) {
 
     __exports__["default"] = QueueNextRoute;
   });
+
 
 
 

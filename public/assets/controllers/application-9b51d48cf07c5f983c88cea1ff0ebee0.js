@@ -3,6 +3,7 @@ define("app/controllers/application",
   function(__exports__) {
     "use strict";
     var ApplicationController = Ember.Controller.extend({
+      showNav: true,
       pusherError: false
     });
 
