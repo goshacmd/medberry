@@ -13,7 +13,7 @@
 //= require_self
 //= require_tree ./adapters
 //= require router
-//= require medlive
+//= require medberry
 //= require_tree ./initializers
 
 TB.setLogLevel(1);
