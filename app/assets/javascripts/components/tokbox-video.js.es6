@@ -1,21 +1,15 @@
-import { cat, partial } from 'app/utils';
+var makeHandlers = function(self, eventNames) {
+  var handlers = {};
 
-var send = function(self, eventName) {
-  return function() {
-    var newArguments = cat([eventName], arguments);
-    Ember.run(function() {
-      self.send.apply(self, newArguments)
-    });
-  };
-};
+  eventNames.forEach(function(eventName) {
+    handlers[eventName] = function(event) {
+      Ember.run(function() {
+        self.handleTokboxAction(eventName, event);
+      });
+    };
+  });
 
-var listenFor = function(object, self, eventName) {
-  object.addEventListener(eventName, send(self, eventName))
-};
-
-var listenTo = function(object, self, events) {
-  var listener = partial(listenFor, object, self);
-  events.forEach(listener);
+  return handlers;
 };
 
 var getSize = function(el$) {
@@ -58,8 +52,13 @@ var TokboxVideoComponent = Ember.Component.extend({
   },
 
   setupEventListeners: function() {
-    listenTo(this.publisher, this, publisherEvents);
-    listenTo(this.session, this, sessionEvents);
+    this.publisher.on(makeHandlers(this, publisherEvents));
+    this.session.on(makeHandlers(this, sessionEvents));
+  },
+
+  teardownEventListeners: function() {
+    this.publisher.off(publisherEvents);
+    this.session.off(sessionEvents);
   },
 
   setupTokbox: function() {
@@ -142,6 +141,8 @@ var TokboxVideoComponent = Ember.Component.extend({
   },
 
   unsubscribeTokbox: function() {
+    this.teardownEventListeners();
+    this.publisher.destroy();
     this.session.disconnect();
   }.on('willDestroyElement'),
 
@@ -162,6 +163,10 @@ var TokboxVideoComponent = Ember.Component.extend({
 
   publish: function() {
     this.session.publish(this.publisher);
+  },
+
+  handleTokboxAction: function(eventName, event) {
+    this.send(eventName, event);
   },
 
   actions: {
