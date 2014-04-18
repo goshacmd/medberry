@@ -27,6 +27,7 @@ en:
       doctor: "Doctor"
       patient: "Patient"
       status: "Status"
+      cause: "Reason"
       duration: "Duration"
       consulted: "Consulted"
       canceled: "Request canceled"
