@@ -73183,28 +73183,21 @@ define("app/components/modal-dialog",
 
     __exports__["default"] = OnlineDotComponent;
   });define("app/components/tokbox-video", 
-  ["app/utils","exports"],
-  function(__dependency1__, __exports__) {
+  ["exports"],
+  function(__exports__) {
     "use strict";
-    var cat = __dependency1__.cat;
-    var partial = __dependency1__.partial;
+    var makeHandlers = function(self, eventNames) {
+      var handlers = {};
 
-    var send = function(self, eventName) {
-      return function() {
-        var newArguments = cat([eventName], arguments);
-        Ember.run(function() {
-          self.send.apply(self, newArguments)
-        });
-      };
-    };
+      eventNames.forEach(function(eventName) {
+        handlers[eventName] = function(event) {
+          Ember.run(function() {
+            self.handleTokboxAction(eventName, event);
+          });
+        };
+      });
 
-    var listenFor = function(object, self, eventName) {
-      object.addEventListener(eventName, send(self, eventName))
-    };
-
-    var listenTo = function(object, self, events) {
-      var listener = partial(listenFor, object, self);
-      events.forEach(listener);
+      return handlers;
     };
 
     var getSize = function(el$) {
@@ -73247,8 +73240,13 @@ define("app/components/modal-dialog",
       },
 
       setupEventListeners: function() {
-        listenTo(this.publisher, this, publisherEvents);
-        listenTo(this.session, this, sessionEvents);
+        this.publisher.on(makeHandlers(this, publisherEvents));
+        this.session.on(makeHandlers(this, sessionEvents));
+      },
+
+      teardownEventListeners: function() {
+        this.publisher.off(publisherEvents);
+        this.session.off(sessionEvents);
       },
 
       setupTokbox: function() {
@@ -73331,6 +73329,8 @@ define("app/components/modal-dialog",
       },
 
       unsubscribeTokbox: function() {
+        this.teardownEventListeners();
+        this.publisher.destroy();
         this.session.disconnect();
       }.on('willDestroyElement'),
 
@@ -73351,6 +73351,10 @@ define("app/components/modal-dialog",
 
       publish: function() {
         this.session.publish(this.publisher);
+      },
+
+      handleTokboxAction: function(eventName, event) {
+        this.send(eventName, event);
       },
 
       actions: {
@@ -73470,18 +73474,18 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, helper, options;
-  data.buffer.push("\n  <div class=\"alert alert-info\">\n    <div class=\"row\">\n      <div class=\"col-lg-3\">\n        <b>");
+  data.buffer.push("\n  <div class=\"alert alert-info\">\n    <div class=\"row\">\n      <div class=\"col-sm-3\">\n        <b>");
   data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "runTime", options) : helperMissing.call(depth0, "time", "runTime", options))));
   data.buffer.push("</b>\n        (");
   data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.remaining", options) : helperMissing.call(depth0, "t", "consultation.remaining", options))));
   data.buffer.push(" ");
   data.buffer.push(escapeExpression((helper = helpers.time || (depth0 && depth0.time),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "remainingTime", options) : helperMissing.call(depth0, "time", "remainingTime", options))));
-  data.buffer.push(")\n      </div>\n\n      <div class=\"col-lg-6 text-center\">\n        ");
+  data.buffer.push(")\n      </div>\n\n      <div class=\"col-sm-6 text-center\">\n        ");
   data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.top_p", options) : helperMissing.call(depth0, "t", "consultation.top_p", options))));
   data.buffer.push("\n\n        ");
   stack1 = helpers['if'].call(depth0, "currentUser.isPatient", {hash:{},hashTypes:{},hashContexts:{},inverse:self.program(4, program4, data),fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n      </div>\n\n      <div class=\"col-lg-3 text-right\">\n        <a href=\"#\" class=\"btn btn-default btn-xs\" ");
+  data.buffer.push("\n      </div>\n\n      <div class=\"col-sm-3 text-right\">\n        <a href=\"#\" class=\"btn btn-default btn-xs\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "finish", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
   data.buffer.push(">\n          ");
   data.buffer.push(escapeExpression((helper = helpers.t || (depth0 && depth0.t),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "consultation.end_button", options) : helperMissing.call(depth0, "t", "consultation.end_button", options))));
