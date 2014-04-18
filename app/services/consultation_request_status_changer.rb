@@ -7,6 +7,8 @@ class ConsultationRequestStatusChanger
 
   def cancel(cause)
     request.update(status: :canceled, cancelation_cause: cause, canceled_at: Time.now)
+
+    AnalyticsService.new.track_canceled_request request
   end
 
   def accept

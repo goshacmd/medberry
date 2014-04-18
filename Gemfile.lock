@@ -75,6 +75,7 @@ GEM
     erubis (2.7.0)
     es6_module_transpiler-rails (0.3.0)
       execjs
+    escape (0.0.4)
     execjs (2.0.2)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
@@ -98,6 +99,10 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     minitest (4.7.5)
+    mixpanel (4.1.1)
+      escape
+      json
+      rack
     multi_json (1.9.0)
     opentok (0.1.2)
       addressable
@@ -216,6 +221,7 @@ DEPENDENCIES
   factory_girl_rails
   i18n-js (~> 3.0.0.rc5)
   jquery-rails
+  mixpanel
   opentok
   pg
   pry

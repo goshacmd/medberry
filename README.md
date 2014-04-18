@@ -31,3 +31,4 @@ at runtime:
 * `OPEN_TOK_KEY`
 * `OPEN_TOK_SECRET`
 * `PUSHER_URL`
+* `MIXPANEL_TOKEN`

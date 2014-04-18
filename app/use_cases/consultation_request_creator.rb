@@ -16,6 +16,8 @@ class ConsultationRequestCreator
     online = OnlineStatusService.new.online?(consultation_request.doctor.user)
 
     if online && consultation_request.save
+      AnalyticsService.new.track_new_request consultation_request
+
       consultation_request
     else
       validation_error
