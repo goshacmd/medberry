@@ -11,7 +11,7 @@ class AnalyticsService
   end
 
   def track_canceled_request(request)
-    track 'Canceled Consutlation Request', {
+    track 'Canceled Consultation Request', {
       canceled_because: request.cancelation_cause
     }.merge(doctor_data(request.doctor)).merge(patient_data(request.patient))
   end
