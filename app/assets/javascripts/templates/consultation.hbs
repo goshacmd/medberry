@@ -1,12 +1,12 @@
 {{#if isActive}}
   <div class="alert alert-info">
     <div class="row">
-      <div class="col-lg-3">
+      <div class="col-sm-3">
         <b>{{time runTime}}</b>
         ({{t 'consultation.remaining'}} {{time remainingTime}})
       </div>
 
-      <div class="col-lg-6 text-center">
+      <div class="col-sm-6 text-center">
         {{t 'consultation.top_p'}}
 
         {{#if currentUser.isPatient}}
@@ -16,7 +16,7 @@
         {{/if}}
       </div>
 
-      <div class="col-lg-3 text-right">
+      <div class="col-sm-3 text-right">
         <a href="#" class="btn btn-default btn-xs" {{action 'finish'}}>
           {{t 'consultation.end_button'}}
         </a>
