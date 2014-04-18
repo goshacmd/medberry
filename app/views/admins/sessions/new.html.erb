@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-lg-4 col-lg-offset-4">
+    <h2>Login</h2>
+
+    <%= simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f| %>
+      <%= f.error_notification %>
+
+      <%= f.input :email, label: false, placeholder: 'Email', autofocus: true %>
+      <%= f.input :password, label: false, placeholder: 'Password' %>
+
+      <% if devise_mapping.rememberable? -%>
+        <%= f.input :remember_me, as: :boolean, label: 'Remember me' %>
+      <% end %>
+
+      <%= f.button :submit, 'Sign in', class: 'btn-primary' %>
+    <% end %>
+  </div>
+</div>

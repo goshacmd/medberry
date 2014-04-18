@@ -6,9 +6,15 @@ Medlive::Application.routes.draw do
     resources :messages
   end
 
+  namespace :admin do
+    root 'dashboard#index'
+  end
+
   devise_for :users, controllers: {
     registrations: 'registrations'
   }
+
+  devise_for :admins
 
   post 'pusher/auth'
 
