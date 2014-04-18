@@ -22,7 +22,7 @@ class ConsultationExtender
     return unless can_extend?
 
     SessionCreator.new(consultation).perform(duration: extension_span)
-    consutlation.transition_to(:in_progress)
+    consultation.transition_to(:in_progress)
   end
 
   # Check if used consultation extensions number is less than max

@@ -17,8 +17,9 @@ Router.map(function() {
     this.route('pharmacists');
   });
 
-  this.resource('consultation_request', { path: '/requests/:consultation_request_id' });
-  this.resource('consultation', { path: '/consults/:consultation_id' });
+  this.resource('consultation', { path: '/consultations/:consultation_id' }, function() {
+    this.route('archive');
+  });
 });
 
 export default Router;

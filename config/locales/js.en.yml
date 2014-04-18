@@ -40,7 +40,7 @@ en:
       end_button: "End"
       video_button: "Video"
       over_header: "The consultation is over"
-      over_p: "The consutlation has lasted for"
+      over_p: "The consultation has lasted for"
       extend_button: "Extend consultation"
       queue_button: "Go to queue"
       next_button: "Proceed to the next patient"

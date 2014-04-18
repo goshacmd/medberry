@@ -1,7 +1,7 @@
 var MessagesController = Ember.ArrayController.extend({
   sortProperty: ['createdAt'],
 
-  showForm: true,
+  showForm: Ember.computed.alias('parentController.model.isInProgress'),
   newMessage: null,
   cannotSendMessage: Ember.computed.empty('newMessage'),
 

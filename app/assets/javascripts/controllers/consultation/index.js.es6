@@ -1,4 +1,4 @@
-var ConsultationController = Ember.ObjectController.extend({
+var ConsultationIndexController = Ember.ObjectController.extend({
   needs: ['clockService'],
 
   isTimeOver: Ember.computed.or('isFinished', 'isExpired'),
@@ -35,4 +35,4 @@ var ConsultationController = Ember.ObjectController.extend({
   }.property('expiresAt', 'controllers.clockService.pulse')
 });
 
-export default ConsultationController;
+export default ConsultationIndexController;

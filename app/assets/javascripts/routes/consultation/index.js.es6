@@ -1,4 +1,4 @@
-var ConsultationRoute = Ember.Route.extend({
+var ConsultationIndexRoute = Ember.Route.extend({
   activate: function() {
     this.send('hideNav');
   },
@@ -24,4 +24,4 @@ var ConsultationRoute = Ember.Route.extend({
   }
 });
 
-export default ConsultationRoute;
+export default ConsultationIndexRoute;
