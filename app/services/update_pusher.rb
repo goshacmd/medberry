@@ -12,7 +12,7 @@ class UpdatePusher
   # @param model [#active_model_serializer] model to push
   # @param scope [Object] serialization scope (e.g. current user)
   def push(channels, model, scope: nil)
-    pusher.trigger channels, event_name(model), serialize(model)
+    pusher.trigger channels, event_name(model), serialize(model, scope: scope)
   end
 
   # @param model [Object]
