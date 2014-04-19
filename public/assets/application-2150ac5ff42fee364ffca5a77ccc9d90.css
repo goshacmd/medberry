@@ -7668,52 +7668,62 @@ button.close {
   color: #7ec700;
 }
 
-/* line 51, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 42, /home/app/app/assets/stylesheets/application.css.scss */
+.pad {
+  padding-bottom: 20px;
+}
+
+/* line 46, /home/app/app/assets/stylesheets/application.css.scss */
+.max-width-img {
+  max-width: 100%;
+}
+
+/* line 59, /home/app/app/assets/stylesheets/application.css.scss */
 .selector label {
   padding-left: 1em;
   font-weight: normal;
   font-size: 0.75em;
 }
 
-/* line 58, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 66, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card {
   border: none;
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 59, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 67, /home/app/app/assets/stylesheets/application.css.scss */
 .doctor-card img {
   max-width: 55%;
 }
 
-/* line 68, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 76, /home/app/app/assets/stylesheets/application.css.scss */
 .modal {
   display: block;
 }
 
-/* line 72, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 80, /home/app/app/assets/stylesheets/application.css.scss */
 .consultation-button {
   margin-bottom: 0.2em;
 }
 
-/* line 81, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 89, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate {
   background-color: #999;
   border-radius: 10px;
 }
 
-/* line 86, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 94, /home/app/app/assets/stylesheets/application.css.scss */
 #video-self {
   background-color: #666;
   border-radius: 10px;
 }
 
-/* line 91, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 99, /home/app/app/assets/stylesheets/application.css.scss */
 #video-mate video, #video-self video {
   border-radius: 10px;
 }
 
-/* line 95, /home/app/app/assets/stylesheets/application.css.scss */
+/* line 103, /home/app/app/assets/stylesheets/application.css.scss */
 .messages-area {
   height: 300px;
   overflow-y: scroll;
