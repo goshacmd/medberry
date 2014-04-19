@@ -6,13 +6,7 @@
 
         Dr. {{fullName}}
 
-        <a href="#" class="star" {{action 'toggleStar'}}>
-          {{#if favorite}}
-            &#9733;
-          {{else}}
-            &#9734;
-          {{/if}}
-        </a>
+        {{toggleable-star value=favorite action="toggleStar"}}
       </h4>
 
       <h6>
@@ -22,7 +16,8 @@
       <img {{bind-attr src="avatarUrl"}} class="img-circle">
 
       <div>
-        <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>
+        <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}}
+           {{action 'showRequestModal' this}}>
           {{t 'doctor_card.call'}}
         </a>
       </div>
