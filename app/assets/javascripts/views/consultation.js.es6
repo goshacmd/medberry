@@ -8,8 +8,15 @@ var optimalSize = function(width, height, aspectRatio) {
 }
 
 var ConsultationView = Ember.View.extend(ResizeHandlerMixin, {
-  width: null,
-  height: null,
+  size: function() {}.property(),
+
+  width: function() {
+    return this.$().width();
+  }.property('size'),
+
+  height: function() {
+    return $(window).height() - this.$().offset().top - 100;
+  }.property('size'),
 
   videoSize: function() {
     var width = this.get('width'),
@@ -18,14 +25,9 @@ var ConsultationView = Ember.View.extend(ResizeHandlerMixin, {
     return optimalSize(width - 300, height, 3/4);
   }.property('width', 'height'),
 
-  setSize: function() {
-    this.set('width', this.$().width());
-    this.set('height', $(window).height() - this.$().offset().top - 100);
-  }.on('didInsertElement'),
-
   actions: {
     resize: function() {
-      this.setSize();
+      this.notifyPropertyChange('size');
     }
   }
 });

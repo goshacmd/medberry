@@ -41,15 +41,15 @@ var TokboxVideoComponent = Ember.Component.extend({
   mateStreamId: null, // id of mate stream
 
   mate$: function() {
-    return this.$(mateSel);
+    return this.$(mateSel).first();
   },
 
   self$: function() {
-    return this.$(selfSel);
+    return this.$(selfSel).first();
   },
 
   v$: function() {
-    return this.$('.videos');
+    return this.$('.videos').first();
   },
 
   setupEventListeners: function() {
@@ -148,7 +148,7 @@ var TokboxVideoComponent = Ember.Component.extend({
   }.on('willDestroyElement'),
 
   ensureMateElement: function() {
-    if (this.mate$().length == 0) return;
+    if (!this.mate$()) return;
 
     this.v$().append('<div id="video-mate"></div>');
     this.setAndPositionVideos();
