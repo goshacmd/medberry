@@ -3,6 +3,8 @@ en:
     camera:
       denied_header: "Access to camera denied"
       denied_body: "It looks like you have denied medberry access to your camera. If you denied access to camera accidentaly, try reloading the page."
+      needs_access_header: "Please, allow medberry to access your camera"
+      needs_access_body: "In order to be able to have a video chat on medberry, you need to allow medberry to access your camera. A pop-up like this should have just apperared. Click 'Allow'."
 
     nav:
       queue: "Queue"

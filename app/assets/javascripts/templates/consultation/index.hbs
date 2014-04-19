@@ -24,9 +24,12 @@
     </div>
   </div>
 
-  <a href="#" {{bind-attr class=":btn :btn-default isModeVideo:active"}} {{action 'toggleVideoMode'}}>
-    {{t 'consultation.video_button'}}
-  </a>
+  <div class="pad">
+    <a href="#" {{bind-attr class=":btn :btn-default isModeVideo:active"}}
+       {{action 'toggleVideoMode'}}>
+      {{t 'consultation.video_button'}}
+    </a>
+  </div>
 
   {{#if showVideo}}
     {{tokbox-video sessionId=tokboxSession token=tokboxToken size=view.videoSize}}

@@ -1,10 +1,22 @@
+{{#if needsUserAction}}
+  <div class="alert alert-warning">
+    <h4>{{t 'camera.needs_access_header'}}</h4>
+
+    <p>{{t 'camera.needs_access_body'}}</p>
+
+    <img src="/assets/camera-access.png" class="max-width-img">
+  </div>
+{{/if}}
+
 {{#unless cameraAccessError}}
-  <div class="videos">
+  <div class="videos" {{bind-attr class="needsUserAction:hidden"}}>
     <div id="video-self"></div>
     <div id="video-mate"></div>
   </div>
 {{else}}
-  <h3>{{t 'camera.denied_header'}}</h3>
+  <div class="alert alert-danger">
+    <h4>{{t 'camera.denied_header'}}</h4>
 
-  <p>{{t 'camera.denied_body'}}</p>
+    <p>{{t 'camera.denied_body'}}</p>
+  </div>
 {{/unless}}

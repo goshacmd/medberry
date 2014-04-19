@@ -34,6 +34,7 @@ var TokboxVideoComponent = Ember.Component.extend({
   publisher: null, // TB.Publisher
   session: null, // TB.Session
   cameraAccessError: null, // was there an error?
+  needsUserAction: null,
   size: null, // video size ({ width: X, height: Y })
   selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
 
@@ -170,6 +171,14 @@ var TokboxVideoComponent = Ember.Component.extend({
   },
 
   actions: {
+    accessDialogOpened: function() {
+      this.set('needsUserAction', true);
+    },
+
+    accessDialogClosed: function() {
+      this.set('needsUserAction', false);
+    },
+
     accessDenied: function() {
       this.set('cameraAccessError', true);
     },

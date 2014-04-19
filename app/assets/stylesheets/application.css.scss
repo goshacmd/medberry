@@ -38,6 +38,14 @@
   color: #7ec700;
 }
 
+.pad {
+  padding-bottom: 20px;
+}
+
+.max-width-img {
+  max-width: 100%;
+}
+
 .selector {
   a.active {
     @extend %text-like-link;
