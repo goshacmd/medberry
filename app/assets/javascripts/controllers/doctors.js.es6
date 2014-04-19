@@ -9,11 +9,11 @@ var DoctorsController = Ember.ArrayController.extend({
     var content = this.get('content');
 
     if (practice !== 'all') {
-      content = content.filterProperty('practice', practice);
+      content = content.filterBy('practice', practice);
     }
 
     if (online) {
-      content = content.filterProperty('online', true);
+      content = content.filterBy('online', true);
     }
 
     return content;

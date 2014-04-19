@@ -1,4 +1,14 @@
-{{#if content}}
+<h2>
+  {{t 'history.header'}}
+
+  <small class="selector">
+    {{#link-to (query-params status="all")}}{{t 'history.sel_all'}}{{/link-to}} /
+    {{#link-to (query-params status="consulted")}}{{t 'history.sel_con'}}{{/link-to}} /
+    {{#link-to (query-params status="canceled")}}{{t 'history.sel_can'}}{{/link-to}}
+  </small>
+</h2>
+
+{{#if filteredContent}}
   <table class="table table-striped">
     <thead>
       <tr>
@@ -18,7 +28,7 @@
     </thead>
 
     <tbody>
-      {{#each controller}}
+      {{#each filteredContent}}
         <tr>
           <td>{{createdAt}}</td>
 

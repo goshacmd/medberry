@@ -23,6 +23,10 @@ en:
       favorite_doctors: "Favorite doctors"
 
     history:
+      header: "History"
+      sel_all: "All"
+      sel_con: "consulted"
+      sel_can: "canceled"
       date: "Date"
       doctor: "Doctor"
       patient: "Patient"
