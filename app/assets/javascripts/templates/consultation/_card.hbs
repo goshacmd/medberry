@@ -1,0 +1,36 @@
+{{#if currentUser.isDoctor}}
+  <div class="media">
+    <div class="pull-left">
+      <img {{bind-attr src="patient.avatarUrl"}}
+            class="media-object img-circle"
+            style="height: 128px; width: 128px;">
+    </div>
+
+    <div class="media-body">
+      <h4 class="media-heading">{{patient.fullName}}</h4>
+
+      <p>{{t 'consultation.dob'}}: {{date patient.dob}}</p>
+      <p>{{t 'consultation.city'}}: {{patient.city}}</p>
+      <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
+      <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    </div>
+  </div>
+{{else}}
+  <div class="media">
+    <div class="pull-left">
+      <img {{bind-attr src="doctor.avatarUrl"}}
+            class="media-object img-circle"
+            style="height: 128px; width: 128px;">
+    </div>
+
+    <div class="media-body">
+      <h4 class="media-heading">
+        Dr. {{doctor.fullName}}
+      </h4>
+
+      <p>{{t 'consultation.practice'}}: {{doctor.practice}}</p>
+      <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
+      <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    </div>
+  </div>
+{{/if}}

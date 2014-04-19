@@ -2,7 +2,7 @@
   {{#with lastConsultationRequest}}
     <div class="media">
       <div class="pull-left">
-        <img src="/assets/no-avatar.png" class="media-object img-circle" style="height: 64px; width: 64px;">
+        <img {{bind-attr src="doctor.avatarUrl"}} class="media-object img-circle" style="height: 64px; width: 64px;">
       </div>
 
       {{#if isNewRequest}}

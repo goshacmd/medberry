@@ -3,6 +3,8 @@ var IdentityMixin = Ember.Mixin.create({
   lastName: DS.attr('string'),
   status: DS.attr('string'),
 
+  avatarUrl: '/assets/no-avatar.png',
+
   isOnline: Ember.computed.equal('status', 'online'),
   isOffline: Ember.computed.equal('status', 'offline'),
 

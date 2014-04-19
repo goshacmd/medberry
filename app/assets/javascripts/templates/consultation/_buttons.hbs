@@ -1,0 +1,26 @@
+{{#if currentUser.isDoctor}}
+  {{#if isOver}}
+    <a href="#" {{action 'requestExtension'}}
+       {{bind-attr class=":btn :btn-lg :btn-success :btn-block canExtend::disabled"}}>
+      {{t 'consultation.extend_button'}}
+
+      {{#if canExtend}}({{time extensionTimeLeft}}){{/if}}
+    </a>
+  {{/if}}
+
+  {{#link-to 'queue' class="consultation-button"}}
+    {{t 'consultation.queue_button'}}
+  {{/link-to}}
+
+  {{#link-to 'queue.next' class="consultation-button"}}
+    {{t 'consultation.next_button'}}
+  {{/link-to}}
+{{else}}
+  {{#link-to 'patient.dashboard' class="consultation-button"}}
+    {{t 'consultation.dashboard_button'}}
+  {{/link-to}}
+{{/if}}
+
+{{#link-to 'history' class="consultation-button"}}
+  {{t 'consultation.history_button'}}
+{{/link-to}}

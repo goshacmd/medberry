@@ -19,7 +19,7 @@
         {{humanPractice}}
       </h6>
 
-      <img src="/assets/no-avatar.png" class="img-circle">
+      <img {{bind-attr src="avatarUrl"}} class="img-circle">
 
       <div>
         <a href="#" {{bind-attr class=":btn :btn-success isOffline:disabled"}} {{action 'showRequestModal' this}}>

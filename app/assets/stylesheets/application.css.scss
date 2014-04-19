@@ -68,6 +68,15 @@
   display: block;
 }
 
+.consultation-button {
+  @extend .btn;
+  @extend .btn-lg;
+  @extend .btn-success;
+  @extend .btn-block;
+
+  margin-bottom: 0.2em;
+}
+
 #video-mate {
   background-color: #999;
   border-radius: 10px;

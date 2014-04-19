@@ -1,9 +1,3 @@
-<p>{{t 'consultation.over_p'}} {{time durationMs}}.</p>
-
-{{#if currentUser.isDoctor}}
-  <h5>{{patient.fullName}}</h5>
-{{else}}
-  <h5>Dr. {{doctor.fullName}}</h5>
-{{/if}}
+{{partial 'consultation/card'}}
 
 {{render 'messages' messages}}
