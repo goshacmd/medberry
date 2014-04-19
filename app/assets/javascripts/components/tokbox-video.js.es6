@@ -147,6 +147,13 @@ var TokboxVideoComponent = Ember.Component.extend({
     this.session.disconnect();
   }.on('willDestroyElement'),
 
+  ensureMateElement: function() {
+    if (this.mate$().length == 0) return;
+
+    this.v$().append('<div id="video-mate"></div>');
+    this.setAndPositionVideos();
+  },
+
   subscribeToStreams: function(streams) {
     var selfConnectionId = this.session.connection.connectionId;
 
@@ -189,6 +196,7 @@ var TokboxVideoComponent = Ember.Component.extend({
     },
 
     streamCreated: function(event) {
+      this.ensureMateElement();
       this.subscribeToStreams(event.streams);
     }
   }
