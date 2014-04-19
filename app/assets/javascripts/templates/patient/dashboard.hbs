@@ -1,46 +1,38 @@
 {{#if showLastRequest}}
   {{#with lastConsultationRequest}}
-    <div class="media">
-      <div class="pull-left">
-        <img {{bind-attr src="doctor.avatarUrl"}} class="media-object img-circle" style="height: 64px; width: 64px;">
-      </div>
-
+    {{#identity-card avatarSize=64 avatarUrl=doctor.avatarUrl}}
       {{#if isNewRequest}}
-        <div class="media-body">
-          <h4 class="media-heading">{{t 'patient_dashboard.wait_header' name=doctor.fullName}}</h4>
+        <h4 class="media-heading">{{t 'patient_dashboard.wait_header' name=doctor.fullName}}</h4>
 
-          <p>{{t 'patient_dashboard.cause_p' cause=cause}}</p>
+        <p>{{t 'patient_dashboard.cause_p' cause=cause}}</p>
 
-          {{#if queueMeta.updatedAt}}
-            <p>
-              {{#if queueMeta.firstInQueue}}
-                {{t 'patient_dashboard.queue_first' name=doctor.fullName}}
-              {{else}}
-                {{t 'patient_dashboard.queue_other' people=queueMeta.position waiting=queueMeta.waiting}}
-              {{/if}}
-            </p>
-          {{else}}
-            <p><i>{{t 'patient_dashboard.updating_estimates'}}</i></p>
-          {{/if}}
-        </div>
+        {{#if queueMeta.updatedAt}}
+          <p>
+            {{#if queueMeta.firstInQueue}}
+              {{t 'patient_dashboard.queue_first' name=doctor.fullName}}
+            {{else}}
+              {{t 'patient_dashboard.queue_other' people=queueMeta.position waiting=queueMeta.waiting}}
+            {{/if}}
+          </p>
+        {{else}}
+          <p><i>{{t 'patient_dashboard.updating_estimates'}}</i></p>
+        {{/if}}
       {{/if}}
 
       {{#if isCanceled}}
-        <div class="media-body">
-          <h4 class="media-heading">{{t 'patient_dashboard.canceled_header' name=doctor.fullName}}</h4>
+        <h4 class="media-heading">{{t 'patient_dashboard.canceled_header' name=doctor.fullName}}</h4>
 
-          <p>
-            {{t 'patient_dashboard.canceled_p' name=doctor.fullName time=createdAt cause=cause}}
+        <p>
+          {{t 'patient_dashboard.canceled_p' name=doctor.fullName time=createdAt cause=cause}}
 
-            {{#if canceledDoctorOffline}}
-              {{t 'patient_dashboard.canceled_doctor_offline'}}
-            {{else}}
-              {{t 'patient_dashboard.canceled_patient_offline'}}
-            {{/if}}
-          </p>
-        </div>
+          {{#if canceledDoctorOffline}}
+            {{t 'patient_dashboard.canceled_doctor_offline'}}
+          {{else}}
+            {{t 'patient_dashboard.canceled_patient_offline'}}
+          {{/if}}
+        </p>
       {{/if}}
-    </div>
+    {{/identity-card}}
   {{/with}}
 {{/if}}
 
