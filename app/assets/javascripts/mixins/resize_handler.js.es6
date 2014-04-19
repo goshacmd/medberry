@@ -1,18 +1,15 @@
 var ResizeHandlerMixin = Ember.Mixin.create({
-  _resizeHandler: null,
+  _resizeHandler: function() {
+    var self = this;
+    Ember.run(function() { self.send('resize') })
+  },
 
   _bindResize: function() {
-    var self = this;
-
-    this._resizeHandler = function() {
-      Ember.run(function() { self.send('resize') })
-    };
-
-    $(window).bind('resize', this._resizeHandler);
+    $(window).on('resize', $.proxy(this, '_resizeHandler'));
   }.on('didInsertElement'),
 
   _unbindResize: function() {
-    $(window).unbind('resize', this._resizeHandler);
+    $(window).off('resize', $.proxy(this, '_resizeHandler'));
   }.on('willDestroyElement')
 });
 
