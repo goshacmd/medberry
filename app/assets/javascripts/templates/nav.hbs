@@ -1,10 +1,8 @@
-<ul class="nav nav-pills">
-  {{#each items}}
-    {{#link-to route tagName='li'}}
-      {{#link-to route}}
-        {{t title}}
-        {{#if badge}}<span class="badge">{{badge}}</span>{{/if}}
-      {{/link-to}}
+{{#each items}}
+  {{#link-to route tagName='li'}}
+    {{#link-to route}}
+      {{t title}}
+      {{#if badge}}<span class="badge">{{badge}}</span>{{/if}}
     {{/link-to}}
-  {{/each}}
-</ul>
+  {{/link-to}}
+{{/each}}

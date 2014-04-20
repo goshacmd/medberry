@@ -1,11 +1,12 @@
 var ToggleableStar = Ember.Component.extend({
-  tagName: 'span',
+  tagName: 'a',
+  classNames: ['star'],
+  layout: Ember.Handlebars.compile('{{#if value}}&#9733;{{else}}&#9734;{{/if}}'),
+
   value: null,
 
-  actions: {
-    toggle: function() {
-      this.sendAction();
-    }
+  click: function(e) {
+    this.sendAction();
   }
 });
 
