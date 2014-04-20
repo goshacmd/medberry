@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418115706) do
+ActiveRecord::Schema.define(version: 20140420125748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,12 +77,14 @@ ActiveRecord::Schema.define(version: 20140418115706) do
     t.string   "tokbox_session"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "status",          default: 0
+    t.integer  "status",                default: 0
     t.datetime "finished_at"
     t.integer  "finished_by"
     t.integer  "finishing_cause"
-    t.integer  "mode",            default: 2
+    t.integer  "mode",                  default: 2
     t.integer  "duration"
+    t.string   "diagnosis_category_id"
+    t.text     "advice"
   end
 
   add_index "consultations", ["doctor_id"], name: "index_consultations_on_doctor_id", using: :btree

@@ -6,6 +6,8 @@
     <p>{{t 'consultation.city'}}: {{patient.city}}</p>
     <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
     <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    <p>{{t 'consultation.diagnosis'}}: {{diagnosisCategory.humanLabel}}</p>
+    <p>{{t 'consultation.advice'}}: {{advice}}</p>
   {{/identity-card}}
 {{else}}
   {{#identity-card avatarSize=128 avatarUrl=patient.avatarUrl}}
@@ -14,5 +16,7 @@
     <p>{{t 'consultation.practice'}}: {{doctor.practice}}</p>
     <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
     <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    <p>{{t 'consultation.diagnosis'}}: {{diagnosisCategory.humanLabel}}</p>
+    <p>{{t 'consultation.advice'}}: {{advice}}</p>
   {{/identity-card}}
 {{/if}}

@@ -1,3 +1,5 @@
+import DC  from 'app/models/diagnosis_category';
+
 var Consultation = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
@@ -13,6 +15,12 @@ var Consultation = DS.Model.extend({
   finishedBy: DS.attr('string'),
   duration: DS.attr('number'),
   extension: DS.attr('boolean'),
+  diagnosisCategoryId: DS.attr('string'),
+  advice: DS.attr('string'),
+
+  diagnosisCategory: function() {
+    return DC.FIXTURES.findBy('slug', this.get('diagnosisCategoryId'));
+  }.property('diagnosisCategoryId'),
 
   isInProgress: Ember.computed.equal('status', 'in_progress'),
   isOver: Ember.computed.equal('status', 'over'),

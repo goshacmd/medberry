@@ -1,5 +1,9 @@
+import DC from 'app/models/diagnosis_category';
+
 var ConsultationIndexController = Ember.ObjectController.extend({
   needs: ['clockService'],
+
+  diagnosisCategories: DC.FIXTURES,
 
   isTimeOver: Ember.computed.or('isFinished', 'isExpired'),
   isNotTimeOver: Ember.computed.not('isTimeOver'),
@@ -32,7 +36,13 @@ var ConsultationIndexController = Ember.ObjectController.extend({
 
   isExpired: function() {
     return (new Date) >= this.get('expiresAt');
-  }.property('expiresAt', 'controllers.clockService.pulse')
+  }.property('expiresAt', 'controllers.clockService.pulse'),
+
+  actions: {
+    saveAdvice: function() {
+      this.get('model').save();
+    }
+  }
 });
 
 export default ConsultationIndexController;

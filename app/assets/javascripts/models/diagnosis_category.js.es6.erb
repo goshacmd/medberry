@@ -1,0 +1,31 @@
+var DiagnosisCategory = Ember.Object.extend({
+  practice: null,
+  slug: null,
+
+  humanLabel: function() {
+    var sliced = this.get('slug').split('.');
+    var practice = sliced.shift();
+
+    var t = function(p) { return I18n.t('js.diagnosis_categories.' + practice + '.' + p); };
+
+    var joinPrev = function(_, i, s) { return s.slice(0, i + 1); };
+    var appendUnderscoreList = function(e, i, s) {
+      var post = (i == s.length - 1) ? '' : '_list';
+      return e + post;
+    };
+
+    return sliced.map(joinPrev).map(function(path) {
+      return path.map(appendUnderscoreList).join('.');
+    }).map(t).join(' — ');
+  }.property('slug')
+});
+
+DiagnosisCategory.FIXTURES = <%=
+  DiagnosisCategory::CATS[:GP].map { |val|
+    { practice: 'family', slug: val } unless val == :gp
+  }.compact.to_json
+%>.map(function(o) {
+  return DiagnosisCategory.create(o);
+});
+
+export default DiagnosisCategory;

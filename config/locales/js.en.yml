@@ -51,6 +51,9 @@ en:
       duration: "Durarion"
       practice: "Practice"
       cause: "Consultation reason"
+      diagnosis: "Diagnosis"
+      advice: "Advice"
+      save_advice_button: "Save advice"
       extend_button: "Extend consultation"
       queue_button: "Go to queue"
       next_button: "Proceed to the next patient"
@@ -85,3 +88,241 @@ en:
       header: "Queue"
       next_button: "Talk to next patient ({{name}})"
       nothing: "The queue is empty."
+
+    diagnosis_categories:
+      gp:
+        general: "General and unspecified"
+        general_list:
+          symptoms: "Symptoms and complaints"
+          symptoms_list:
+            fever: "Fever"
+            weakness: "Fatigue, weakness"
+            allergy: "Allergy / allergic reaction"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            drug_reaction: "Adverse drug reaction"
+            other: "Other diseases"
+
+        blood: "Blood and blood forming organs"
+        blood_list:
+          symptoms: "Symptoms and complaints"
+          symptoms_list:
+            lymph: "Enlarged lymph node"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            lymphadenitis: "Acute lymphadenitis"
+            anemia: "Anemia"
+            other: "Other diseases"
+
+        digestive: "Digestive organs"
+        digestive_list:
+          symptoms: "Symptoms and complaints"
+          symptoms_list:
+            cramps: "Generalized abdominal pain / cramps"
+            stomach: "Stomach ache"
+            other_pain: "Other localized abdominal pain"
+            diarrhea: "Diarrhea"
+            constipation: "Constipation"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            infect_diarrhea: "Infect. diarrhea and gastro-int."
+            stomach_disorder: "Disorders of the esophagus and stomach"
+            IBS: "Spastic colon / IBS"
+            other: "Other diseases"
+
+        eye: "Eye"
+        eye_list:
+          symptoms: "Symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            infection: "Infection / inflammation of eye / adnexa"
+            cataract: "Cataract"
+            other: "Other diseases"
+
+        ear: "Ear"
+        ear_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            earache: "Earache"
+            hearing: "Hearing compltaints"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            otitis_externa: "Otitis externa"
+            otitis_media: "Otitis media"
+            cerumen: "Excessive cerumen"
+            vertigo: "Vertigo Syndrome / labyrinthitis"
+            deafness: "Deafness"
+            other: "Other diseases"
+
+        cardio: "Cardiovascular system"
+        cardio_list:
+          symptoms: "Symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            angina: "Angina pectoris"
+            infraction: "Acute myocardial infarction"
+            chronic: "Other / chronic ischemic heart disease"
+            failure: "Congestive heart failure"
+            arrhythmia: "Cardiac arrhythmias"
+            inc_pressure: "Increased blood pressure"
+            CVA: "Cerebrovascular accident (CVA)"
+            peripheral: "Diseases of the peripheral arteries"
+            varices: "Varices legs"
+            hemorrhoids: "Hemorrhoids"
+            other: "Other diseases"
+
+        muscul: "Musculoskeletal"
+        muscul_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            neck: "Symptoms or neck complaints"
+            back: "Symptoms or back complaints"
+            low_back_wo_r: "Low back pain without radiation"
+            chest: "Symptoms or chest complaints"
+            shoulder: "Symptoms or shoulder complaints"
+            knee: "Symptoms or knee compltaints"
+            foot: "Symptoms or foot/toe compltaints"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            sprain: "Sprain, distortion"
+            low_back_w_r: "Low back pain with radiation"
+            arthritis: "Rheumatoid arthritis"
+            osteoarthritis: "Osteoarthritis"
+            PHS: "Shoulder Syndrome / PHS"
+            osteoporosis: "Osteoporosis"
+            other: "Other diseases"
+
+        nervous: "Nervous system"
+        nervous_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            headache: "Headache"
+            tension_headache: "Tension headaches"
+            dizziness: "Dizziness"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            m_sclerosis: "Multiple sclerosis"
+            epilepsy: "Epilepsy"
+            migraine: "Migraine"
+            other: "Other diseases"
+
+        psycho: "Psychological issues"
+        psycho_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            nervous_feeling: "Anxious, nervous, tense feeling"
+            feeling_depressed: "Down / feeling depressed"
+            insomnia: "Insomnia, other sleep disorder"
+            hyperkinetic: "Hyperactive child / hyperkinetic syndrome"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            dementia: "Dementia / Alzheimers"
+            anxiety: "Angstst. / Anxiety state and other neuroses"
+            depression: "Depression"
+            surmenage: "Neurasthenia / surmenage"
+            other: "Other diseases"
+
+        respiratory: "Respiratory"
+        respiratory_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            cough: "Cough"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            upper_resp_inf: "Acute upper respiratory infection"
+            sinusitis: "Acute / chronic sinusitis"
+            abses: "Acute tonsillitis / peritonsillar abses"
+            bronchiolitis: "Acute bronchitis / bronchiolitis"
+            influenza: "Influenza"
+            pneumonia: "Pneumonia"
+            COPD: "Chronic bronchitis, emphysema, COPD"
+            asthma: "Asthma"
+            hay_fever: "Hay fever / allergic rhinitis"
+            other: "Other diseases"
+
+        skin: "Skin and subcutaneous tissue"
+        skin_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            warts: "Warts"
+            tear_wound: "Tear wound, cut"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            dermatomycosis: "Dermatomycosis"
+            nevus: "Nevus / mole"
+            impetigo: "Impetigo / Impertignisation"
+            atopic_eczema: "Atopic eczema"
+            other_eczema: "Contact dermatitis / other eczema"
+            psoriasis: "Psoriasis"
+            other: "Other diseases"
+
+        nutrition: "Endocrine kl. / Metabol. / Nutrition"
+        nutrition_list:
+          symptoms: "Symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            myxedema: "Hypothyroidism / myxedema"
+            diabetes: "Diabetes mellitus"
+            metabolism: "Lipid metabolism disorder"
+            other: "Other diseases"
+
+        urinary: "Urinary"
+        urinary_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            micturition: "Micturition problems"
+            incontinence: "Urinary incontience"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            tract_infection: "Cystitis / urinary tract infection"
+            other: "Other diseases"
+
+        pregnancy: "Pregnancy / childbirth / etc."
+        pregnancy_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            contraception: "Contraception"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+
+        gen_female: "Gemitalia and breasts wife"
+        gen_female_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            menstruation: "Menstruation compltaints"
+            climacteric: "Climacteric symptoms / compltaints"
+            breasts: "Nodule / swelling breasts wife"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            candidiasis: "Urogenital candidiasis"
+            vaginitis: "Vaginitis / vulvitis nao"
+            other: "Other diseases"
+
+        gen_male: "Sex organs and male breast"
+        gen_male_list:
+          symptoms: "Symptoms"
+          symptoms_list:
+            prostate: "Prostatic problems"
+            other: "Other signs and symptoms"
+          diseases: "Diseases"
+          diseases_list:
+            hypertrophy: "Benign prostatic hypertrophy"
+            other: "Other diseases"
+
+        social: "Social problems"
+        social_list:
+          workspace: "Problems with workspace"
+          relationship: "Relationship problems with partner"
+          loss: "Loss or illness of partner"
+          other: "Other social problems"
