@@ -8,13 +8,22 @@ var optimalSize = function(width, height, aspectRatio) {
 }
 
 var ConsultationView = Ember.View.extend(ResizeHandlerMixin, {
+  wasInserted: false,
+
+  didInsertElement: function() {
+    this.set('wasInserted', true);
+    this.notifyPropertyChange('size');
+  },
+
   size: function() {}.property(),
 
   width: function() {
+    if (!this.get('wasInserted')) return;
     return this.$().width();
   }.property('size'),
 
   height: function() {
+    if (!this.get('wasInserted')) return;
     return $(window).height() - this.$().offset().top - 100;
   }.property('size'),
 

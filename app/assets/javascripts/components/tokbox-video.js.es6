@@ -42,7 +42,7 @@ var TokboxVideoComponent = Ember.Component.extend({
   session: null, // TB.Session
   cameraAccessError: null, // was there an error?
   needsUserAction: null,
-  size: null, // video size ({ width: X, height: Y })
+  size: { width: 400, height: 300 }, // video size ({ width: X, height: Y })
   selfPosition: 4, // 1 - top left, 2 - top right, 3 - bottom left, 4 - bottom right
   positionPadding: 20,
   mateStreamId: null, // id of mate stream
@@ -96,6 +96,18 @@ var TokboxVideoComponent = Ember.Component.extend({
     this.session.connect(apiKey, token);
   }.on('didInsertElement'),
 
+  videoSizesDidChange: function() {
+    Ember.run.once('afterRender', this, 'setVideoSizes');
+  }.observes('mateVideoSize', 'selfVideoSize'),
+
+  videoPositionsDidChange: function() {
+    Ember.run.once('afterRender', this, 'positionVideoElements');
+  }.observes('mateVideoPosition', 'selfVideoPosition'),
+
+  sizeDidChange: function() {
+    Ember.run.once('afterRender', this, 'positionVideoContainer');
+  }.observes('size'),
+
   setVideoSizes: function() {
     var mateSize = this.get('mateVideoSize'),
         selfSize = this.get('selfVideoSize');
@@ -104,7 +116,7 @@ var TokboxVideoComponent = Ember.Component.extend({
 
     this.mate$().css(mateSize);
     this.self$().css(selfSize);
-  }.observes('mateVideoSize', 'selfVideoSize'),
+  },
 
   positionVideoContainer: function() {
     var v$ = this.v$();
@@ -114,7 +126,7 @@ var TokboxVideoComponent = Ember.Component.extend({
 
     var vPosition = { left: (this.$().width() - v$.width()) / 2 };
     v$.css(vPosition);
-  }.observes('size'),
+  },
 
   positionVideoElements: function() {
     var mate$ = this.mate$();
@@ -128,7 +140,7 @@ var TokboxVideoComponent = Ember.Component.extend({
 
     mate$.css(matePosition);
     self$.css(selfPosition);
-  }.observes('mateVideoPosition', 'selfVideoPosition'),
+  },
 
   setAndPositionVideos: function() {
     this.setVideoSizes();
