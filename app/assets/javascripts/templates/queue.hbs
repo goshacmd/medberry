@@ -7,9 +7,9 @@
 
   <div class="row">
     {{#each}}
-      <div class="col-md-3 col-sm-4 col-xs-6 text-center">
-        <div class="panel panel-default patient-card">
-          <div class="panel-body">
+      <div class="card-outer">
+        <div class="card patient-card">
+          <div class="card-body">
             <h4>
               {{online-dot isOffline=patient.isOffline}}
 

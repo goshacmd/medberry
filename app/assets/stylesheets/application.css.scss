@@ -103,3 +103,19 @@
   height: 300px;
   overflow-y: scroll;
 }
+
+.card-outer {
+  @extend .col-md-3;
+  @extend .col-sm-4;
+  @extend .col-xs-6;
+  @extend .text-center;
+}
+
+.card {
+  @extend .panel;
+  @extend .panel-default;
+}
+
+.card-body {
+  @extend .panel-body;
+}
