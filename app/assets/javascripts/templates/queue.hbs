@@ -5,30 +5,29 @@
     {{t 'queue.next_button' name=nextRequest.patient.fullName}}
   </a>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>{{t 'queue.patient'}}</th>
-        <th>{{t 'queue.cause'}}</th>
-        <th>{{t 'queue.placed_at'}}</th>
-      </tr>
-    </thead>
+  <div class="row">
+    {{#each}}
+      <div class="col-md-3 col-sm-4 col-xs-6 text-center">
+        <div class="panel panel-default patient-card">
+          <div class="panel-body">
+            <h4>
+              {{online-dot isOffline=patient.isOffline}}
 
-    <tbody>
-      {{#each controller}}
-        <tr>
-          <td>
-            {{patient.fullName}}
+              {{patient.fullName}}
+            </h4>
 
-            {{online-dot isOffline=patient.isOffline}}
-          </td>
+            <h6>
+              {{cause}}
+            </h6>
 
-          <td>{{cause}}</td>
-          <td>{{createdAt}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+            <img {{bind-attr src="patient.avatarUrl"}} class="img-circle">
+
+            <h6>{{formatTime createdAt}}</h6>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
 {{else}}
   <p>{{t 'queue.nothing'}}</p>
 {{/if}}

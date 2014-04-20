@@ -84,7 +84,4 @@ en:
     queue:
       header: "Queue"
       next_button: "Talk to next patient ({{name}})"
-      patient: "Patient"
-      cause: "Cause"
-      placed_at: "Placed at"
       nothing: "The queue is empty."
