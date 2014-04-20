@@ -9,6 +9,6 @@ class ConsultationStateMachine
   transition from: :over, to: [:in_progress, :finished]
 
   after_transition do |consultation, transition|
-    consultation.update(status: transition.to_state)
+    consultation.update_attribute(:status, transition.to_state)
   end
 end

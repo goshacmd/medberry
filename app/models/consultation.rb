@@ -21,7 +21,7 @@ class Consultation < ActiveRecord::Base
   enum :finishing_cause, FINISHING_CAUSES
   enum :finished_by, FINISHERS
 
-  validates :diagnosis_category_id, inclusion: { in: DiagnosisCategory::CATS[:GP] }, unless: :in_progress?
+  #validates :diagnosis_category_id, inclusion: { in: DiagnosisCategory::CATS[:GP] + [nil] }
   validates :mode, inclusion: { in: MODES.keys }
 
   scope :created_before, -> time { where('created_at <= :time', time: time) }
@@ -29,7 +29,7 @@ class Consultation < ActiveRecord::Base
   class << self
     def create_from_request(request)
       create(status: :in_progress, patient: request.patient, doctor: request.doctor,
-             request: request, cause_category_id: request.cause_category_id, mode: 'video')
+             request: request, cause_category_id: request.cause_category_id, mode: :video)
     end
   end
 
