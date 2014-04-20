@@ -1,14 +1,20 @@
+import DC from 'app/models/diagnosis_category';
+
 var ConsultationRequest = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
   consultation: DS.belongsTo('consultation'),
   queueMeta: DS.belongsTo('consultation_request_queue_meta'),
 
-  cause: DS.attr('string'),
+  causeCategoryId: DS.attr('string'),
   status: DS.attr('string'),
   cancelationCause: DS.attr('string'),
   createdAt: DS.attr('date'),
   canceledAt: DS.attr('date'),
+
+  causeCategory: function() {
+    return DC.FIXTURES.findBy('slug', this.get('causeCategoryId'));
+  }.property('causeCategoryId'),
 
   isNewRequest: Ember.computed.equal('status', 'new'),
   isAccepted: Ember.computed.equal('status', 'accepted'),

@@ -5,7 +5,7 @@
     <p>{{t 'consultation.dob'}}: {{date patient.dob}}</p>
     <p>{{t 'consultation.city'}}: {{patient.city}}</p>
     <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
-    <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    <p>{{t 'consultation.cause'}}: {{causeCategory.humanLabel}}</p>
     <p>{{t 'consultation.diagnosis'}}: {{diagnosisCategory.humanLabel}}</p>
     <p>{{t 'consultation.advice'}}: {{advice}}</p>
   {{/identity-card}}
@@ -15,7 +15,7 @@
 
     <p>{{t 'consultation.practice'}}: {{doctor.practice}}</p>
     <p>{{t 'consultation.duration'}}: {{time durationMs}}</p>
-    <p>{{t 'consultation.cause'}}: {{cause}}</p>
+    <p>{{t 'consultation.cause'}}: {{causeCategory.humanLabel}}</p>
     <p>{{t 'consultation.diagnosis'}}: {{diagnosisCategory.humanLabel}}</p>
     <p>{{t 'consultation.advice'}}: {{advice}}</p>
   {{/identity-card}}

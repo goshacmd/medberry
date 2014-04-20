@@ -11,6 +11,7 @@ class ConsultationRequest < ActiveRecord::Base
 
   validates :patient, presence: true
   validates :doctor, presence: true
+  validates :cause_category_id, inclusion: { in: DiagnosisCategory::CATS[:GP] }
 
   enum :status, STATUSES
   enum :cancelation_cause, CANCELATION_CAUSES

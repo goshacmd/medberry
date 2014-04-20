@@ -20,7 +20,12 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">{{t 'new_request.cause_label'}}</label>
         <div class="col-sm-10">
-          {{input value=cause type="text" class="form-control" placeholder="Reason for your appointment..."}}
+          {{view Ember.Select
+                 class="form-control"
+                 content=causeCategories
+                 value=causeCategoryId
+                 optionValuePath="content.slug"
+                 optionLabelPath="content.humanLabel"}}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@
       {{#if isNewRequest}}
         <h4 class="media-heading">{{t 'patient_dashboard.wait_header' name=doctor.fullName}}</h4>
 
-        <p>{{t 'patient_dashboard.cause_p' cause=cause}}</p>
+        <p>{{t 'patient_dashboard.cause_p' cause=causeCategory.humanLabel}}</p>
 
         {{#if queueMeta.updatedAt}}
           <p>
@@ -23,7 +23,7 @@
         <h4 class="media-heading">{{t 'patient_dashboard.canceled_header' name=doctor.fullName}}</h4>
 
         <p>
-          {{t 'patient_dashboard.canceled_p' name=doctor.fullName time=createdAt cause=cause}}
+          {{t 'patient_dashboard.canceled_p' name=doctor.fullName time=createdAt cause=causeCategory.humanLabel}}
 
           {{#if canceledDoctorOffline}}
             {{t 'patient_dashboard.canceled_doctor_offline'}}

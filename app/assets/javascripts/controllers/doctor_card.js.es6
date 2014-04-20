@@ -8,7 +8,7 @@ var DoctorCardController = Ember.ObjectController.extend({
     },
 
     showRequestModal: function(doctor) {
-      var requestData = { doctor: doctor, cause: null };
+      var requestData = { doctor: doctor, causeCategoryId: null };
       this.send('openModal', 'new_consultation_request', requestData);
     }
   }

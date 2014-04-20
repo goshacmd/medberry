@@ -21,16 +21,22 @@ class Consultation < ActiveRecord::Base
   enum :finishing_cause, FINISHING_CAUSES
   enum :finished_by, FINISHERS
 
+  validates :diagnosis_category_id, inclusion: { in: DiagnosisCategory::CATS[:GP] }, unless: :in_progress?
+  validates :mode, inclusion: { in: MODES.keys }
+
   scope :created_before, -> time { where('created_at <= :time', time: time) }
 
   class << self
     def create_from_request(request)
-      create(status: :in_progress, patient: request.patient, doctor: request.doctor, request: request, cause: request.cause)
+      create(status: :in_progress, patient: request.patient, doctor: request.doctor,
+             request: request, cause_category_id: request.cause_category_id, mode: 'video')
     end
   end
 
-  delegate :tokbox_token_patient, :tokbox_token_doctor, :expires_at, to: :latest_session
-  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state, to: :state_machine
+  delegate :tokbox_token_patient, :tokbox_token_doctor, :expires_at,
+    to: :latest_session
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def latest_session
     sessions.order(created_at: :desc).first || ConsultationSession.new
@@ -68,7 +74,8 @@ class Consultation < ActiveRecord::Base
   end
 
   def state_machine
-    @state_machine ||= ConsultationStateMachine.new(self, transition_class: self.class.transition_class)
+    @state_machine ||=
+      ConsultationStateMachine.new(self, transition_class: self.class.transition_class)
   end
 
   private

@@ -4,7 +4,7 @@ class ConsultationRequestCreator
   model ConsultationRequest
 
   def attrs
-    params.require(:consultation_request).permit(:doctor_id, :cause)
+    params.require(:consultation_request).permit(:doctor_id, :cause_category_id)
   end
 
   # Create a consultation request, checking the online status of the doctor.

@@ -1,6 +1,10 @@
+import DC from 'app/models/diagnosis_category';
+
 var NewConsultationRequestController = Ember.ObjectController.extend({
   isSaving: false,
   hasError: false,
+
+  causeCategories: DC.FIXTURES,
 
   resetState: function() {
     this.set('isSaving', false);

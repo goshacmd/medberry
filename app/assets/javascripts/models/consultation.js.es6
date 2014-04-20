@@ -4,7 +4,7 @@ var Consultation = DS.Model.extend({
   patient: DS.belongsTo('patient'),
   doctor: DS.belongsTo('doctor'),
   messages: DS.hasMany('message'),
-  cause: DS.attr('string'),
+  causeCategoryId: DS.attr('string'),
   tokboxSession: DS.attr('string'),
   tokboxToken: DS.attr('string'),
   createdAt: DS.attr('date'),
@@ -17,6 +17,10 @@ var Consultation = DS.Model.extend({
   extension: DS.attr('boolean'),
   diagnosisCategoryId: DS.attr('string'),
   advice: DS.attr('string'),
+
+  causeCategory: function() {
+    return DC.FIXTURES.findBy('slug', this.get('causeCategoryId'));
+  }.property('causeCategoryId'),
 
   diagnosisCategory: function() {
     return DC.FIXTURES.findBy('slug', this.get('diagnosisCategoryId'));
