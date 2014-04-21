@@ -6,3 +6,11 @@
     {{/link-to}}
   {{/link-to}}
 {{/each}}
+
+{{#if currentUser.isDoctor}}
+  <li>
+    <a href="#" {{action 'openModal' 'new_connection'}}>
+      {{t 'nav.invite_button'}}
+    </a>
+  </li>
+{{/if}}

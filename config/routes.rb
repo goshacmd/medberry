@@ -4,6 +4,8 @@ Medlive::Application.routes.draw do
     resources :consultation_requests
     resources :consultations
     resources :messages
+
+    resources :connections
   end
 
   namespace :admin do

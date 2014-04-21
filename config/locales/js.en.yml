@@ -11,6 +11,7 @@ en:
       dashboard: "Dashboard"
       history: "History"
       doctors: "Talk to a doctor"
+      invite_button: "Invite a patient"
 
     patient_dashboard:
       wait_header: "Please wait for your consultation with Dr. {{name}} to begin"
@@ -83,6 +84,13 @@ en:
       place_button: "Place a request"
       place_button_progress: "Placing a request..."
       error_p: "You already have an active request or are in the middle of a consultation."
+
+    new_connection:
+      header: "Invite a patient"
+      email_label: "Patient's email"
+      invite_button: "Invite"
+      invite_button_progress: "Inviting..."
+      success_p: "Invite successfully sent"
 
     queue:
       header: "Queue"
