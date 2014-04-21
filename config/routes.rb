@@ -21,6 +21,8 @@ Medlive::Application.routes.draw do
 
   post 'pusher/auth'
 
+  get 'app(/*path)' => 'home#app'
+
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

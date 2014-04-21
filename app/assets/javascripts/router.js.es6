@@ -1,4 +1,7 @@
-var Router = Ember.Router.extend();
+var Router = Ember.Router.extend({
+  rootURL: '/app',
+  location: 'history'
+});
 
 Router.map(function() {
   this.route('dashboard', { path: '/' });
