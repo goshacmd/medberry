@@ -9,6 +9,8 @@ Medlive::Application.routes.draw do
   end
 
   namespace :admin do
+    resource :invitations
+
     root 'dashboard#index'
   end
 

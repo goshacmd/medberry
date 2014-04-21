@@ -1,0 +1,8 @@
+<h2>Invite a user</h2>
+
+<%= simple_form_for @invite, as: :invite, url: admin_invitations_path, html: { method: :post } do |f| %>
+  <%= f.input :email, label: 'Email address', placeholder: 'john.due@gmail.com' %>
+  <%= f.input :role, collection: [['Doctor', 'doctor'], ['Patient', 'patient']], as: :radio_buttons %>
+
+  <%= f.button :submit, 'Invite', class: 'btn-success' %>
+<% end %>
