@@ -1,0 +1,21 @@
+<h3>Personal information</h3>
+
+<%= f.simple_fields_for :identity do |ff| %>
+  <%= ff.input :bsn, label: 'BSN', placeholder: '123456789', autofocus: true %>
+  <%= ff.input :dob, label: 'Date of birth', order: [:day, :month, :year], start_year: 1900, end_year: Time.now.year, as: :date %>
+  <%= ff.input :gender, collection: [['Male', 'male'], ['Female', 'female']], default: 'male' %>
+  <%= ff.input :first_name, placeholder: 'John' %>
+  <%= ff.input :last_name, placeholder: 'Doe' %>
+  <%= ff.input :zip, label: 'Postal code', placeholder: '1111 AB' %>
+  <%= ff.input :address, placeholder: 'Somestraat 42' %>
+  <%= ff.input :city, placeholder: 'Amsterdam' %>
+<% end %>
+
+<h3>Insurance information</h3>
+
+<%= f.simple_fields_for :identity do |fi| %>
+  <%= fi.simple_fields_for :insurance_policy do |ff| %>
+    <%= ff.association :insurance_company, collection: InsuranceCompany.all, label_method: :name, prompt: 'Insurance company' %>
+    <%= ff.input :number, placeholder: 'Insurance policy number' %>
+  <% end %>
+<% end %>

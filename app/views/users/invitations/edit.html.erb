@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <h2><%= t 'devise.invitations.edit.header' %></h2>
+
+    <%= simple_form_for resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put } do |f| %>
+      <%= f.error_notification %>
+      <%= f.hidden_field :invitation_token %>
+
+      <%= render partial: 'users/registrations/patient_form', locals: { f: f } %>
+
+      <h3>Account information</h3>
+
+      <%= f.input :password, placeholder: 'Desired password' %>
+      <%= f.input :password_confirmation, placeholder: 'Confirm' %>
+
+      <%= f.button :submit, t("devise.invitations.edit.submit_button"), class: 'btn-success' %>
+    <% end %>
+  </div>
+</div>

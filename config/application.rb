@@ -29,6 +29,10 @@ module Medlive
 
     config.active_record.observers = [:consultation_request_observer, :consultation_observer, :message_observer]
 
+    config.action_mailer.default_url_options = {
+      host: ENV['APP_HOST']
+    }
+
     config.assets.initialize_on_precompile = true
 
     config.handlebars.output_type = :amd

@@ -11,7 +11,8 @@ Medlive::Application.routes.draw do
   end
 
   devise_for :users, controllers: {
-    registrations: 'registrations'
+    registrations: 'users/registrations',
+    invitations: 'users/invitations'
   }
 
   devise_for :admins
