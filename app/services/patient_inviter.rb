@@ -11,7 +11,7 @@ class PatientInviter
   end
 
   def patient_user
-    @patient_user ||= User.where(email: email).first
+    @user ||= User.where(email: email).first
   end
 
   def invitee_patient?
@@ -23,11 +23,17 @@ class PatientInviter
   end
 
   def send_invitation
-    User.invite!({ email: email }, current_user)
+    User.invite!({ email: email }, current_user).tap do |user|
+      user.identity = Patient.new
+      user.save validate: false
+    end
   end
 
   def perform
-    raise RuntimeError, 'invited user not a patient' if patient_user && !invitee_patient?
+    raise RuntimeError, 'invited user is not a patient' if patient_user && !invitee_patient?
     send_invitation unless patient_user
+
+    patient.available_doctors << doctor
+    patient.save
   end
 end

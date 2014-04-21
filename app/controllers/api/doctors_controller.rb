@@ -2,7 +2,7 @@ class Api::DoctorsController < ApiController
   before_action :ensure_patient
 
   def index
-    @doctors = Doctor.all
+    @doctors = current_user.identity.available_doctors
 
     render json: @doctors
   end

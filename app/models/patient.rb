@@ -5,6 +5,8 @@ class Patient < ActiveRecord::Base
   has_many :consultation_requests
   has_many :favorite_doctors
   has_many :fav_doctors, through: :favorite_doctors, source: :doctor
+  has_many :doctor_patient_connections
+  has_many :available_doctors, through: :doctor_patient_connections, source: :doctor
 
   validates :bsn, presence: true, length: { is: 9 }, format: { with: /\A[0-9]+\z/ }
   validates :first_name, presence: true
