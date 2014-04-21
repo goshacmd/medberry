@@ -12,6 +12,9 @@ Medlive::Application.routes.draw do
     root 'dashboard#index'
   end
 
+  get 'languages/english'
+  get 'languages/dutch'
+
   devise_for :users, controllers: {
     registrations: 'users/registrations',
     invitations: 'users/invitations'

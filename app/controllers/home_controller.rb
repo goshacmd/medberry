@@ -4,5 +4,6 @@ class HomeController < ApplicationController
   end
 
   def app
+    render layout: 'js_app'
   end
 end
