@@ -72842,6 +72842,9 @@ define("app/adapters/application",
     var Doctor = DS.Model.extend(Identity, {
       practice: DS.attr('string'),
       favorite: DS.attr('boolean'),
+      available: DS.attr('boolean'),
+
+      favoriteAndAvailable: Ember.computed.and('favorite', 'available'),
 
       humanPractice: function() {
         return this.get('practice') == 'family' ? 'Family doctor' : 'Pharmacist';
@@ -74981,7 +74984,7 @@ function program4(depth0,data) {
 
     var DoctorsRoute = PatientOnlyRoute.extend({
       model: function() {
-        return this.store.find('doctor');
+        return this.store.filter('doctor', {}, function(d) { return d.get('available') });
       }
     });
 
@@ -75007,7 +75010,7 @@ function program4(depth0,data) {
       model: function() {
         var is = function(property) { return function(record) { return record.get(property) } };
 
-        var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favorite'));
+        var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favoriteAndAvailable'));
         var consultationRequests = this.store.find('consultation_request');
 
         return Ember.RSVP.hash({
