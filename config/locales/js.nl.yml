@@ -14,11 +14,11 @@ nl:
       invite_button: "Patient uitnodigen"
 
     patient_dashboard:
-    	wait_header: "Nog even geduld, het consult met {{name}} gaat zo beginnen"
-    	cause_p: "De reden voor het consult is: {{cause}}"
-    	queue_first: "U bent de eerst wachtende voor een gesprek met {{name}}. Nog even geduld alstublieft."
-    	queue_other: "Er zijn nog <b>{{people}}</b> wachtenden voor u. De verwachte wachttijd is <b>{{waiting}}</b> minuten."
-    	updating_estimates: "Verversen van de verwachte wachttijd..."
+      wait_header: "Nog even geduld, het consult met {{name}} gaat zo beginnen"
+      cause_p: "De reden voor het consult is: {{cause}}"
+      queue_first: "U bent de eerst wachtende voor een gesprek met {{name}}. Nog even geduld alstublieft."
+      queue_other: "Er zijn nog <b>{{people}}</b> wachtenden voor u. De verwachte wachttijd is <b>{{waiting}}</b> minuten."
+      updating_estimates: "Verversen van de verwachte wachttijd..."
       canceled_header: "Het consult met {{name}} is geannuleerd."
       canceled_p: "U heeft een consult aangevraagd met {{name}} op {{time}} met als reden '{{cause}}'."
       canceled_doctor_offline: "Helaas is de arts op dit moment offline, uw aanvraag is geannuleerd."
