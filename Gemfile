@@ -19,6 +19,7 @@ gem 'statesman'
 gem 'opentok'
 gem 'pusher'
 gem 'mixpanel'
+gem 'sentry-raven'
 
 gem 'i18n-js', '~> 3.0.0.rc5'
 gem 'sass-rails', '~> 4.0.0'
