@@ -17,17 +17,27 @@ class AnalyticsService
   end
 
   def track_finished_consultation(consultation)
-    track 'Finished Consutlation', {
+    track 'Finished Consutlation', consultation_data(consultation)
+  end
+
+  def track_diagnosed_consultation(consultation)
+    track 'Diagnosed Consultation', {
+      diagnosis: consultation.diagnosis_category_id
+    }.merge(consultation_params(consultation))
+  end
+
+  def track(name, data)
+    mixpanel.track name, data
+  end
+
+  def consultation_params(consultation)
+    {
       finished_because: consultation.finishing_cause,
       finished_by: consultation.finished_by,
       duration_minutes: (consultation.duration / 60).to_i,
       messages: consultation.messages.size,
       extended_times: consultation.sessions.size - 1
     }.merge(doctor_data(consultation.doctor)).merge(patient_data(consultation.patient))
-  end
-
-  def track(name, data)
-    mixpanel.track name, data
   end
 
   def patient_data(patient)

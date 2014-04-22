@@ -36,11 +36,18 @@ class ConsultationUpdater
     elsif extension
       ConsultationExtender.new(consultation).perform
     else
-      consultation.update(mode: mode)
+      consultation.mode = mode
 
       if current_user.doctor?
-        consultation.update(diagnosis_category_id: diagnosis, advice: advice)
+        consultation.diagnosis_category_id = diagnosis
+        consultation.advice = advice
       end
+
+      report = consultation.diagnosis_category_id_changed?
+
+      consultation.save
+
+      AnalyticsService.new.track_diagnosed_consultation(consultation) if report
     end
   end
 end
