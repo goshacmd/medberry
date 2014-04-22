@@ -6,7 +6,7 @@
       <%= f.error_notification %>
       <%= f.hidden_field :invitation_token %>
 
-      <% if current_user.patient? %>
+      <% if resource.patient? %>
         <%= render partial: 'users/registrations/patient_form', locals: { f: f } %>
       <% else %>
         <h3>Personal information</h3>
