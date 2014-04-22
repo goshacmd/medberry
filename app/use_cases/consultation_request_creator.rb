@@ -19,7 +19,7 @@ class ConsultationRequestCreator
     patient.available_doctors
   end
 
-  def available_doctors_inlclude_doctor?
+  def available_doctors_include_doctor?
     available_doctors.where(doctor_id: doctor_id).count > 0
   end
 
