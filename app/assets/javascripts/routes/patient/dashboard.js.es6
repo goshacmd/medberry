@@ -4,7 +4,7 @@ var PatientDashboardRoute = PatientOnlyRoute.extend({
   model: function() {
     var is = function(property) { return function(record) { return record.get(property) } };
 
-    var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favorite'));
+    var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favoriteAndAvailable'));
     var consultationRequests = this.store.find('consultation_request');
 
     return Ember.RSVP.hash({
