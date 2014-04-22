@@ -49,7 +49,7 @@ en:
       over_header: "The consultation is over"
       dob: "Date of birth"
       city: "City of residence"
-      duration: "Durarion"
+      duration: "Duration"
       practice: "Practice"
       cause: "Consultation reason"
       diagnosis: "Diagnosis"
@@ -136,7 +136,7 @@ en:
             other: "Other signs and symptoms"
           diseases: "Diseases"
           diseases_list:
-            infect_diarrhea: "Infect. diarrhea and gastro-int."
+            infect_diarrhea: "Infectious diarrhea and suspected gastrointestinal infection."
             stomach_disorder: "Disorders of the esophagus and stomach"
             IBS: "Spastic colon / IBS"
             other: "Other diseases"
@@ -232,7 +232,7 @@ en:
           diseases: "Diseases"
           diseases_list:
             dementia: "Dementia / Alzheimers"
-            anxiety: "Angstst. / Anxiety state and other neuroses"
+            anxiety: "Anxiety disorder / anxiety state and other neuroses"
             depression: "Depression"
             surmenage: "Neurasthenia / surmenage"
             other: "Other diseases"
@@ -273,7 +273,7 @@ en:
             psoriasis: "Psoriasis"
             other: "Other diseases"
 
-        nutrition: "Endocrine kl. / Metabol. / Nutrition"
+        nutrition: "Endocrine / metabolic / nutritional"
         nutrition_list:
           symptoms: "Symptoms"
           diseases: "Diseases"
@@ -295,7 +295,7 @@ en:
             tract_infection: "Cystitis / urinary tract infection"
             other: "Other diseases"
 
-        pregnancy: "Pregnancy / childbirth / etc."
+        pregnancy: "Pregnancy, childbirth, childbirth and contraception"
         pregnancy_list:
           symptoms: "Symptoms"
           symptoms_list:
@@ -303,7 +303,7 @@ en:
             other: "Other signs and symptoms"
           diseases: "Diseases"
 
-        gen_female: "Gemitalia and breasts wife"
+        gen_female: "Reproductive system and breast woman"
         gen_female_list:
           symptoms: "Symptoms"
           symptoms_list:
@@ -317,7 +317,7 @@ en:
             vaginitis: "Vaginitis / vulvitis nao"
             other: "Other diseases"
 
-        gen_male: "Sex organs and male breast"
+        gen_male: "Reproductive system and breast men"
         gen_male_list:
           symptoms: "Symptoms"
           symptoms_list:
