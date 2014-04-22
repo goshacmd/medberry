@@ -10,7 +10,7 @@ redis:
 
 web:
   build: .
-  command: rails s -p 3000
+  command: bundle exec puma
   volumes:
     - .:/home/app
   ports:
