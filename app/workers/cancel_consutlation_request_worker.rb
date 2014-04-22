@@ -3,8 +3,13 @@
 # 1. the doctor has been offline for more than 5 minutes
 # 2. the patient has been offline for more than 5 minutes AND the request is
 #    the first in the queue to that doctor
-class CancelConsultationRequestProcessor
+class CancelConsultationRequestWorker
   include BatchProcessor
+  include Sidekiq::Worker
+  include Sidetiq::Schedulable
+
+  sidekiq_options retry: false
+  recurrence { secondly(30) }
 
   attr_reader :status_service
 

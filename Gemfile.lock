@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/tobiassvn/sidetiq.git
+  revision: 4f7d7daea3873443b17bf2f3da61619532bbeba2
+  specs:
+    sidetiq (0.5.0)
+      celluloid (>= 0.14.1)
+      ice_cube (~> 0.11.0)
+      sidekiq (>= 2.16.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -46,7 +55,10 @@ GEM
       sass (~> 3.2)
     builder (3.1.4)
     cancan (1.6.10)
+    celluloid (0.15.2)
+      timers (~> 1.1.0)
     coderay (1.1.0)
+    connection_pool (2.0.0)
     database_cleaner (1.2.0)
     debug_inspector (0.0.2)
     devise (3.2.3)
@@ -55,6 +67,8 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise-async (0.9.0)
+      devise (~> 3.2)
     devise_invitable (1.3.4)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
@@ -94,6 +108,7 @@ GEM
     i18n (0.6.9)
     i18n-js (3.0.0.rc5)
       i18n
+    ice_cube (0.11.3)
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -153,6 +168,8 @@ GEM
     rdoc (4.1.1)
       json (~> 1.4)
     redis (3.0.7)
+    redis-namespace (1.4.1)
+      redis (~> 3.0.4)
     ref (1.0.5)
     rspec-core (2.14.8)
     rspec-expectations (2.14.5)
@@ -166,8 +183,6 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
-    rufus-scheduler (3.0.7)
-      tzinfo
     sass (3.2.15)
     sass-rails (4.0.2)
       railties (>= 4.0.0, < 5.0)
@@ -181,6 +196,12 @@ GEM
       faraday (>= 0.7.6)
       hashie (>= 1.1.0)
       uuidtools
+    sidekiq (3.0.0)
+      celluloid (>= 0.15.2)
+      connection_pool (>= 2.0.0)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
     signature (0.1.7)
     simple_form (3.0.1)
       actionpack (>= 4.0.0, < 4.1)
@@ -203,6 +224,7 @@ GEM
     thread_safe (0.2.0)
       atomic (>= 1.1.7, < 2)
     tilt (1.4.1)
+    timers (1.1.0)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -225,6 +247,7 @@ DEPENDENCIES
   cancan
   database_cleaner
   devise (~> 3.2.0)
+  devise-async
   devise_invitable (~> 1.3.0)
   dotenv-rails
   ember-data-source (= 1.0.0.beta.7)
@@ -245,10 +268,11 @@ DEPENDENCIES
   rails_12factor
   redis
   rspec-rails
-  rufus-scheduler
   sass-rails (~> 4.0.0)
   sdoc
   sentry-raven
+  sidekiq
+  sidetiq!
   simple_form (~> 3.0.0)
   statesman
   therubyracer

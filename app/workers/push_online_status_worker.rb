@@ -1,4 +1,10 @@
-class PushOnlineStatusProcessor
+class PushOnlineStatusWorker
+  include Sidekiq::Worker
+  include Sidetiq::Schedulable
+
+  sidekiq_options retry: false
+  recurrence { secondly(30) }
+
   attr_reader :status_service, :pusher
 
   def initialize(status_service: OnlineStatusService.new, pusher: Pusher)

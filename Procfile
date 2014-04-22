@@ -1,2 +1,2 @@
 web: rails s -p $PORT
-pulser: rake scheduler
+worker: bundle exec sidekiq

@@ -3,8 +3,13 @@
 #
 # 1. it has already expired and already past extension window (1 min)
 # 2. either doctor or patient was offline for more than 2 mins
-class FinishConsultationProcessor
+class FinishConsultationWorker
   include BatchProcessor
+  include Sidekiq::Worker
+  include Sidetiq::Schedulable
+
+  sidekiq_options retry: false
+  recurrence { secondly(30) }
 
   attr_reader :status_service
 

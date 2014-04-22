@@ -1,5 +1,10 @@
-class PushQueueStatsProcessor
+class PushQueueStatsWorker
   include BatchProcessor
+  include Sidekiq::Worker
+  include Sidetiq::Schedulable
+
+  sidekiq_options retry: false
+  recurrence { secondly(30) }
 
   attr_reader :queue_service, :update_pusher, :pusher
 

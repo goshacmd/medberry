@@ -1,5 +1,10 @@
-class MarkOnlineStatusProcessor
+class MarkOnlineStatusWorker
   include BatchProcessor
+  include Sidekiq::Worker
+  include Sidetiq::Schedulable
+
+  sidekiq_options retry: false
+  recurrence { secondly(30) }
 
   attr_reader :status_service
 
@@ -13,6 +18,9 @@ class MarkOnlineStatusProcessor
 
   def process(user)
     id, role = user
+
+    return unless id && role # in case identity_id and identity_type are missing for some reason
+
     status_service.mark([role.downcase, id])
   end
 end
