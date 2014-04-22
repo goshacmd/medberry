@@ -12,6 +12,8 @@
     <tr>
       <th>Name</th>
       <th>Practice</th>
+      <th>Requests / consultations</th>
+      <th>Patients</th>
   </thead>
 
   <tbody>
@@ -19,6 +21,8 @@
       <tr>
         <td><%= doctor.full_name %></td>
         <td><%= doctor.practice %></td>
+        <td><%= doctor.consultation_requests.size %> / <%= doctor.consultations.size %></td>
+        <td><%= doctor.doctor_patient_connections.size %></th>
       </tr>
     <% end %>
   </tbody>
