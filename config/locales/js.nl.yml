@@ -22,7 +22,7 @@ nl:
       canceled_header: "Het consult met {{name}} is geannuleerd."
       canceled_p: "U heeft een consult aangevraagd met {{name}} op {{time}} met als reden '{{cause}}'."
       canceled_doctor_offline: "Helaas is de arts op dit moment offline, uw aanvraag is geannuleerd."
-      canceled_patient_offline: "Helaas bent u offline gegaan, uw aanvraag is geannuleerd."
+      canceled_patient_offline: "U bent offline gegaan, uw aanvraag is geannuleerd."
       favorite_doctors: "Favoriete artsen"
 
     history:
@@ -36,7 +36,7 @@ nl:
       status: "Status"
       cause: "Reden"
       duration: "Duur"
-      consulted: "Geraadpleegd"
+      consulted: "Consult afgelopen"
       canceled: "Aanvraag geannuleerd"
       archive_button: "Bekijk archief"
       nothing: "Niets te zien."
@@ -65,8 +65,8 @@ nl:
       call: "Spreek nu"
 
     doctors:
-      header: "Artsen"
-      sel_all: "Alles"
+      header: "Zorgverleners"
+      sel_all: "Allemaal"
       sel_gp: "Huisartsen"
       sel_ph: "Apothekers"
       check_online: "Toon alleen beschikbare artsen"
@@ -78,7 +78,7 @@ nl:
       send_button: "Verstuur"
 
     new_request:
-      header: "Verzoek een consult"
+      header: "Consult aanvragen"
       provider_label: "Zorgverlener"
       cause_label: "Reden"
       place_button: "Plaats een verzoek"
@@ -89,9 +89,9 @@ nl:
       header: "Patient uitnodigen"
       email_label: "E-mail patient"
       invite_button: "Uitnodigen"
-      invite_button_progress: "Uitnodigen wordt verzonden..."
+      invite_button_progress: "Uitnodiging wordt verzonden..."
       success_p: "De uitnodigen is verzonden."
-      error_p: "The user you are inviting is a doctor."
+      error_p: "De persoon die u probeert uit te nodigen is een zorgverlener."
 
     queue:
       header: "Wachtrij"
