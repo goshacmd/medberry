@@ -1,4 +1,6 @@
 class PatientInviter
+  class NotAPatient < StandardError; end
+
   attr_reader :email, :current_user
 
   def initialize(email, current_user)
@@ -30,7 +32,7 @@ class PatientInviter
   end
 
   def perform
-    raise RuntimeError, 'invited user is not a patient' if patient_user && !invitee_patient?
+    raise NotAPatient if patient_user && !invitee_patient?
     send_invitation unless patient_user
 
     patient.available_doctors << doctor

@@ -88,9 +88,10 @@ nl:
     new_connection:
       header: "Patient uitnodigen"
       email_label: "E-mail patient"
-      invite_button: "uitnodigen"
+      invite_button: "Uitnodigen"
       invite_button_progress: "Uitnodigen wordt verzonden..."
-      success_p: "De uitnodigen is verzonden"
+      success_p: "De uitnodigen is verzonden."
+      error_p: "The user you are inviting is a doctor."
 
     queue:
       header: "Wachtrij"

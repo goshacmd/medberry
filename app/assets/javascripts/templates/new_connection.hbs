@@ -11,6 +11,12 @@
         </div>
       {{/if}}
 
+      {{#if hasError}}
+        <div class="alert alert-danger">
+          <p>{{t 'new_connection.error_p'}}</p>
+        </div>
+      {{/if}}
+
       <div class="form-group">
         <label class="col-sm-2 control-label">
           {{t 'new_connection.email_label'}}

@@ -90,7 +90,8 @@ en:
       email_label: "Patient's email"
       invite_button: "Invite"
       invite_button_progress: "Inviting..."
-      success_p: "Invite successfully sent"
+      success_p: "Invite successfully sent."
+      error_p: "The user you are inviting is a doctor."
 
     queue:
       header: "Queue"
