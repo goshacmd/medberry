@@ -12,9 +12,9 @@ class Admin::InvitationsController < AdminController
         user.save validate: false
       end
 
-      redirect_to new_admin_invitations_path, notice: 'Invite sent succesfully.'
+      redirect_to new_admin_invitation_path, notice: 'Invite sent succesfully.'
     else
-      redirect_to new_admin_invitations_path, alert: 'Invalid params'
+      redirect_to new_admin_invitation_path, alert: 'Invalid params'
     end
   end
 end

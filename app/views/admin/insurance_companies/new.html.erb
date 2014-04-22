@@ -1,0 +1,7 @@
+<h2>Add insurance company</h2>
+
+<%= simple_form_for @company, url: admin_insurance_companies_path, html: { method: :post } do |f| %>
+  <%= f.input :name, placeholder: 'Medtek Insurance Ltd.' %>
+
+  <%= f.button :submit, 'Add', class: 'btn-success' %>
+<% end %>
