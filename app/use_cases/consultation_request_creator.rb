@@ -20,7 +20,7 @@ class ConsultationRequestCreator
   end
 
   def available_doctors_include_doctor?
-    available_doctors.where(doctor_id: doctor_id).count > 0
+    available_doctors.where(id: doctor_id).count > 0
   end
 
   # Create a consultation request, checking the online status of the doctor.
