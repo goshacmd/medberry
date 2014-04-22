@@ -1,4 +1,6 @@
 class Patient < ActiveRecord::Base
+  include Identity
+
   has_one :user, as: :identity
   belongs_to :insurance_policy, autosave: true
   has_many :consultations

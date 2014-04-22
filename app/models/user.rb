@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    [identity.first_name, identity.last_name].join(' ')
+    identity.full_name
   end
 
   def id_string

@@ -1,4 +1,5 @@
 class Doctor < ActiveRecord::Base
+  include Identity
   include Enum
 
   PRACTICES = { family: 0, pharmacist: 1 }
