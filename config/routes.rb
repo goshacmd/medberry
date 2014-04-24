@@ -6,6 +6,8 @@ Medlive::Application.routes.draw do
     resources :messages
 
     resources :connections
+
+    get 'me.json' => 'home#me'
   end
 
   namespace :admin do

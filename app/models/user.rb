@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
   belongs_to :identity, polymorphic: true, autosave: true, validate: true
   accepts_nested_attributes_for :identity
 
+  def me
+    identity.me
+  end
+
   def role
     identity.class.name.downcase
   end

@@ -17,7 +17,7 @@ class AnalyticsService
   end
 
   def track_finished_consultation(consultation)
-    track 'Finished Consutlation', consultation_data(consultation)
+    track 'Finished Consutlation', consultation_params(consultation)
   end
 
   def track_diagnosed_consultation(consultation)

@@ -1,4 +1,8 @@
 var ApplicationRoute = Ember.Route.extend({
+  model: function() {
+    return this.store.find('me', 'me');
+  },
+
   actions: {
     openModal: function(modalName, model) {
       this.controllerFor(modalName).set('model', model);

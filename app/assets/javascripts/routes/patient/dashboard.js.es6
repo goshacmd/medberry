@@ -2,15 +2,7 @@ import PatientOnlyRoute from 'app/routes/patient_only';
 
 var PatientDashboardRoute = PatientOnlyRoute.extend({
   model: function() {
-    var is = function(property) { return function(record) { return record.get(property) } };
-
-    var favoriteDoctors = this.store.filter('doctor', { favorite: true }, is('favoriteAndAvailable'));
-    var consultationRequests = this.store.find('consultation_request');
-
-    return Ember.RSVP.hash({
-      favoriteDoctors: favoriteDoctors,
-      consultationRequests: consultationRequests
-    });
+    return this.modelFor('application');
   },
 
   activate: function() {

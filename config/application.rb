@@ -29,7 +29,12 @@ module Medlive
 
     config.autoload_paths += %W(#{config.root}/lib)
 
-    config.active_record.observers = [:consultation_request_observer, :consultation_observer, :message_observer]
+    config.active_record.observers = [
+      :consultation_request_observer,
+      :consultation_observer,
+      :message_observer,
+      :favorite_doctor_observer
+    ]
 
     config.action_mailer.default_url_options = {
       host: ENV['APP_HOST']
