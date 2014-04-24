@@ -10,7 +10,7 @@ redis:
 
 web:
   build: .
-  command: bundle exec puma
+  command: bundle exec puma -p 3000
   volumes:
     - .:/home/app
   ports:
