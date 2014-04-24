@@ -17,8 +17,11 @@ var PusherService = Ember.Object.extend({
     this.userChannel = this.pusher.subscribe(this.get('userChannelName'));
     this.pulserChannel = this.pusher.subscribe(this.get('pulserChannelName'));
 
-    this.bindAllUser(this.allHandler.bind(this));
-    this.bindPulser('pulse', this.pulseHandler.bind(this));
+    var self = this;
+
+    [this.userChannel, this.pulserChannel].forEach(function(channel) {
+      channel.bind_all(Ember.run.bind(self, self.allHandler));
+    });
   },
 
   stateChangeHandler: function(state) {
@@ -38,6 +41,8 @@ var PusherService = Ember.Object.extend({
         this.store.pushPayload(name, data);
       } catch(e) {
       }
+    } else if (type == 'pulse') {
+      this.pulseHandler(data);
     }
   },
 
@@ -50,16 +55,8 @@ var PusherService = Ember.Object.extend({
     data.filter(hasDoctor).forEach(updateDoctor);
   },
 
-  bindAllUser: function(handler) {
-    this.userChannel.bind_all(handler);
-  },
-
-  bindUser: function(eventName, handler) {
-    this.userChannel.bind(eventName, handler);
-  },
-
-  bindPulser: function(eventName, handler) {
-    this.pulserChannel.bind(eventName, handler);
+  bindUser: function(event, handler) {
+    this.userChannel.bind(event, Ember.run.bind(this, handler));
   }
 });
 
