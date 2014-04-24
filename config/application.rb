@@ -25,6 +25,8 @@ module Medlive
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    config.i18n.available_locales = [:en, :nl]
+
     config.autoload_paths += %W(#{config.root}/lib)
 
     config.active_record.observers = [:consultation_request_observer, :consultation_observer, :message_observer]
