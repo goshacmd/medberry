@@ -19,9 +19,9 @@ class ConsultationDispatcher
 
     consultation.update(tokbox_session: open_tok.create_session.session_id)
 
-    ConsultationRequestStatusChanger.new(request).accept
-
     initial_span = consultation.doctor.consultation_policy.initial_span
     SessionCreator.new(consultation).perform duration: initial_span
+
+    ConsultationRequestStatusChanger.new(request).accept
   end
 end
