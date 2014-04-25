@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def user_params
     devise_parameter_sanitizer.send(:default_params).permit(
-      :email, :password, :password_confirmation,
+      :email, :password, :password_confirmation, :current_password,
       identity_attributes: [
         :bsn, :dob, :gender, :first_name, :last_name, :zip, :address, :city,
         { insurance_policy_attributes: [:insurance_company_id, :number] }
