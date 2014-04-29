@@ -20,7 +20,7 @@ development: &default
   database: medlive_development
   pool: 5
   username: docker
-  password: docker 
+  password: docker
   host: <%= ENV.fetch('DB_1_PORT_5432_TCP_ADDR', 'localhost') %>
   port: <%= ENV.fetch('DB_1_PORT_5432_TCP_PORT', '5432') %>
 
