@@ -7,6 +7,8 @@ Medlive::Application.routes.draw do
 
     resources :connections
 
+    resources :feedback
+
     get 'me.json' => 'home#me'
   end
 

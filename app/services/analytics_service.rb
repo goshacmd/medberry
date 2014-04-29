@@ -26,6 +26,13 @@ class AnalyticsService
     }.merge(consultation_params(consultation))
   end
 
+  def track_feedback(attrs)
+    audio = attrs.delete(:audio_problems)
+    video = attrs.delete(:video_problems)
+
+    track 'Feedback', attrs.merge(prefix(audio, :audio)).merge(prefix(video, :video))
+  end
+
   def track(name, data)
     mixpanel.track name, data
   end
@@ -48,5 +55,11 @@ class AnalyticsService
 
   def doctor_data(doctor)
     { doctor_practice: doctor.practice }
+  end
+
+  def prefix(hash, prefix)
+    hash.map do |(k, v)|
+      ["#{prefix}_#{k}", v]
+    end.to_h
   end
 end

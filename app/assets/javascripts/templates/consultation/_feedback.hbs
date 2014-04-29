@@ -1,0 +1,64 @@
+{{#if feedbackShown}}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          {{#if feedbackStep1}}
+            {{t 'feedback.step_1_header'}}
+          {{else}}
+            {{t 'feedback.step_2_header'}}
+          {{/if}}
+        </div>
+
+        <div class="panel-body">
+          {{#if feedbackStep1}}
+            <div class="btn-group-vertical pad">
+              {{#each feedbackCategories}}
+                <a href="#" class="btn btn-default"
+                   {{action 'setFeedbackCategory' slug}}>
+                   {{humanLabel}}
+                </a>
+              {{/each}}
+            </div>
+          {{else}}
+            <div class="row">
+              <div class="col-sm-6">
+                <h4>{{t 'feedback.audio_problems_header'}}</h4>
+
+                {{#each feedbackAudioProblems}}
+                  <label>
+                    {{input type="checkbox" checked=checked}}
+                    {{humanLabel}}
+                  </label>
+                {{/each}}
+              </div>
+
+              <div class="col-sm-6">
+                <h4>{{t 'feedback.video_problems_header'}}</h4>
+
+                {{#each feedbackVideoProblems}}
+                  <label>
+                    {{input type="checkbox" checked=checked}}
+                    {{humanLabel}}
+                  </label>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+
+          <div>
+            <a href="#" {{action 'hideFeedback'}} class="btn btn-default pull-right">
+              {{t 'feedback.cancel_button'}}
+            </a>
+
+            {{#if feedbackStep2}}
+              <a href="#" {{action 'sendFeedback'}} class="btn btn-primary pull-right">
+                {{t 'feedback.send_button'}}
+              </a>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}

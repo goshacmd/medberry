@@ -98,6 +98,40 @@ en:
       next_button: "Talk to next patient ({{name}})"
       nothing: "The queue is empty."
 
+    feedback:
+      step_1_header: "How would you rate the overall quality of this call?"
+      step_2_header: "What problems have you experienced?"
+
+      categories:
+        excellent: "Excellent — perfect, no problems"
+        minor_problems: "Minor problems"
+        some_problems: "Had some problems that affected the call"
+        several_problems: "Had several problems; really affected the call"
+        bad: "Problems were so bad the call was impossible"
+
+      audio_problems_header: "Audio problems"
+      video_problems_header: "Video problems"
+
+      cancel_button: "Cancel"
+      send_button: "Send"
+
+      audio_problems:
+        didnt_hear: "I didn't hear the other side"
+        other_didnt_hear: "The other side couldn't hear me"
+        dropped: "The call ended unexpectedly"
+        unnatural_speech: "The speech was not natural"
+        fades: "There were fades out in speech"
+        echo: "I heard echo in the call"
+        noise: "I heard noise in the call"
+        delay: "There was delay in the call"
+        none: "None of the above"
+
+      video_problems:
+        didnt_see: "I didn't see the other side"
+        other_didnt_see: "The other side couldn't see me"
+        bad_image: "The image was bad"
+        none: "None of the above"
+
     diagnosis_categories:
       gp:
         general: "General and unspecified"
