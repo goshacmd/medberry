@@ -98,6 +98,40 @@ nl:
       next_button: "Praat met de eerstvolgende patient ({{name}})"
       nothing: "Er zijn geen wachtenden in de wachtrij."
 
+    feedback:
+      step_1_header: "Hoe zou u de algehele kwaliteit van deze oproep beoordelen?"
+      step_2_header: "Welke problemen heeft u ervaren?"
+
+      categories:
+        excellent: "Excellent — perfect, helder, geen problemen"
+        minor_problems: "Kleine problemen, nauwelijks opgemerkt"
+        some_problems: "Had wat problemen met de oproep"
+        several_problems: "Had verschillende problemen met de oproep"
+        bad: "De problemen waren zo erg dat een gesprek onmogelijk was"
+
+      audio_problems_header: "Audio problemen"
+      video_problems_header: "Video problemen"
+
+      cancel_button: "Annuleren"
+      send_button: "Versturen"
+
+      audio_problems:
+        didnt_hear: "Ik kon de andere kant niet horen"
+        other_didnt_hear: "De andere kant kon mij niet horen"
+        dropped: "De oproep is onverwachts beëindigd"
+        unnatural_speech: "De spraak was onnatuurlijk"
+        fades: "De spraak vervaagt"
+        echo: "Ik hoorde een echo in het gesprek"
+        noise: "Ik hoorde geruis in het gesprek"
+        delay: "Er was een vertraging in het gesprek"
+        none: "Geen van de bovenstaande"
+
+      video_problems:
+        didnt_see: "Ik kon de andere kant niet zien"
+        other_didnt_see: "De andere kant kon mij niet zien"
+        bad_image: "Het beeld was slecht"
+        none: "Geen van de bovenstaande"
+
     diagnosis_categories:
       gp:
         general: "Algemeen en niet gespecificeerd"
