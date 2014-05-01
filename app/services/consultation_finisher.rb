@@ -26,7 +26,7 @@ class ConsultationFinisher
     consultation.update finished_at: Time.now, finished_by: role,
       finishing_cause: cause, duration: duration
 
-    AnalyticsService.new.track_finished_consultation consultation
+    Services.analytics.track_finished_consultation consultation
   end
 
   def can_finish?

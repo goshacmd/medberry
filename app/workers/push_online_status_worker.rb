@@ -5,11 +5,11 @@ class PushOnlineStatusWorker
   sidekiq_options retry: false
   recurrence { secondly(30) }
 
-  attr_reader :status_service, :pusher
+  attr_reader :status_service, :update_pusher
 
-  def initialize(status_service: OnlineStatusService.new, pusher: Pusher)
+  def initialize(status_service: Services.online_status, update_pusher: Services.update_pusher)
     @status_service = status_service
-    @pusher = pusher
+    @update_pusher = pusher
   end
 
   # Push the online statuses of all doctors.
@@ -21,7 +21,7 @@ class PushOnlineStatusWorker
     doctors_data = Doctor.pluck(:id).map(&make_mapper.call(:doctor))
     patients_data = Patient.pluck(:id).map(&make_mapper.call(:patient))
 
-    pusher.trigger 'private-patient-online-pulser', 'pulse', doctors_data
-    pusher.trigger 'private-doctor-online-pulser', 'pulse', patients_data
+    update_pusher.push_pulse :patient, doctors_data
+    update_pusher.push_pulse :doctor, patients_data
   end
 end

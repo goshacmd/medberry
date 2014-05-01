@@ -13,7 +13,7 @@ class CancelConsultationRequestWorker
 
   attr_reader :status_service
 
-  def initialize(status_service: OnlineStatusService.new)
+  def initialize(status_service: Services.online_status)
     @status_service = status_service
   end
 

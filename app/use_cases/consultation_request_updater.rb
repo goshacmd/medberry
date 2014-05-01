@@ -23,6 +23,6 @@ class ConsultationRequestUpdater
     return false unless request.new_request?
     return false unless status == 'accepted'
 
-    BusinessService.no_active_consultation?(request.doctor)
+    Services.business.no_active_consultation?(request.doctor)
   end
 end

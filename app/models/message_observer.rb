@@ -1,6 +1,6 @@
-class MessageObserver < ActiveRecord::Observer
+class MessageObserver < ApplicationObserver
   def after_create(message)
     channels = message.consultation.channels
-    UpdatePusher.new.push channels, message
+    push channels, message
   end
 end

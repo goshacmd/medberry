@@ -6,15 +6,13 @@ class PushQueueStatsWorker
   sidekiq_options retry: false
   recurrence { secondly(30) }
 
-  attr_reader :queue_service, :update_pusher, :pusher
+  attr_reader :queue_service, :update_pusher
 
   # @param queue_service [Class]
-  # @param update_pusher [UpdatePusher]
-  # @param pusher [Pusher]
-  def initialize(queue_service: QueueService, update_pusher: nil, pusher: Pusher)
+  # @param update_pusher [UpdatePusherService]
+  def initialize(queue_service: QueueService, update_pusher: Services.update_pusher)
     @queue_service = queue_service
-    @update_pusher = update_pusher || UpdatePusher.new(pusher: pusher)
-    @pusher = pusher
+    @update_pusher = update_pusher
   end
 
   def selector

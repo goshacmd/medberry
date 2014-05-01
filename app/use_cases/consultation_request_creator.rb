@@ -29,10 +29,10 @@ class ConsultationRequestCreator
 
     @model = consultation_request = ConsultationRequest.new attrs
     consultation_request.patient = patient
-    online = OnlineStatusService.new.online?(consultation_request.doctor.user)
+    online = Services.online_status.online?(consultation_request.doctor.user)
 
     if online && consultation_request.save
-      AnalyticsService.new.track_new_request consultation_request
+      Services.analytics.track_new_request consultation_request
 
       consultation_request
     else
@@ -41,7 +41,7 @@ class ConsultationRequestCreator
   end
 
   def can_create?
-    return false unless BusinessService.nothing_active?(current_user.identity)
+    return false unless Services.business.nothing_active?(current_user.identity)
 
     available_doctors_include_doctor?
   end

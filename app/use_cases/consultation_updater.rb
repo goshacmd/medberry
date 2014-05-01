@@ -47,7 +47,7 @@ class ConsultationUpdater
 
       consultation.save
 
-      AnalyticsService.new.track_diagnosed_consultation(consultation) if report
+      Services.analytics.track_diagnosed_consultation(consultation) if report
     end
   end
 end

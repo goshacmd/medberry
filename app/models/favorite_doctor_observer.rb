@@ -1,4 +1,4 @@
-class FavoriteDoctorObserver < ActiveRecord::Observer
+class FavoriteDoctorObserver < ApplicationObserver
   def after_create(fav)
     push_me(fav)
   end
@@ -8,10 +8,9 @@ class FavoriteDoctorObserver < ActiveRecord::Observer
   end
 
   def push_me(fav)
-    update_pusher = UpdatePusher.new
     patient = fav.patient
     user = patient.user
 
-    update_pusher.push user.pusher_channel_name, patient.me, scope: user
+    push user.pusher_channel_name, patient.me, scope: user
   end
 end

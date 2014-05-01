@@ -1,9 +1,17 @@
-class UpdatePusher
+class UpdatePusherService
   attr_reader :pusher
 
   # @param pusher [Pusher]
   def initialize(pusher: Pusher)
     @pusher = pusher
+  end
+
+  # Push the pulse.
+  #
+  # @param identity_kind [String]
+  # @param data [Array<Hash>]
+  def push_pulse(identity_kind, data)
+    pusher.trigger "private-#{identity_kind}-online-pulser", 'pulse', data
   end
 
   # Push the serialized model.
