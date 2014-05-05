@@ -14,10 +14,13 @@ chat.
 
 ### Starting the app
 
-Once docker and fig are installed, you can start the application and all
-needed services using the following command:
+Once docker and fig are installed, before you can start the application and all
+needed services using the following commands:
 
-    fig up
+    fig up -d redis db # start up the database & redis
+    fig run web rake db:setup # migrate db & seed
+    fig up web # run the web server
+    fig run web sidekiq # run the background job processor
 
 This will build docker containers and expose the Rails application at
 http://localdocker:3000/ (if you are using docker-osx).
@@ -32,3 +35,7 @@ at runtime:
 * `OPEN_TOK_SECRET`
 * `PUSHER_URL`
 * `MIXPANEL_TOKEN`
+
+## License
+
+All rights reserved.
